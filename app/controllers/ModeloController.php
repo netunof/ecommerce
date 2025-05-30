@@ -1,5 +1,5 @@
 <?php
-require_once "../app/models/ModeloModel.php";
+require_once "app/models/ModeloModel.php";
 class ModeloController {
     private $modeloModel;
     
@@ -9,13 +9,13 @@ class ModeloController {
     
     public function index() {
         $modelos = $this->modeloModel->getAll();
-        require_once '../app/views/modelo/index.php';
+        require_once 'app/views/modelo/index.php';
     }
     
     public function show($id) {
         $modelo = $this->modeloModel->find($id);
         if ($modelo) {
-            require_once '../app/views/modelo/show.php';
+            require_once 'app/views/modelo/show.php';
         } else {
             $this->notFound();
         }
@@ -33,7 +33,7 @@ class ModeloController {
                 die('Erro ao criar');
             }
         } else {
-            require_once '../app/views/modelo/create.php';
+            require_once 'app/views/modelo/create.php';
         }
     }
     
@@ -51,7 +51,7 @@ class ModeloController {
         } else {
             $modelo = $this->modeloModel->find($id);
             if ($modelo) {
-                require_once '../app/views/modelo/edit.php';
+                require_once 'app/views/modelo/edit.php';
             } else {
                 $this->notFound();
             }

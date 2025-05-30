@@ -1,5 +1,5 @@
 <?php
-require_once "../app/models/ProdutoModel.php";
+require_once "app/models/ProdutoModel.php";
 class ProdutoController {
     private $productModel;
     
@@ -9,13 +9,13 @@ class ProdutoController {
     
     public function index() {
         $products = $this->productModel->getAll();
-        require_once '../app/views/products/index.php';
+        require_once 'app/views/products/index.php';
     }
     
     public function show($id) {
         $product = $this->productModel->find($id);
         if ($product) {
-            require_once '../app/views/products/show.php';
+            require_once 'app/views/products/show.php';
         } else {
             $this->notFound();
         }
@@ -36,7 +36,7 @@ class ProdutoController {
                 die('Erro ao criar');
             }
         } else {
-            require_once '../app/views/products/create.php';
+            require_once 'app/views/products/create.php';
         }
     }
     
@@ -57,7 +57,7 @@ class ProdutoController {
         } else {
             $product = $this->productModel->find($id);
             if ($product) {
-                require_once '../app/views/products/edit.php';
+                require_once 'app/views/products/edit.php';
             } else {
                 $this->notFound();
             }

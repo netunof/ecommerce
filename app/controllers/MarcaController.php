@@ -1,5 +1,5 @@
 <?php
-require_once "../app/models/MarcaModel.php";
+require_once "app/models/MarcaModel.php";
 class MarcaController {
     private $marcaModel;
     
@@ -9,13 +9,13 @@ class MarcaController {
     
     public function index() {
         $marcas = $this->marcaModel->getAll();
-        require_once '../app/views/marca/index.php';
+        require_once 'app/views/marca/index.php';
     }
     
     public function show($id) {
         $marca = $this->marcaModel->find($id);
         if ($marca) {
-            require_once '../app/views/marca/show.php';
+            require_once 'app/views/marca/show.php';
         } else {
             $this->notFound();
         }
@@ -33,7 +33,7 @@ class MarcaController {
                 die('Erro ao criar');
             }
         } else {
-            require_once '../app/views/marca/create.php';
+            require_once 'app/views/marca/create.php';
         }
     }
     
@@ -51,7 +51,7 @@ class MarcaController {
         } else {
             $marca = $this->marcaModel->find($id);
             if ($marca) {
-                require_once '../app/views/marca/edit.php';
+                require_once 'app/views/marca/edit.php';
             } else {
                 $this->notFound();
             }
