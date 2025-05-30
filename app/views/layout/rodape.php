@@ -41,9 +41,9 @@
         <p>© <?php echo date("Y"); ?> &nbsp Grupo Digicommerce</p>
     </div>
 </footer>
-<script src="../assets/bootstrap/js/bootstrap.min.js"></script>
-<script src="../assets/js/jquery.min.js"></script>
-<script src="../assets/js/theme.js"></script>
+<script src="/public/assets/bootstrap/js/bootstrap.min.js"></script>
+<script src="/public/assets/js/jquery.min.js"></script>
+<script src="/public/assets/js/theme.js"></script>
 </body>
 
 </html>

@@ -6,18 +6,18 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Digicommerce</title>
-        <link rel="stylesheet" href="/assets/bootstrap/css/bootstrap.min.css">
+        <link rel="stylesheet" href="/public/assets/bootstrap/css/bootstrap.min.css">
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat:400,400i,700,700i,600,600i">
-        <link rel="stylesheet" href="/assets/fonts/font-awesome.min.css">
-        <link rel="stylesheet" href="/assets/fonts/simple-line-icons.min.css">
-        <link rel="stylesheet" href="/assets/css/Navigation-with-Search.css">
+        <link rel="stylesheet" href="/public/assets/fonts/font-awesome.min.css">
+        <link rel="stylesheet" href="/public/assets/fonts/simple-line-icons.min.css">
+        <link rel="stylesheet" href="/public/assets/css/Navigation-with-Search.css">
     </head>
 
     <body>
         <header style="width:auto;">
             <nav class="navbar navbar-light navbar-expand-md navigation-clean-search" style="height:100px;padding:0px;width:auto;">
                 <div class="container">
-                    <a class="navbar-brand" href="/"><img src="../assets/img/logo.png" style="width:300px;"></a>
+                    <a class="navbar-brand" href="/"><img src="/public/assets/img/logo.png" style="width:300px;"></a>
                     <button class="navbar-toggler" data-toggle="collapse" data-target="#navcol-1">
                         <span class="sr-only">Toggle navigation</span>
                         <span class="navbar-toggler-icon"></span>
