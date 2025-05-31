@@ -6,7 +6,7 @@
             <div class="block-heading" style="padding-top:30px;padding-bottom:30px;margin-bottom:0px;">
                 <h2 class="text-center text-info">Cadastrar Modelo</h2>
             </div>
-            <form action="/modelo/create.php" method="POST">
+            <form action="#" method="POST">
                 <div class="form-group">
                     <label for="modelo_nome">Nome</label><input class="form-control item" type="text" id="modelo_nome" name="modelo_nome" required>
                 </div>

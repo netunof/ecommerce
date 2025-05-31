@@ -11,7 +11,7 @@
         </tr>
         <?php foreach ($modelos as $modelo): ?>
         <tr>
-            <td><?= $modelo->id ?></td>
+            <td><?= $modelo->modelo_id ?></td>
             <td><?= htmlspecialchars($modelo->modelo_nome) ?></td>
             <td>
                 <a href="/modelos/<?= $modelo->modelo_id ?>">Ver</a>

@@ -20,10 +20,9 @@ class Modelo {
     }
     
     public function create($data) {
-        $query = $this->db->prepare("INSERT INTO modelo (modelo_id, modelo_nome) 
-        VALUES (:modelo_id, :modelo_nome)");
+        $query = $this->db->prepare("INSERT INTO modelo (modelo_nome, created_at) 
+        VALUES (:modelo_nome, CURRENT_TIMESTAMP)");
         return $query->execute([
-            ':modelo_id' => $data['modelo_id'],
             ':modelo_nome' => $data['modelo_nome']
         ]);
     }
