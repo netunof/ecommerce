@@ -10,14 +10,23 @@ $marcaController = new MarcaController();
 $categoriaController = new CategoriaController();
 
 switch ($request) {
-#CATEGORIAS
-    case '':
     case '/':
+        require_once('app/views/home.php');
+        break;
+    case '/admin':
+        require_once('app/views/admin.php');
+        break;
+#CATEGORIAS
+    case '/categorias':
         $categoriaController->index();
         break;
         
     case preg_match('/^\/categoria\/create\/?$/', $request) ? true : false:
         $categoriaController->create();
+        break;
+    
+    case preg_match('/^\/categoria\/store\/?$/', $request) ? true : false:
+        $categoriaController->store();
         break;
         
     case preg_match('/^\/categorias\/(\d+)\/?$/', $request, $matches) ? true : false:
