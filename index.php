@@ -1,35 +1,35 @@
 <?php
 require_once 'config/database.php';
 require_once 'app/controllers/MarcaController.php';
-require_once 'app/controllers/ModeloController.php';
+require_once 'app/controllers/CategoriaController.php';
 require_once 'app/controllers/ProdutoController.php';
 
 $request = $_SERVER['REQUEST_URI'];
 $produtoController = new ProdutoController();
 $marcaController = new MarcaController();
-$modeloController = new ModeloController();
+$categoriaController = new CategoriaController();
 
 switch ($request) {
 #MODELOS
     case '':
     case '/':
-        $modeloController->index();
+        $categoriaController->index();
         break;
         
-    case preg_match('/^\/modelo\/create\/?$/', $request) ? true : false:
-        $modeloController->create();
+    case preg_match('/^\/categoria\/create\/?$/', $request) ? true : false:
+        $categoriaController->create();
         break;
         
-    case preg_match('/^\/modelos\/(\d+)\/?$/', $request, $matches) ? true : false:
-        $modeloController->show($matches[1]);
+    case preg_match('/^\/categorias\/(\d+)\/?$/', $request, $matches) ? true : false:
+        $categoriaController->show($matches[1]);
         break;
         
-    case preg_match('/^\/modelos\/(\d+)\/edit\/?$/', $request, $matches) ? true : false:
-        $modeloController->edit($matches[1]);
+    case preg_match('/^\/categorias\/(\d+)\/edit\/?$/', $request, $matches) ? true : false:
+        $categoriaController->edit($matches[1]);
         break;
         
-    case preg_match('/^\/modelos\/(\d+)\/delete\/?$/', $request, $matches) ? true : false:
-        $modeloController->delete($matches[1]);
+    case preg_match('/^\/categorias\/(\d+)\/delete\/?$/', $request, $matches) ? true : false:
+        $categoriaController->delete($matches[1]);
         break;
 #PRODUTOS
     case '/produtos':
