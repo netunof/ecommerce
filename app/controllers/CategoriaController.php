@@ -22,45 +22,39 @@ class CategoriaController {
     }
     
     public function create() {
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $data = [
+        require_once 'app/views/categoria/create.php';
+    }
+
+    public function store() {
+        $data = [
                 'categoria_nome' => $_POST['categoria_nome']
             ];
-            
-            if ($this->categoriaModel->create($data)) {
-                header('Location: /categoria');
-            } else {
-                die('Erro ao criar');
-            }
+        if ($this->categoriaModel->create($data)) {
+            header('Location: /');
         } else {
-            require_once 'app/views/categoria/create.php';
+            die('Erro ao criar');
         }
     }
     
-    public function edit($id) {
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $data = [
-                'categoria_nome' => $_POST['categoria_nome']
-            ];
-            
-            if ($this->categoriaModel->update($id, $data)) {
-                header('Location: /categoria/' . $id);
-            } else {
-                die('Erro ao modificar');
-            }
+    public function edit() {
+        $id = $_GET['categoria_id'];
+        $categoria = $this->categoriaModel->find($id);
+        require_once 'app/views/categoria/edit.php';
+    }
+
+    public function update() {
+        $id = $_POST['categoria_id'];
+        $nome = $_POST['categoria_nome'];
+        if($this->categoriaModel->update($id, $nome)){
+            header('Location: /');
         } else {
-            $categoria = $this->categoriaModel->find($id);
-            if ($categoria) {
-                require_once 'app/views/categoria/edit.php';
-            } else {
-                $this->notFound();
-            }
+            die('Erro ao atualizar');
         }
     }
     
     public function delete($id) {
         if ($this->categoriaModel->delete($id)) {
-            header('Location: /categoria');
+            header('Location: /');
         } else {
             die('Erro ao apagar');
         }
@@ -68,7 +62,7 @@ class CategoriaController {
     
     private function notFound() {
         http_response_code(404);
-        echo "404 - Categoria não encontrado``";
+        echo "404 - Categoria não encontrada";
         exit();
     }
 }

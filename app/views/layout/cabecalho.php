@@ -4,40 +4,49 @@
 
     <head>
         <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>Digicommerce</title>
-        <link rel="stylesheet" href="/public/assets/bootstrap/css/bootstrap.min.css">
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat:400,400i,700,700i,600,600i">
-        <link rel="stylesheet" href="/public/assets/fonts/font-awesome.min.css">
-        <link rel="stylesheet" href="/public/assets/fonts/simple-line-icons.min.css">
-        <link rel="stylesheet" href="/public/assets/css/Navigation-with-Search.css">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4Q6Gf2aSP4eDXB8Miphtr37CMZZQ5oXLH2yaXMJ2w8e2ZtHTl7GptT4jmndRuHDT" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
     </head>
 
     <body>
-        <header style="width:auto;">
-            <nav class="navbar navbar-light navbar-expand-md navigation-clean-search" style="height:100px;padding:0px;width:auto;">
-                <div class="container">
-                    <a class="navbar-brand" href="/"><img src="/public/assets/img/logo.png" style="width:300px;"></a>
-                    <button class="navbar-toggler" data-toggle="collapse" data-target="#navcol-1">
-                        <span class="sr-only">Toggle navigation</span>
-                        <span class="navbar-toggler-icon"></span>
+        <header>
+            <nav class="navbar navbar-expand-lg">
+                <div class="container-fluid">
+                    <div class="" style="width: 30vw">
+                        <a class="navbar-brand" href="/"><img src="/public/assets/img/logo.png" class="img-fluid"></a>
+                    </div>
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
                     </button>
-                    <div class="collapse navbar-collapse" id="navcol-1" style="width:auto;margin-left:0px;padding:0px;padding-left:0px;">
-                        <ul class="nav navbar-nav">
-                            <li class="nav-item" role="presentation" style="width:80px;margin-left:40px;">
-                                <a class="nav-link text-dark" href="clientelogin.php" style="color:rgb(0,0,0);margin-left:0px;width:auto;padding-top:8px;padding-right:0px;padding-left:0px;">Login</a>
-                            </li>
-                            <li class="nav-item" role="presentation">
-                                <a class="nav-link text-dark" href="carrinho.php" style="color:rgb(0,0,0);margin-left:0px;width:auto;padding-right:0px;padding-left:0px;">Meu carrinho</a>
-                            </li>
+                    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                        <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="#">Meu Carrinho</a>
+                        </li>
+                        <li class="nav-item">
+                        <a class="nav-link" href="#">Login</a>
+                        </li>
+                        <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            Dropdown
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="#">Action</a></li>
+                            <li><a class="dropdown-item" href="#">Another action</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="#">Something else here</a></li>
                         </ul>
-                        <form class="form-inline mr-auto" action="index.php" style="margin-right:0px;">
-                            <div class="form-group" style="margin-left:40px;margin-right:0px;padding-left:0px;">
-                                <label for="search-field"><i class="fa fa-search"></i></label>
-                                <input class="form-control search-field" type="search" name="pesquisa" placeholder="o que você precisa?" id="search-field" style="padding-left:8px;padding-right:0px;">
-                                <input type="submit" value="Busca" class="btn btn-light action-button">
-                            </div>
-                        </form>
+                        </li>
+                        <li class="nav-item">
+                        <a class="nav-link disabled" aria-disabled="true">Disabled</a>
+                        </li>
+                    </ul>
+                    <form class="d-flex" role="search">
+                        <input class="form-control me-2" type="search" placeholder="O que você procura?" aria-label="Search"/>
+                        <button class="btn btn-outline-success" type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
+                    </form>
                     </div>
                 </div>
             </nav>

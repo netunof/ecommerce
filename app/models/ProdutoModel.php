@@ -8,7 +8,7 @@ class Produto {
     }
     
     public function getAll() {
-        $query = $this->db->query("SELECT * FROM produto ORDER BY id DESC");
+        $query = $this->db->query("SELECT * FROM produto ORDER BY produto_id DESC");
         return $query->fetchAll(PDO::FETCH_OBJ);
     }
     

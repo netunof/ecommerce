@@ -10,7 +10,7 @@ $marcaController = new MarcaController();
 $categoriaController = new CategoriaController();
 
 switch ($request) {
-#MODELOS
+#CATEGORIAS
     case '':
     case '/':
         $categoriaController->index();
