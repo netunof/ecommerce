@@ -9,13 +9,13 @@ class ProdutoController {
     
     public function index() {
         $products = $this->productModel->getAll();
-        require_once 'app/views/products/index.php';
+        require_once 'app/views/produto/index.php';
     }
     
     public function show($id) {
         $product = $this->productModel->find($id);
         if ($product) {
-            require_once 'app/views/products/show.php';
+            require_once 'app/views/produto/show.php';
         } else {
             $this->notFound();
         }
@@ -31,12 +31,12 @@ class ProdutoController {
             ];
             
             if ($this->productModel->create($data)) {
-                header('Location: /products');
+                header('Location: /produto');
             } else {
                 die('Erro ao criar');
             }
         } else {
-            require_once 'app/views/products/create.php';
+            require_once 'app/views/produto/create.php';
         }
     }
     
@@ -50,14 +50,14 @@ class ProdutoController {
             ];
             
             if ($this->productModel->update($id, $data)) {
-                header('Location: /products/' . $id);
+                header('Location: /produto/' . $id);
             } else {
                 die('Erro ao modificar');
             }
         } else {
             $product = $this->productModel->find($id);
             if ($product) {
-                require_once 'app/views/products/edit.php';
+                require_once 'app/views/produto/edit.php';
             } else {
                 $this->notFound();
             }
@@ -66,7 +66,7 @@ class ProdutoController {
     
     public function delete($id) {
         if ($this->productModel->delete($id)) {
-            header('Location: /products');
+            header('Location: /produto');
         } else {
             die('Erro ao apagar');
         }

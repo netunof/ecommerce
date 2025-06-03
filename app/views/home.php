@@ -34,81 +34,26 @@
                                 <div class="filters" style="padding-left:30px;">
                                     <div class="filter-item">
                                         <h3>Categorias</h3>
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" id="formCheck-1" name="tipo[]" value="acessorio">
-                                            <label class="form-check-label" for="formCheck-1">Acessórios</label>
-                                        </div>
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" id="formCheck-2" name="tipo[]" value="armazenamento">
-                                            <label class="form-check-label" for="formCheck-2">Armazenamento</label>
-                                        </div>
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" id="formCheck-3" name="tipo[]" value="gabinete">
-                                            <label class="form-check-label" for="formCheck-3">Gabinetes</label>
-                                        </div>
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" id="formCheck-4" name="tipo[]" value="memoria">
-                                            <label class="form-check-label" for="formCheck-4">Memórias</label>
-                                        </div>
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" id="formCheck-5" name="tipo[]" value="periferico">
-                                            <label class="form-check-label" for="formCheck-5">Periféricos</label>
-                                        </div>
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" id="formCheck-6" name="tipo[]" value="placamae">
-                                            <label class="form-check-label" for="formCheck-6">Placas-mãe</label>
-                                        </div>
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" id="formCheck-7" name="tipo[]" value="placadevideo">
-                                            <label class="form-check-label" for="formCheck-7">Placas de vídeo</label>
-                                        </div>
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" id="formCheck-8" name="tipo[]" value="processador">
-                                            <label class="form-check-label" for="formCheck-8">Processadores</label>
-                                        </div>
+                                        <?php if($data['categorias']){
+                                            foreach ($data['categorias'] as $categoria): ?>
+
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" id="formCheck-<?= $categoria->categoria_id?>" name="categoria_id[]" value="<?= $categoria->categoria_id ?>">
+                                                <label class="form-check-label" for="formCheck-1"><?= $categoria->categoria_nome?></label>
+                                            </div>
+                                        <?php endforeach;}
+                                        else echo 'Nenhuma categoria cadastrada' ?>
                                     </div>
                                     <div class="filter-item">
                                         <h3>Marcas</h3>
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" id="formCheck-9" name="marca[]" value="amd">
-                                            <label class="form-check-label" for="formCheck-9">AMD</label>
-                                        </div>
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" id="formCheck-10" name="marca[]" value="asus">
-                                            <label class="form-check-label" for="formCheck-10">Asus</label>
-                                        </div>
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" id="formCheck-11" name="marca[]" value="gigabyte">
-                                            <label class="form-check-label" for="formCheck-11">Gigabyte</label>
-                                        </div>
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" id="formCheck-12" name="marca[]" value="intel">
-                                            <label class="form-check-label" for="formCheck-12">Intel</label>
-                                        </div>
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" id="formCheck-13" name="marca[]" value="kingston">
-                                            <label class="form-check-label" for="formCheck-13">Kingston</label>
-                                        </div>
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" id="formCheck-14" name="marca[]" value="logitech">
-                                            <label class="form-check-label" for="formCheck-14">Logitech</label>
-                                        </div>
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" id="formCheck-15" name="marca[]" value="msi">
-                                            <label class="form-check-label" for="formCheck-15">MSI</label>
-                                        </div>
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" id="formCheck-16" name="marca[]" value="razer">
-                                            <label class="form-check-label" for="formCheck-16">Razer</label>
-                                        </div>
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" id="formCheck-17" name="marca[]" value="seagate">
-                                            <label class="form-check-label" for="formCheck-17">Seagate</label>
-                                        </div>
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" id="formCheck-18" name="marca[]" value="wd">
-                                            <label class="form-check-label" for="formCheck-18">WD</label>
-                                        </div>
+                                        <?php if($data['marcas']){
+                                            foreach ($data['marcas'] as $marca): ?>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" id="formCheck-<?= $marca->marca_id?>" name="marca_id[]" value="<?= $marca->marca_id ?>">
+                                                <label class="form-check-label" for="formCheck-1"><?= $marca->marca_nome?></label>
+                                            </div>
+                                        <?php endforeach;}
+                                        else echo 'Nenhuma marca cadastrada' ?>
                                         <br>
                                         <input type="submit" value="Filtrar" class="btn btn-info">
                                     </div>

@@ -3,18 +3,20 @@ require_once 'config/database.php';
 require_once 'app/controllers/MarcaController.php';
 require_once 'app/controllers/CategoriaController.php';
 require_once 'app/controllers/ProdutoController.php';
+require_once 'app/controllers/HomeController.php';
 
 $request = $_SERVER['REQUEST_URI'];
 $produtoController = new ProdutoController();
 $marcaController = new MarcaController();
 $categoriaController = new CategoriaController();
+$homeController = new HomeController();
 
 switch ($request) {
     case '/':
-        require_once('app/views/home.php');
+        $homeController->home();
         break;
     case '/admin':
-        require_once('app/views/admin.php');
+        require_once 'app/views/admin.php';
         break;
 #CATEGORIAS
     case '/categorias':
