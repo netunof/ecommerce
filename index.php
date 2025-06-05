@@ -19,6 +19,7 @@ switch ($request) {
         require_once 'app/views/admin.php';
         break;
 #CATEGORIAS
+    case '/categorias/':
     case '/categorias':
         $categoriaController->index();
         break;
@@ -41,6 +42,31 @@ switch ($request) {
         
     case preg_match('/^\/categorias\/(\d+)\/delete\/?$/', $request, $matches) ? true : false:
         $categoriaController->delete($matches[1]);
+        break;
+#MARCAS
+    case '/marcas/':
+    case '/marcas':
+        $marcaController->index();
+        break;
+        
+    case preg_match('/^\/marca\/create\/?$/', $request) ? true : false:
+        $marcaController->create();
+        break;
+    
+    case preg_match('/^\/marca\/store\/?$/', $request) ? true : false:
+        $marcaController->store();
+        break;
+        
+    case preg_match('/^\/marcas\/(\d+)\/?$/', $request, $matches) ? true : false:
+        $marcaController->show($matches[1]);
+        break;
+        
+    case preg_match('/^\/marcas\/(\d+)\/edit\/?$/', $request, $matches) ? true : false:
+        $marcaController->edit($matches[1]);
+        break;
+        
+    case preg_match('/^\/marcas\/(\d+)\/delete\/?$/', $request, $matches) ? true : false:
+        $marcaController->delete($matches[1]);
         break;
 #PRODUTOS
     case '/produtos':

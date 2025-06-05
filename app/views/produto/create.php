@@ -1,4 +1,5 @@
 <?php include_once __DIR__ . '/../layout/cabecalho.php';?>
+
 <div class="mx-auto col-10">
     <h3 class="text-info mt-3">Cadastrar um produto</h3>
 </div>

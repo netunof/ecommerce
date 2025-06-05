@@ -1,20 +1,23 @@
 <?php
 require_once "app/models/ProdutoModel.php";
 class ProdutoController {
-    private $productModel;
+    private $produtoModel;
     
     public function __construct() {
-        $this->productModel = new Produto();
+        $this->produtoModel = new Produto();
     }
     
     public function index() {
-        $products = $this->productModel->getAll();
+        $produtos = $this->produtoModel->getAll();
+        /*[':produto_nome' => 'produto_nome',
+        ':produto_marca' => 'produto_marca', ':produto_modelo' => 'produto_modelo',
+        ':preco_max' => 'preco_max', ':preco_min ' => 'preco_min']*/
         require_once 'app/views/produto/index.php';
     }
     
     public function show($id) {
-        $product = $this->productModel->find($id);
-        if ($product) {
+        $produto = $this->produtoModel->find($id);
+        if ($produto) {
             require_once 'app/views/produto/show.php';
         } else {
             $this->notFound();
@@ -30,7 +33,7 @@ class ProdutoController {
                 'produto_estoque' => $_POST['produto_estoque']
             ];
             
-            if ($this->productModel->create($data)) {
+            if ($this->produtoModel->create($data)) {
                 header('Location: /produto');
             } else {
                 die('Erro ao criar');
@@ -49,14 +52,14 @@ class ProdutoController {
                 'produto_estoque' => $_POST['produto_estoque']
             ];
             
-            if ($this->productModel->update($id, $data)) {
+            if ($this->produtoModel->update($id, $data)) {
                 header('Location: /produto/' . $id);
             } else {
                 die('Erro ao modificar');
             }
         } else {
-            $product = $this->productModel->find($id);
-            if ($product) {
+            $produto = $this->produtoModel->find($id);
+            if ($produto) {
                 require_once 'app/views/produto/edit.php';
             } else {
                 $this->notFound();
@@ -65,7 +68,7 @@ class ProdutoController {
     }
     
     public function delete($id) {
-        if ($this->productModel->delete($id)) {
+        if ($this->produtoModel->delete($id)) {
             header('Location: /produto');
         } else {
             die('Erro ao apagar');

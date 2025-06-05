@@ -7,10 +7,11 @@ class Produto {
         $this->db = Database::getInstance();
     }
     
-    public function asdf() {
-        
+    public function getAll() {
+        $query = $this->db->prepare("SELECT * FROM produto ORDER BY produto_id");
+        return $query->fetchAll(PDO::FETCH_OBJ);
     }
-    public function getAll($data) {
+    public function getFilter($data) {
         $query = $this->db->prepare("SELECT * FROM produto 
         WHERE (produto_nome LIKE '%':produto_nome'%' OR :produto_nome = '')
         AND (produto_marca = :produto_marca OR :produto_marca = 0)
@@ -20,7 +21,7 @@ class Produto {
         $query->execute([
             ':produto_nome' => $data['produto_nome'],
             ':produto_marca' => $data['produto_marca'],
-            ':produto_modelo' => $data['produto_modelo'],
+            ':produto_categoria' => $data['produto_categoria'],
             ':preco_max' => $data['preco_max'],
             ':preco_min ' => $data['preco_min']
         ]);
