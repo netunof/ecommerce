@@ -30,14 +30,13 @@ class CategoriaController {
                 'categoria_nome' => $_POST['categoria_nome']
             ];
         if ($this->categoriaModel->create($data)) {
-            header('Location: /');
+            header('Location: /categorias');
         } else {
             die('Erro ao criar');
         }
     }
     
-    public function edit() {
-        $id = $_GET['categoria_id'];
+    public function edit($id) {
         $categoria = $this->categoriaModel->find($id);
         require_once 'app/views/categoria/edit.php';
     }
@@ -46,7 +45,7 @@ class CategoriaController {
         $id = $_POST['categoria_id'];
         $nome = $_POST['categoria_nome'];
         if($this->categoriaModel->update($id, $nome)){
-            header('Location: /');
+            header('Location: /categorias');
         } else {
             die('Erro ao atualizar');
         }
@@ -54,7 +53,7 @@ class CategoriaController {
     
     public function delete($id) {
         if ($this->categoriaModel->delete($id)) {
-            header('Location: /');
+            header('Location: /categorias');
         } else {
             die('Erro ao apagar');
         }

@@ -16,7 +16,7 @@ class HomeController {
         $data = [
             'categorias' => $this->categoriaModel->getAll(),
             'marcas' => $this->marcaModel->getAll(),
-            'produtos' => $this->produtoModel->asdf()
+            'produtos' => $this->produtoModel->getAll()
         ];
         require_once 'app/views/home.php';
     }

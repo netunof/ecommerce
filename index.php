@@ -32,15 +32,19 @@ switch ($request) {
         $categoriaController->store();
         break;
         
-    case preg_match('/^\/categorias\/(\d+)\/?$/', $request, $matches) ? true : false:
+    case preg_match('/^\/categoria\/(\d+)\/?$/', $request, $matches) ? true : false:
         $categoriaController->show($matches[1]);
         break;
         
-    case preg_match('/^\/categorias\/(\d+)\/edit\/?$/', $request, $matches) ? true : false:
+    case preg_match('/^\/categoria\/(\d+)\/edit\/?$/', $request, $matches) ? true : false:
         $categoriaController->edit($matches[1]);
         break;
+    
+    case preg_match('/^\/categoria\/(\d+)\/update\/?$/', $request, $matches) ? true : false:
+        $categoriaController->update();
+        break;
         
-    case preg_match('/^\/categorias\/(\d+)\/delete\/?$/', $request, $matches) ? true : false:
+    case preg_match('/^\/categoria\/(\d+)\/delete\/?$/', $request, $matches) ? true : false:
         $categoriaController->delete($matches[1]);
         break;
 #MARCAS
@@ -57,15 +61,19 @@ switch ($request) {
         $marcaController->store();
         break;
         
-    case preg_match('/^\/marcas\/(\d+)\/?$/', $request, $matches) ? true : false:
+    case preg_match('/^\/marca\/(\d+)\/?$/', $request, $matches) ? true : false:
         $marcaController->show($matches[1]);
         break;
         
-    case preg_match('/^\/marcas\/(\d+)\/edit\/?$/', $request, $matches) ? true : false:
+    case preg_match('/^\/marca\/(\d+)\/edit\/?$/', $request, $matches) ? true : false:
         $marcaController->edit($matches[1]);
         break;
-        
-    case preg_match('/^\/marcas\/(\d+)\/delete\/?$/', $request, $matches) ? true : false:
+    
+    case preg_match('/^\/marca\/(\d+)\/update\/?$/', $request, $matches) ? true : false:
+        $marcaController->update();
+        break;
+    
+    case preg_match('/^\/marca\/(\d+)\/delete\/?$/', $request, $matches) ? true : false:
         $marcaController->delete($matches[1]);
         break;
 #PRODUTOS
@@ -74,19 +82,19 @@ switch ($request) {
         $produtoController->index();
         break;
         
-    case preg_match('/^\/produtos\/create\/?$/', $request) ? true : false:
+    case preg_match('/^\/produto\/create\/?$/', $request) ? true : false:
         $produtoController->create();
         break;
         
-    case preg_match('/^\/produtos\/(\d+)\/?$/', $request, $matches) ? true : false:
+    case preg_match('/^\/produto\/(\d+)\/?$/', $request, $matches) ? true : false:
         $produtoController->show($matches[1]);
         break;
         
-    case preg_match('/^\/produtos\/(\d+)\/edit\/?$/', $request, $matches) ? true : false:
+    case preg_match('/^\/produto\/(\d+)\/edit\/?$/', $request, $matches) ? true : false:
         $produtoController->edit($matches[1]);
         break;
         
-    case preg_match('/^\/produtos\/(\d+)\/delete\/?$/', $request, $matches) ? true : false:
+    case preg_match('/^\/produto\/(\d+)\/delete\/?$/', $request, $matches) ? true : false:
         $produtoController->delete($matches[1]);
         break;
     

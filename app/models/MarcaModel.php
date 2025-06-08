@@ -20,21 +20,20 @@ class Marca {
     }
     
     public function create($data) {
-        $query = $this->db->prepare("INSERT INTO marca (marca_id, marca_nome) 
-        VALUES (:marca_id, :marca_nome)");
+        $query = $this->db->prepare("INSERT INTO marca (marca_nome, created_at) 
+        VALUES (:marca_nome, CURRENT_TIMESTAMP)");
         return $query->execute([
-            ':marca_id' => $data['marca_id'],
             ':marca_nome' => $data['marca_nome']
         ]);
     }
     
     public function update($id, $data) {
-        $query = $this->db->prepare("UPDATE marcas 
+        $query = $this->db->prepare("UPDATE marca
         SET marca_nome = :marca_nome
         WHERE marca_id = :marca_id");
         return $query->execute([
             ':marca_id' => $id,
-            ':marca_nome' => $data['marca_nome']
+            ':marca_nome' => $data
         ]);
     }
     

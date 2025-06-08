@@ -22,7 +22,7 @@
                 <li data-target="#carousel-2" data-slide-to="2" class="active"></li>
             </ol>
         </div>
-        <div class="row">
+        <div class="row mx-0">
             <div class="col-md-3 bg-secondary">
                 <div>
                     <form action="index.php" method="GET">

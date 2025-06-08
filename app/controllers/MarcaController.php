@@ -22,45 +22,38 @@ class MarcaController {
     }
     
     public function create() {
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $data = [
+        require_once 'app/views/marca/create.php';
+    }
+
+    public function store() {
+        $data = [
                 'marca_nome' => $_POST['marca_nome']
             ];
-            
-            if ($this->marcaModel->create($data)) {
-                header('Location: /marca');
-            } else {
-                die('Erro ao criar');
-            }
+        if ($this->marcaModel->create($data)) {
+            header('Location: /marcas');
         } else {
-            require_once 'app/views/marca/create.php';
+            die('Erro ao criar');
         }
     }
     
     public function edit($id) {
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $data = [
-                'marca_nome' => $_POST['marca_nome']
-            ];
-            
-            if ($this->marcaModel->update($id, $data)) {
-                header('Location: /marca/' . $id);
-            } else {
-                die('Erro ao modificar');
-            }
+        $marca = $this->marcaModel->find($id);
+        require_once 'app/views/marca/edit.php';
+    }
+
+    public function update() {
+        $id = $_POST['marca_id'];
+        $nome = $_POST['marca_nome'];
+        if($this->marcaModel->update($id, $nome)){
+            header('Location: /marcas');
         } else {
-            $marca = $this->marcaModel->find($id);
-            if ($marca) {
-                require_once 'app/views/marca/edit.php';
-            } else {
-                $this->notFound();
-            }
+            die('Erro ao atualizar');
         }
     }
     
     public function delete($id) {
         if ($this->marcaModel->delete($id)) {
-            header('Location: /marca');
+            header('Location: /marcas');
         } else {
             die('Erro ao apagar');
         }

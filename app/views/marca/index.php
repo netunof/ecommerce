@@ -2,11 +2,14 @@
 
 <div class="col-8 mx-auto">
     <div class="row">
-        <div class="col-6"><h1>Categorias</h1></div>
+        <div class="col-6"><h1>Marcas</h1></div>
         <div class="col-6">
-            <a href="/categoria/create" class="btn btn-success float-end"><i class="fa-solid fa-plus me-2"></i>Criar Categoria</a>
+            <a href="/marca/create" class="btn btn-success float-end"><i class="fa-solid fa-plus me-2"></i>Criar Marca</a>
         </div>
     </div>    
+        <?php if(!$marcas){?>
+        <div>Nenhuma marca encontrada</div>
+        <?php } else{?>
         <table class="table table-hover">
             <thead>
                 <tr>
@@ -16,18 +19,18 @@
                 </tr>
             </thead>
             <tbody>
-                <?php foreach ($categorias as $categoria): ?>
+                <?php foreach ($marcas as $marca): ?>
                 <tr>
-                    <th scope="row" class="col-2"><?= $categoria->categoria_id ?></th>
-                    <td class="col-8"><?= htmlspecialchars($categoria->categoria_nome) ?></td>
+                    <th scope="row" class="col-2"><?= $marca->marca_id ?></th>
+                    <td class="col-8"><?= htmlspecialchars($marca->marca_nome) ?></td>
                     <td class="col-2">
-                        <a href="/categorias/<?= $categoria->categoria_id ?>" class="me-3">
+                        <a href="/marca/<?= $marca->marca_id ?>" class="me-3">
                             <i class="fa-solid fa-eye"></i>
                         </a>
-                        <a href="/categorias/<?= $categoria->categoria_id ?>/edit" class="me-3">
+                        <a href="/marca/<?= $marca->marca_id ?>/edit" class="me-3">
                             <i class="fa-solid fa-pencil"></i>
                         </a>
-                        <a href="/categorias/<?= $categoria->categoria_id ?>/delete" method="POST">
+                        <a href="/marca/<?= $marca->marca_id ?>/delete" method="POST">
                             <i class="fa-solid fa-trash text-danger"></i>
                         </a>
                     </td>
@@ -35,6 +38,7 @@
                 <?php endforeach; ?>
             </tbody>
         </table>
+        <?php }?>
 </div>
 
 <?php include_once __DIR__ . '/../layout/rodape.php'; ?>

@@ -1,7 +1,7 @@
 <?php include_once __DIR__.'/../layout/cabecalho.php';?>
 
-<h1>Categorias</h1>
-    <a href="/categoria/create">Criar Categoria</a>
+<h1>Marcas</h1>
+    <a href="/marca/create">Criar Marca</a>
     <table class="table">
         <thead>
             <tr>
@@ -13,10 +13,10 @@
         </thead>
         <tbody>
             <tr>
-                <th scope="row"><?= $categoria->categoria_id ?></th>
-                <td><?= $categoria->categoria_nome ?></td>
-                <td><?= $categoria->created_at ?></td>
-                <td><?= $categoria->created_by ?></td>
+                <th scope="row"><?= $marca->marca_id ?></th>
+                <td><?= $marca->marca_nome ?></td>
+                <td><?= $marca->created_at ?></td>
+                <td><?= $marca->created_by ?></td>
             </tr>
         </tbody>
     </table>

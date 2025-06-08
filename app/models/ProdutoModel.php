@@ -6,7 +6,7 @@ class Produto {
     public function __construct() {
         $this->db = Database::getInstance();
     }
-    
+
     public function getAll() {
         $query = $this->db->prepare("SELECT * FROM produto ORDER BY produto_id");
         return $query->fetchAll(PDO::FETCH_OBJ);

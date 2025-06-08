@@ -28,12 +28,12 @@ class Categoria {
     }
     
     public function update($id, $data) {
-        $query = $this->db->prepare("UPDATE categorias 
+        $query = $this->db->prepare("UPDATE categoria 
         SET categoria_nome = :categoria_nome
         WHERE categoria_id = :categoria_id");
         return $query->execute([
             ':categoria_id' => $id,
-            ':categoria_nome' => $data['categoria_nome']
+            ':categoria_nome' => $data
         ]);
     }
     
