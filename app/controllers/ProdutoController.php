@@ -1,10 +1,16 @@
 <?php
 require_once "app/models/ProdutoModel.php";
+require_once "app/models/CategoriaModel.php";
+require_once "app/models/MarcaModel.php";
 class ProdutoController {
     private $produtoModel;
+    private $categoriaModel;
+    private $marcaModel;
     
     public function __construct() {
         $this->produtoModel = new Produto();
+        $this->categoriaModel = new Categoria();
+        $this->marcaModel = new Marca();
     }
     
     public function index() {
@@ -25,45 +31,49 @@ class ProdutoController {
     }
     
     public function create() {
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $data = [
-                'produto_nome' => $_POST['produto_nome'],
-                'produto_descricao' => $_POST['produto_descricao'],
-                'produto_preco' => $_POST['produto_preco'],
-                'produto_estoque' => $_POST['produto_estoque']
-            ];
-            
-            if ($this->produtoModel->create($data)) {
-                header('Location: /produto');
-            } else {
-                die('Erro ao criar');
-            }
+        $data = ['marcas' => $this->marcaModel->getAll(),
+                'categorias' => $this->categoriaModel->getAll()];
+        require_once 'app/views/produto/create.php';
+    }
+
+    public function store() {
+        $data = [
+            'produto_nome' => $_POST['produto_nome'],
+            'produto_descricao' => $_POST['produto_descricao'],
+            'produto_preco' => $_POST['produto_preco'],
+            'marca_fk' => $_POST['marca_fk'],
+            'categoria_fk' => $_POST['categoria_fk'],
+            'produto_estoque' => $_POST['produto_estoque']
+        ];
+
+        if ($this->produtoModel->create($data)) {
+            header('Location: /produtos');
         } else {
-            require_once 'app/views/produto/create.php';
+            die('Erro ao criar');
         }
     }
     
     public function edit($id) {
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $data = [
-                'produto_nome' => $_POST['produto_nome'],
-                'produto_descricao' => $_POST['produto_descricao'],
-                'produto_preco' => $_POST['produto_preco'],
-                'produto_estoque' => $_POST['produto_estoque']
-            ];
+        $data = ['marcas' => $this->marcaModel->getAll(),
+                'categorias' => $this->categoriaModel->getAll()];
+        $produto = $this->produtoModel->find($id);
+        require_once 'app/views/marca/edit.php';
+    }
+    public function update() {
+        $id = $_POST['produto_id'];
+        $data = [
+            'produto_nome' => $_POST['produto_nome'],
+            'produto_descricao' => $_POST['produto_descricao'],
+            'marca_fk' => $_POST['marca_fk'],
+            'categoria_fk' => $_POST['categoria_fk'],
+            'produto_preco' => $_POST['produto_preco'],
+            'produto_estoque' => $_POST['produto_estoque']
+        ];
             
-            if ($this->produtoModel->update($id, $data)) {
-                header('Location: /produto/' . $id);
-            } else {
-                die('Erro ao modificar');
-            }
+        if ($this->produtoModel->update($id, $data)) {
+            header('Location: /produtos');
         } else {
-            $produto = $this->produtoModel->find($id);
-            if ($produto) {
-                require_once 'app/views/produto/edit.php';
-            } else {
-                $this->notFound();
-            }
+            die('Erro ao modificar');
         }
     }
     

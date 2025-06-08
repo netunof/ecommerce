@@ -85,6 +85,10 @@ switch ($request) {
     case preg_match('/^\/produto\/create\/?$/', $request) ? true : false:
         $produtoController->create();
         break;
+    
+    case preg_match('/^\/produto\/store\/?$/', $request) ? true : false:
+        $produtoController->store();
+        break;
         
     case preg_match('/^\/produto\/(\d+)\/?$/', $request, $matches) ? true : false:
         $produtoController->show($matches[1]);
@@ -92,6 +96,10 @@ switch ($request) {
         
     case preg_match('/^\/produto\/(\d+)\/edit\/?$/', $request, $matches) ? true : false:
         $produtoController->edit($matches[1]);
+        break;
+
+    case preg_match('/^\/produto\/(\d+)\/update\/?$/', $request, $matches) ? true : false:
+        $produtoController->update();
         break;
         
     case preg_match('/^\/produto\/(\d+)\/delete\/?$/', $request, $matches) ? true : false:

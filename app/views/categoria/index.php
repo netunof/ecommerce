@@ -19,11 +19,12 @@
                 <?php foreach ($categorias as $categoria): ?>
                 <tr>
                     <th scope="row" class="col-2"><?= $categoria->categoria_id ?></th>
-                    <td class="col-8"><?= htmlspecialchars($categoria->categoria_nome) ?></td>
-                    <td class="col-2">
+                    <td class="col-8">
                         <a href="/categoria/<?= $categoria->categoria_id ?>" class="me-3">
-                            <i class="fa-solid fa-eye"></i>
+                            <?= htmlspecialchars($categoria->categoria_nome) ?>
                         </a>
+                    </td>
+                    <td class="col-2">
                         <a href="/categoria/<?= $categoria->categoria_id ?>/edit" class="me-3">
                             <i class="fa-solid fa-pencil"></i>
                         </a>

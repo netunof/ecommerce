@@ -20,15 +20,16 @@
                 <?php foreach ($produtos as $produto): ?>
                 <tr>
                     <th scope="row" class="col-2"><?= $produto->produto_id ?></th>
-                    <td class="col-8"><?= htmlspecialchars($produto->produto_nome) ?></td>
-                    <td class="col-2">
-                        <a href="/produtos/<?= $produto->produto_id ?>" class="me-3">
-                            <i class="fa-solid fa-eye"></i>
+                    <td class="col-8">
+                        <a href="/produto/<?= $produto->produto_id ?>" class="me-3">
+                            <?= htmlspecialchars($produto->produto_nome) ?>
                         </a>
-                        <a href="/produtos/<?= $produto->produto_id ?>/edit" class="me-3">
+                    </td>
+                    <td class="col-2">
+                        <a href="/produto/<?= $produto->produto_id ?>/edit" class="me-3">
                             <i class="fa-solid fa-pencil"></i>
                         </a>
-                        <a href="/produtos/<?= $produto->produto_id ?>/delete" method="POST">
+                        <a href="/produto/<?= $produto->produto_id ?>/delete" method="POST">
                             <i class="fa-solid fa-trash text-danger"></i>
                         </a>
                     </td>

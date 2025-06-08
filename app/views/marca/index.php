@@ -22,11 +22,12 @@
                 <?php foreach ($marcas as $marca): ?>
                 <tr>
                     <th scope="row" class="col-2"><?= $marca->marca_id ?></th>
-                    <td class="col-8"><?= htmlspecialchars($marca->marca_nome) ?></td>
-                    <td class="col-2">
+                    <td class="col-8">
                         <a href="/marca/<?= $marca->marca_id ?>" class="me-3">
-                            <i class="fa-solid fa-eye"></i>
+                            <?= htmlspecialchars($marca->marca_nome) ?>
                         </a>
+                    </td>
+                    <td class="col-2">
                         <a href="/marca/<?= $marca->marca_id ?>/edit" class="me-3">
                             <i class="fa-solid fa-pencil"></i>
                         </a>
