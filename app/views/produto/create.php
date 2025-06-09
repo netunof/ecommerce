@@ -8,25 +8,25 @@
     <div class="row">
         <div class="col-6">
             <label for="produto_nome" class="form-label">Nome</label>
-            <input type="text" class="form-control" id="produto_nome" aria-describedby="produto_nome" name="produto_nome">
+            <input type="text" class="form-control" id="produto_nome" aria-describedby="produto_nome" name="produto_nome" required>
             <label for="categoria_fk" class="form-label">Categoria</label>
-            <select name="categoria_fk" id="categoria_fk" class="form-select" aria-label="Default select example">
+            <select name="categoria_fk" id="categoria_fk" class="form-select" aria-label="Default select example" required>
                 <option value="" selected disabled hidden>Selecione</option>
                 <?php foreach ($data['categorias'] as $categoria): ?>
                 <option value="<?=$categoria->categoria_id?>"><?=$categoria->categoria_nome?></option>
                 <?php endforeach; ?>
             </select>
             <label for="marca_fk" class="form-label">Marca</label>
-            <select name="marca_fk" id="marca_fk" class="form-select" aria-label="Default select example">
+            <select name="marca_fk" id="marca_fk" class="form-select" aria-label="Default select example" required>
                 <option value="" selected disabled hidden>Selecione</option>
                 <?php foreach ($data['marcas'] as $marca): ?>
                 <option value="<?=$marca->marca_id?>"><?=$marca->marca_nome?></option>
                 <?php endforeach; ?>
             </select>
             <label for="produto_preco" class="form-label">Preço</label>
-            <input type="number" step="0.01" min="0" class="form-control" id="produto_preco" aria-describedby="produto_preco" name="produto_preco">
+            <input type="number" step="0.01" min="0" class="form-control" id="produto_preco" aria-describedby="produto_preco" name="produto_preco" required>
             <label for="produto_estoque" class="form-label">Estoque</label>
-            <input type="number" min="0" step="1" class="form-control" id="produto_estoque" aria-describedby="produto_estoque" name="produto_estoque">
+            <input type="number" min="0" step="1" class="form-control" id="produto_estoque" aria-describedby="produto_estoque" name="produto_estoque" required>
         </div>
         <div class="col-6">
             <label for="produto_descricao" class="form-label">Descrição</label>

@@ -57,7 +57,7 @@ class ProdutoController {
         $data = ['marcas' => $this->marcaModel->getAll(),
                 'categorias' => $this->categoriaModel->getAll()];
         $produto = $this->produtoModel->find($id);
-        require_once 'app/views/marca/edit.php';
+        require_once 'app/views/produto/edit.php';
     }
     public function update() {
         $id = $_POST['produto_id'];

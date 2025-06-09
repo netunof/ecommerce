@@ -3,34 +3,40 @@
 <div class="mx-auto col-10">
     <h3 class="text-info mt-3">Modificar um produto</h3>
 </div>
-
 <form action="update" method="POST" class="col-10 mx-auto mb-3">
     <div class="row">
         <div class="col-6">
+            <input type="hidden" name="produto_id" id="produto_id" value="<?=$produto->produto_id?>">
             <label for="produto_nome" class="form-label">Nome</label>
-            <input type="text" class="form-control" id="produto_nome" aria-describedby="produto_nome" name="produto_nome">
+            <input type="text" class="form-control" id="produto_nome" aria-describedby="produto_nome" 
+            name="produto_nome" value="<?=$produto->produto_nome?>">
             <label for="categoria_fk" class="form-label">Categoria</label>
             <select name="categoria_fk" id="categoria_fk" class="form-select" aria-label="Default select example">
-                <option value="" selected disabled hidden>Selecione</option>
+                <option value="0">Selecione</option>
                 <?php foreach ($data['categorias'] as $categoria): ?>
-                <option value="<?=$categoria->categoria_id?>"><?=$categoria->categoria_nome?></option>
+                <option value="<?=$categoria->categoria_id?>" <?php if($produto->categoria_fk == $categoria->categoria_id) echo 'selected'?>>
+                    <?=$categoria->categoria_nome?></option>
                 <?php endforeach; ?>
             </select>
             <label for="marca_fk" class="form-label">Marca</label>
             <select name="marca_fk" id="marca_fk" class="form-select" aria-label="Default select example">
-                <option value="" selected disabled hidden>Selecione</option>
+                <option value="0">Selecione</option>
                 <?php foreach ($data['marcas'] as $marca): ?>
-                <option value="<?=$marca->marca_id?>"><?=$marca->marca_nome?></option>
+                <option value="<?=$marca->marca_id?>" <?php if($produto->marca_fk == $marca->marca_id) echo 'selected'?>>
+                    <?=$marca->marca_nome?></option>
                 <?php endforeach; ?>
             </select>
             <label for="produto_preco" class="form-label">Preço</label>
-            <input type="number" step="0.01" min="0" class="form-control" id="produto_preco" aria-describedby="produto_preco" name="produto_preco">
+            <input type="number" step="0.01" min="0" class="form-control" id="produto_preco" 
+            aria-describedby="produto_preco" name="produto_preco" value="<?=$produto->produto_preco?>">
             <label for="produto_estoque" class="form-label">Estoque</label>
-            <input type="number" min="0" step="1" class="form-control" id="produto_estoque" aria-describedby="produto_estoque" name="produto_estoque">
+            <input type="number" step="1" min="0" class="form-control" id="produto_estoque" 
+            aria-describedby="produto_estoque" name="produto_estoque" value="<?=$produto->produto_estoque?>">
         </div>
         <div class="col-6">
             <label for="produto_descricao" class="form-label">Descrição</label>
-            <textarea class="form-control" id="produto_descricao" aria-describedby="produto_descricao" name="produto_descricao" rows="7"></textarea>
+            <textarea class="form-control" id="produto_descricao" aria-describedby="produto_descricao" 
+            name="produto_descricao" rows="7"><?=$produto->produto_descricao?></textarea>
         </div>
     </div>
     <div class="mt-3">
