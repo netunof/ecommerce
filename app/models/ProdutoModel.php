@@ -34,11 +34,11 @@ class Produto {
         return $query->fetch(PDO::FETCH_OBJ);
     }
     
-    public function create($data) {
+    public function create($data, $pictures) {
         $query = $this->db->prepare("INSERT INTO produto (produto_nome, produto_descricao, marca_fk, categoria_fk, produto_preco, produto_estoque, created_at) 
             VALUES (:produto_nome, :produto_descricao, :marca_fk, :categoria_fk, :produto_preco, :produto_estoque, NOW())
         ");
-        return $query->execute([
+        $query->execute([
             ':produto_nome' => $data['produto_nome'],
             ':produto_descricao' => $data['produto_descricao'],
             ':marca_fk' => $data['marca_fk'],
@@ -46,6 +46,19 @@ class Produto {
             ':produto_preco' => $data['produto_preco'],
             ':produto_estoque' => $data['produto_estoque']
         ]);
+        $recentId = Database::lastId();
+        if ($pictures) {
+            foreach ($pictures as $picture) {
+                $pics = $this->db->prepare("INSERT INTO produto_foto (file_name, file_content, produto_fk, created_at)
+                VALUES (:file_name, :file_content, :produto_fk, NOW())");
+                $pics->execute([
+                    ':file_name'=> 'teste' . strval(random_int(1, 99999999)),
+                    ':file_content'=> base64_encode(file_get_contents($picture)),
+                    ':produto_fk'=> $recentId
+                ]);
+            }
+        }
+        return true;//chamar o retorno das duas queries
     }
     
     public function update($id, $data) {

@@ -35,6 +35,11 @@ class ProdutoController {
                 'categorias' => $this->categoriaModel->getAll()];
         require_once 'app/views/produto/create.php';
     }
+    public function debug() {
+        
+        echo(file_get_contents($_FILES['produto_fotos']['tmp_name'][0]));
+        print_r($_FILES);
+    }
 
     public function store() {
         $data = [
@@ -45,8 +50,9 @@ class ProdutoController {
             'categoria_fk' => $_POST['categoria_fk'],
             'produto_estoque' => $_POST['produto_estoque']
         ];
+        $pictures = $_FILES['produto_fotos']['tmp_name'];
 
-        if ($this->produtoModel->create($data)) {
+        if ($this->produtoModel->create($data, $pictures)) {
             header('Location: /produtos');
         } else {
             die('Erro ao criar');

@@ -4,7 +4,7 @@
     <h3 class="text-info mt-3">Cadastrar um produto</h3>
 </div>
 
-<form action="store" method="POST" class="col-10 mx-auto mb-3">
+<form action="store" method="POST" class="col-10 mx-auto mb-3" enctype="multipart/form-data">
     <div class="row">
         <div class="col-6">
             <label for="produto_nome" class="form-label">Nome</label>
@@ -31,6 +31,8 @@
         <div class="col-6">
             <label for="produto_descricao" class="form-label">Descrição</label>
             <textarea class="form-control" id="produto_descricao" aria-describedby="produto_descricao" name="produto_descricao" rows="7"></textarea>
+            <label for="produto_foto" class="form-label">Descrição</label>
+            <input type="file" class="form-control" id="produto_foto" name="produto_fotos[]" accept="image/png, image/jpeg" aria-describedby="Fotos do produto" multiple>
         </div>
     </div>
     <div class="mt-3">

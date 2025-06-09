@@ -23,4 +23,8 @@ class Database {
         }
         return self::$instance->connection;
     }
+    public static function lastId() {
+        return self::$instance->connection->lastInsertId();
+    }
+    
 }

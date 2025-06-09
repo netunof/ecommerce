@@ -86,6 +86,10 @@ switch ($request) {
         $produtoController->create();
         break;
     
+        case preg_match('/^\/produto\/debug\/?$/', $request) ? true : false:
+        $produtoController->debug();
+        break;
+    
     case preg_match('/^\/produto\/store\/?$/', $request) ? true : false:
         $produtoController->store();
         break;
@@ -111,3 +115,8 @@ switch ($request) {
         echo "404 - Page not found";
         break;
 }
+
+/*
+Warning: file_get_contents(primeira.jpg): Failed to open stream: No such file or directory in /Users/biel/Desktop/DIGICOMMERCE/ecommerce/app/controllers/ProdutoController.php on line 40
+Array ( [produto_fotos] => Array ( [name] => Array ( [0] => primeira.jpg [1] => segunda.jpg ) [full_path] => Array ( [0] => primeira.jpg [1] => segunda.jpg ) [type] => Array ( [0] => image/jpeg [1] => image/jpeg ) [tmp_name] => Array ( [0] => /private/var/folders/wb/pr5zph914m36_135w0n2m0740000gn/T/phpuh1f3a3rir57eoa7EDa [1] => /private/var/folders/wb/pr5zph914m36_135w0n2m0740000gn/T/phpusgt5dl6i1gj5YAClom ) [error] => Array ( [0] => 0 [1] => 0 ) [size] => Array ( [0] => 25929 [1] => 11424 ) ) )
+ */
