@@ -2,13 +2,16 @@
 require_once "app/models/ProdutoModel.php";
 require_once "app/models/CategoriaModel.php";
 require_once "app/models/MarcaModel.php";
+require_once "app/controllers/ProdutoFotoController.php";
 class ProdutoController {
     private $produtoModel;
+    private $produtoFotoController;
     private $categoriaModel;
     private $marcaModel;
     
     public function __construct() {
         $this->produtoModel = new Produto();
+        $this->produtoFotoController = new ProdutoFotoController();
         $this->categoriaModel = new Categoria();
         $this->marcaModel = new Marca();
     }
@@ -33,11 +36,12 @@ class ProdutoController {
     public function create() {
         $data = ['marcas' => $this->marcaModel->getAll(),
                 'categorias' => $this->categoriaModel->getAll()];
+        
         require_once 'app/views/produto/create.php';
     }
     public function debug() {
+        echo file_get_contents($_FILES['produto_fotos']['tmp_name'][0]);
         
-        echo(file_get_contents($_FILES['produto_fotos']['tmp_name'][0]));
         print_r($_FILES);
     }
 
@@ -50,9 +54,14 @@ class ProdutoController {
             'categoria_fk' => $_POST['categoria_fk'],
             'produto_estoque' => $_POST['produto_estoque']
         ];
-        $pictures = $_FILES['produto_fotos']['tmp_name'];
 
-        if ($this->produtoModel->create($data, $pictures)) {
+        $createResult = $this->produtoModel->create($data);
+        
+        if ($createResult['queryResult']) {
+            $this->produtoFotoController->store(
+                $createResult['produtoId'], $_FILES['produto_fotos']
+            );
+            
             header('Location: /produtos');
         } else {
             die('Erro ao criar');
@@ -85,7 +94,7 @@ class ProdutoController {
     
     public function delete($id) {
         if ($this->produtoModel->delete($id)) {
-            header('Location: /produto');
+            header('Location: /produtos');
         } else {
             die('Erro ao apagar');
         }
