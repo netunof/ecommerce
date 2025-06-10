@@ -1,108 +1,131 @@
 <?php
-require_once "app/models/ProdutoModel.php";
-require_once "app/models/CategoriaModel.php";
-require_once "app/models/MarcaModel.php";
-require_once "app/controllers/ProdutoFotoController.php";
-class ProdutoController {
-    private $produtoModel;
-    private $produtoFotoController;
-    private $categoriaModel;
-    private $marcaModel;
-    
-    public function __construct() {
-        $this->produtoModel = new Produto();
-        $this->produtoFotoController = new ProdutoFotoController();
-        $this->categoriaModel = new Categoria();
-        $this->marcaModel = new Marca();
-    }
-    
-    public function index() {
+
+declare(strict_types=1);
+
+namespace App\Controllers;
+
+use App\Models\{Produto, Categoria, Marca, ProdutoFoto};
+use App\Controllers\ProdutoFotoController;
+
+class ProdutoController
+{
+    public function __construct(
+        private Produto $produtoModel = new Produto(),
+        private ProdutoFotoController $produtoFotoController = new ProdutoFotoController(),
+        private ProdutoFoto $produtoFotoModel = new ProdutoFoto(),
+        private Categoria $categoriaModel = new Categoria(),
+        private Marca $marcaModel = new Marca()
+    ) {}
+
+    public function index(): void
+    {
         $produtos = $this->produtoModel->getAll();
-        /*[':produto_nome' => 'produto_nome',
-        ':produto_marca' => 'produto_marca', ':produto_modelo' => 'produto_modelo',
-        ':preco_max' => 'preco_max', ':preco_min ' => 'preco_min']*/
-        require_once 'app/views/produto/index.php';
-    }
-    
-    public function show($id) {
-        $produto = $this->produtoModel->find($id);
-        if ($produto) {
-            require_once 'app/views/produto/show.php';
-        } else {
-            $this->notFound();
-        }
-    }
-    
-    public function create() {
-        $data = ['marcas' => $this->marcaModel->getAll(),
-                'categorias' => $this->categoriaModel->getAll()];
-        
-        require_once 'app/views/produto/create.php';
-    }
-    public function debug() {
-        echo file_get_contents($_FILES['produto_fotos']['tmp_name'][0]);
-        
-        print_r($_FILES);
+        require 'app/views/produto/index.php';
     }
 
-    public function store() {
+    public function show(string $produtoId): void
+    {
+        $produto = $this->produtoModel->find($produtoId);
+        
+        if (!$produto) {
+            $this->notFound();
+        }
+
+        $produtoFotos = $this->produtoFotoModel->getByProduto($produtoId);
+        require 'app/views/produto/show.php';
+    }
+
+    public function create(): void
+    {
         $data = [
-            'produto_nome' => $_POST['produto_nome'],
-            'produto_descricao' => $_POST['produto_descricao'],
-            'produto_preco' => $_POST['produto_preco'],
-            'marca_fk' => $_POST['marca_fk'],
-            'categoria_fk' => $_POST['categoria_fk'],
-            'produto_estoque' => $_POST['produto_estoque']
+            'marcas' => $this->marcaModel->getAll(),
+            'categorias' => $this->categoriaModel->getAll()
+        ];
+        
+        require 'app/views/produto/create.php';
+    }
+
+    public function store(): void
+    {
+        $data = [
+            'produto_nome' => filter_input(INPUT_POST, 'produto_nome', FILTER_SANITIZE_SPECIAL_CHARS),
+            'produto_descricao' => filter_input(INPUT_POST, 'produto_descricao', FILTER_SANITIZE_SPECIAL_CHARS),
+            'produto_preco' => filter_input(INPUT_POST, 'produto_preco', FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION),
+            'marca_fk' => filter_input(INPUT_POST, 'marca_fk', FILTER_VALIDATE_INT),
+            'categoria_fk' => filter_input(INPUT_POST, 'categoria_fk', FILTER_VALIDATE_INT),
+            'produto_estoque' => filter_input(INPUT_POST, 'produto_estoque', FILTER_VALIDATE_INT)
         ];
 
         $createResult = $this->produtoModel->create($data);
         
         if ($createResult['queryResult']) {
             $this->produtoFotoController->store(
-                $createResult['produtoId'], $_FILES['produto_fotos']
+                $createResult['produtoId'], 
+                $_FILES['produto_fotos'] ?? []
             );
             
             header('Location: /produtos');
-        } else {
-            die('Erro ao criar');
+            exit;
         }
+
+        http_response_code(500);
+        die('Error creating product');
     }
-    
-    public function edit($id) {
-        $data = ['marcas' => $this->marcaModel->getAll(),
-                'categorias' => $this->categoriaModel->getAll()];
-        $produto = $this->produtoModel->find($id);
-        require_once 'app/views/produto/edit.php';
-    }
-    public function update() {
-        $id = $_POST['produto_id'];
+
+    public function edit(string $produtoId): void
+    {
+        $produto = $this->produtoModel->find($produtoId);
+        
+        if (!$produto) {
+            $this->notFound();
+        }
+
         $data = [
-            'produto_nome' => $_POST['produto_nome'],
-            'produto_descricao' => $_POST['produto_descricao'],
-            'marca_fk' => $_POST['marca_fk'],
-            'categoria_fk' => $_POST['categoria_fk'],
-            'produto_preco' => $_POST['produto_preco'],
-            'produto_estoque' => $_POST['produto_estoque']
+            'marcas' => $this->marcaModel->getAll(),
+            'categorias' => $this->categoriaModel->getAll(),
+            'produto' => $produto
         ];
-            
-        if ($this->produtoModel->update($id, $data)) {
-            header('Location: /produtos');
-        } else {
-            die('Erro ao modificar');
-        }
+        
+        require 'app/views/produto/edit.php';
     }
-    
-    public function delete($id) {
-        if ($this->produtoModel->delete($id)) {
+
+    public function update(): void
+    {
+        $produtoId = filter_input(INPUT_POST, 'produto_id', FILTER_VALIDATE_INT);
+        
+        $data = [
+            'produto_nome' => filter_input(INPUT_POST, 'produto_nome', FILTER_SANITIZE_SPECIAL_CHARS),
+            'produto_descricao' => filter_input(INPUT_POST, 'produto_descricao', FILTER_SANITIZE_SPECIAL_CHARS),
+            'marca_fk' => filter_input(INPUT_POST, 'marca_fk', FILTER_VALIDATE_INT),
+            'categoria_fk' => filter_input(INPUT_POST, 'categoria_fk', FILTER_VALIDATE_INT),
+            'produto_preco' => filter_input(INPUT_POST, 'produto_preco', FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION),
+            'produto_estoque' => filter_input(INPUT_POST, 'produto_estoque', FILTER_VALIDATE_INT)
+        ];
+
+        if ($this->produtoModel->update($produtoId, $data)) {
             header('Location: /produtos');
-        } else {
-            die('Erro ao apagar');
+            exit;
         }
+
+        http_response_code(500);
+        die('Error updating product');
     }
-    
-    private function notFound() {
+
+    public function delete(string $produtoId): void
+    {
+        if ($this->produtoModel->delete($produtoId)) {
+            header('Location: /produtos');
+            exit;
+        }
+
+        http_response_code(500);
+        die('Error deleting product');
+    }
+
+    private function notFound(): never
+    {
         http_response_code(404);
-        echo "404 - Produto não encontrado";
-        exit();
+        require 'app/views/errors/404.php';
+        exit;
     }
 }

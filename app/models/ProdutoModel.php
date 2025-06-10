@@ -1,4 +1,6 @@
 <?php
+namespace App\Models;
+
 require_once "config/database.php";
 class Produto {
     private $db;
@@ -31,10 +33,10 @@ class Produto {
         return $query->fetchAll(PDO::FETCH_OBJ);
     }
     
-    public function find($id) {
+    public function find($produtoId) {
         $query = $this->db->prepare("SELECT * FROM produto WHERE produto_id = :produto_id");
         
-        $query->execute([':produto_id' => $id]);
+        $query->execute([':produto_id' => $produtoId]);
         
         return $query->fetch(PDO::FETCH_OBJ);
     }
@@ -54,14 +56,14 @@ class Produto {
        ]), 'produtoId' => Database::lastId()];
     }
     
-    public function update($id, $data) {
+    public function update($produtoId, $data) {
         $query = $this->db->prepare("UPDATE produto 
             SET produto_nome = :produto_nome, produto_descricao = :produto_descricao, marca_fk = :marca_fk, 
             categoria_fk = :categoria_fk, produto_preco = :produto_preco, produto_estoque = :produto_estoque 
             WHERE produto_id = :produto_id");
         
         return $query->execute([
-            ':produto_id' => $id,
+            ':produto_id' => $produtoId,
             ':produto_nome' => $data['produto_nome'],
             ':produto_descricao' => $data['produto_descricao'],
             ':marca_fk' => $data['marca_fk'],
@@ -71,9 +73,9 @@ class Produto {
         ]);
     }
     
-    public function delete($id) {
+    public function delete($produtoId) {
         $query = $this->db->prepare("DELETE FROM produto WHERE produto_id = :produto_id");
  
-        return $query->execute([':produto_id' => $id]);
+        return $query->execute([':produto_id' => $produtoId]);
     }
 }

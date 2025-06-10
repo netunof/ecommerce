@@ -7,7 +7,7 @@
             <a href="/produto/create" class="btn btn-success float-end"><i class="fa-solid fa-plus me-2"></i>Criar Produto</a>
         </div>
     </div>
-        <?php if($produtos){ ?>    
+        <?php if($produtos){ ?>
         <table class="table table-hover">
             <thead>
                 <tr>
@@ -34,7 +34,7 @@
                         </a>
                     </td>
                 </tr>
-                <?php endforeach;} 
+                <?php endforeach;}
                 else echo 'Nenhum produto cadastrado'?>
             </tbody>
         </table>

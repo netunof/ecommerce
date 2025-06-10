@@ -1,4 +1,6 @@
 <?php
+namespace App\Controllers;
+
 require_once "app/models/CategoriaModel.php";
 require_once "app/models/MarcaModel.php";
 require_once "app/models/ProdutoModel.php";

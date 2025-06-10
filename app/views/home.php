@@ -64,7 +64,9 @@
                         <?php if($data['produtos']){
                             foreach ($data['produtos'] as $produto):?>
                             <div class="card" style="width: 18rem;">
-                                <img src="..." class="card-img-top" alt="...">
+                                <a href="produto/<?=$produto->produto_id?>">
+                                    <img src="..." class="card-img-top" alt="...">
+                                </a>
                                 <div class="card-body">
                                     <h5 class="card-title"><?= $produto->produto_nome?></h5>
                                     <p class="card-text">R$<?= $produto->produto_preco?></p>

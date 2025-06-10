@@ -1,4 +1,5 @@
 <?php
+namespace App\Models;
 require_once "config/database.php";
 
 class Categoria {

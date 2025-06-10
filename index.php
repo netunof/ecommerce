@@ -1,9 +1,6 @@
 <?php
-require_once 'config/database.php';
-require_once 'app/controllers/MarcaController.php';
-require_once 'app/controllers/CategoriaController.php';
-require_once 'app/controllers/ProdutoController.php';
-require_once 'app/controllers/HomeController.php';
+use Config\Database;
+use App\Controllers\{ProdutoController, CategoriaController, MarcaController, ProdutoFotoController, HomeController};
 
 $request = $_SERVER['REQUEST_URI'];
 $produtoController = new ProdutoController();

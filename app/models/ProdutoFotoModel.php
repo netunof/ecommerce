@@ -1,4 +1,6 @@
 <?php
+namespace App\Models;
+
 require_once "config/database.php";
 class ProdutoFoto {
     private $db;
@@ -8,13 +10,19 @@ class ProdutoFoto {
     }
 
     public function getByProduto($produtoId) {
-        $query = $this->db->query("SELECT * FROM produto_foto ORDER BY produto_foto_id
-        WHERE produto_fk = :produto_fk");
+    try {
+        $query = $this->db->prepare("SELECT * FROM produto_foto 
+        WHERE produto_fk = :produto_fk ORDER BY produto_foto_id");
         
         $query->execute([':produto_fk' => $produtoId]);
         
         return $query->fetchAll(PDO::FETCH_OBJ);
+    } catch (PDOException $e) {
+        error_log("Database error in getByProduto: " . $e->getMessage());
+        
+        return [];
     }
+}
     
     
     public function create($produtoId, $foto) {

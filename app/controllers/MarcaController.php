@@ -1,4 +1,6 @@
 <?php
+namespace App\Controllers;
+
 require_once "app/models/MarcaModel.php";
 class MarcaController {
     private $marcaModel;
