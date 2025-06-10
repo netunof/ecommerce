@@ -1,5 +1,5 @@
 <?php
-namespace Config;
+namespace App\Config;
 class Database {
     private static $instance = null;
     private $connection;
@@ -11,9 +11,9 @@ class Database {
         $password = 'postgres';
         
         try {
-            $this->connection = new PDO("pgsql:host=$host;dbname=$dbname", $username, $password);
-            $this->connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-        } catch(PDOException $e) {
+            $this->connection = new \PDO("pgsql:host=$host;dbname=$dbname", $username, $password);
+            $this->connection->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
+        } catch(\PDOException $e) {
             die("Connection failed: " . $e->getMessage());
         }
     }

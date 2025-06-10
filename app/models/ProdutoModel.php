@@ -1,8 +1,8 @@
 <?php
 namespace App\Models;
 
-require_once "config/database.php";
-class Produto {
+use App\Config\Database;
+class ProdutoModel {
     private $db;
     
     public function __construct() {
@@ -12,7 +12,7 @@ class Produto {
     public function getAll() {
         $query = $this->db->query("SELECT * FROM produto ORDER BY produto_id");
         
-        return $query->fetchAll(PDO::FETCH_OBJ);
+        return $query->fetchAll(\PDO::FETCH_OBJ);
     }
     public function getFilter($data) {
         $query = $this->db->prepare("SELECT * FROM produto 
@@ -30,7 +30,7 @@ class Produto {
             ':preco_min ' => $data['preco_min']
         ]);
         
-        return $query->fetchAll(PDO::FETCH_OBJ);
+        return $query->fetchAll(\PDO::FETCH_OBJ);
     }
     
     public function find($produtoId) {
@@ -38,7 +38,7 @@ class Produto {
         
         $query->execute([':produto_id' => $produtoId]);
         
-        return $query->fetch(PDO::FETCH_OBJ);
+        return $query->fetch(\PDO::FETCH_OBJ);
     }
     
     public function create($data) {

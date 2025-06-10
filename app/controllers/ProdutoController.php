@@ -4,17 +4,17 @@ declare(strict_types=1);
 
 namespace App\Controllers;
 
-use App\Models\{Produto, Categoria, Marca, ProdutoFoto};
+use App\Models\{ProdutoModel, CategoriaModel, MarcaModel, ProdutoFotoModel};
 use App\Controllers\ProdutoFotoController;
 
 class ProdutoController
 {
     public function __construct(
-        private Produto $produtoModel = new Produto(),
+        private ProdutoModel $produtoModel = new ProdutoModel(),
         private ProdutoFotoController $produtoFotoController = new ProdutoFotoController(),
-        private ProdutoFoto $produtoFotoModel = new ProdutoFoto(),
-        private Categoria $categoriaModel = new Categoria(),
-        private Marca $marcaModel = new Marca()
+        private ProdutoFotoModel $produtoFotoModel = new ProdutoFotoModel(),
+        private CategoriaModel $categoriaModel = new CategoriaModel(),
+        private MarcaModel $marcaModel = new MarcaModel()
     ) {}
 
     public function index(): void

@@ -1,8 +1,8 @@
 <?php
 namespace App\Models;
-require_once "config/database.php";
+use App\Config\Database;
 
-class Categoria {
+class CategoriaModel {
     private $db;
     
     public function __construct() {
@@ -11,13 +11,13 @@ class Categoria {
     
     public function getAll() {
         $query = $this->db->query("SELECT * FROM categoria ORDER BY categoria_nome");
-        return $query->fetchAll(PDO::FETCH_OBJ);
+        return $query->fetchAll(\PDO::FETCH_OBJ);
     }
     
     public function find($id) {
         $query = $this->db->prepare("SELECT * FROM categoria WHERE categoria_id = :categoria_id");
         $query->execute([':categoria_id' => $id]);
-        return $query->fetch(PDO::FETCH_OBJ);
+        return $query->fetch(\PDO::FETCH_OBJ);
     }
     
     public function create($data) {

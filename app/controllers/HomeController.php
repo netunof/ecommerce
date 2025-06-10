@@ -1,18 +1,17 @@
 <?php
 namespace App\Controllers;
 
-require_once "app/models/CategoriaModel.php";
-require_once "app/models/MarcaModel.php";
-require_once "app/models/ProdutoModel.php";
+use App\Models\{CategoriaModel, MarcaModel, ProdutoModel};
+
 class HomeController {
     private $categoriaModel;
     private $marcaModel;
     private $produtoModel;
     
     public function __construct() {
-        $this->categoriaModel = new Categoria();
-        $this->marcaModel = new Marca();
-        $this->produtoModel = new Produto();
+        $this->categoriaModel = new CategoriaModel();
+        $this->marcaModel = new MarcaModel();
+        $this->produtoModel = new ProdutoModel();
     }
     public function home() {
         $data = [

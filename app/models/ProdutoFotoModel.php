@@ -1,8 +1,9 @@
 <?php
 namespace App\Models;
 
-require_once "config/database.php";
-class ProdutoFoto {
+use App\Config\Database;
+
+class ProdutoFotoModel {
     private $db;
     
     public function __construct() {
@@ -16,8 +17,8 @@ class ProdutoFoto {
         
         $query->execute([':produto_fk' => $produtoId]);
         
-        return $query->fetchAll(PDO::FETCH_OBJ);
-    } catch (PDOException $e) {
+        return $query->fetchAll(\PDO::FETCH_OBJ);
+    } catch (\PDOException $e) {
         error_log("Database error in getByProduto: " . $e->getMessage());
         
         return [];

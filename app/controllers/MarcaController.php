@@ -1,12 +1,12 @@
 <?php
 namespace App\Controllers;
 
-require_once "app/models/MarcaModel.php";
+use app\Models\MarcaModel;
 class MarcaController {
     private $marcaModel;
     
     public function __construct() {
-        $this->marcaModel = new Marca();
+        $this->marcaModel = new MarcaModel();
     }
     
     public function index() {

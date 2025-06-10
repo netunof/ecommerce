@@ -1,12 +1,13 @@
 <?php
 namespace App\Controllers;
 
-require_once "app/models/ProdutoFotoModel.php";
+use App\Models\ProdutoFotoModel;
+
 class ProdutoFotoController {
     private $produtoFotoModel;
     
     public function __construct() {
-        $this->produtoFotoModel = new ProdutoFoto();
+        $this->produtoFotoModel = new ProdutoFotoModel();
     }
     
     public function store($produtoId, $fotos) {

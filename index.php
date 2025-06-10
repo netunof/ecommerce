@@ -1,5 +1,6 @@
 <?php
-use Config\Database;
+require_once 'vendor/autoload.php';
+
 use App\Controllers\{ProdutoController, CategoriaController, MarcaController, ProdutoFotoController, HomeController};
 
 $request = $_SERVER['REQUEST_URI'];

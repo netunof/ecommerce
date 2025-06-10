@@ -1,9 +1,9 @@
 <?php
 namespace App\Models;
 
-require_once "config/database.php";
+use App\Config\Database;
 
-class Marca {
+class MarcaModel {
     private $db;
     
     public function __construct() {
@@ -12,13 +12,13 @@ class Marca {
     
     public function getAll() {
         $query = $this->db->query("SELECT * FROM marca ORDER BY marca_nome");
-        return $query->fetchAll(PDO::FETCH_OBJ);
+        return $query->fetchAll(\PDO::FETCH_OBJ);
     }
     
     public function find($id) {
         $query = $this->db->prepare("SELECT * FROM marca WHERE marca_id = :marca_id");
         $query->execute([':marca_id' => $id]);
-        return $query->fetch(PDO::FETCH_OBJ);
+        return $query->fetch(\PDO::FETCH_OBJ);
     }
     
     public function create($data) {

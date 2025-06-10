@@ -1,12 +1,13 @@
 <?php
 namespace App\Controllers;
 
-require_once "app/models/CategoriaModel.php";
+use App\Models\CategoriaModel;
+
 class CategoriaController {
     private $categoriaModel;
     
     public function __construct() {
-        $this->categoriaModel = new Categoria();
+        $this->categoriaModel = new CategoriaModel();
     }
     
     public function index() {
