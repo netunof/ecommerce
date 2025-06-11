@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Controllers;
 
 use App\Models\{ProdutoModel, CategoriaModel, MarcaModel, ProdutoFotoModel};
-use App\Controllers\ProdutoFotoController;
+use App\Views\ViewRenderer;
 
 class ProdutoController
 {
@@ -14,13 +14,14 @@ class ProdutoController
         private ProdutoFotoController $produtoFotoController = new ProdutoFotoController(),
         private ProdutoFotoModel $produtoFotoModel = new ProdutoFotoModel(),
         private CategoriaModel $categoriaModel = new CategoriaModel(),
-        private MarcaModel $marcaModel = new MarcaModel()
+        private MarcaModel $marcaModel = new MarcaModel(),
+        private ViewRenderer $view = new ViewRenderer()
     ) {}
 
     public function index(): void
     {
         $produtos = $this->produtoModel->getAll();
-        require 'app/views/produto/index.php';
+        $this->view->render('produto/index', ['produtos' => $produtos]);
     }
 
     public function show(string $produtoId): void
@@ -32,7 +33,10 @@ class ProdutoController
         }
 
         $produtoFotos = $this->produtoFotoModel->getByProduto($produtoId);
-        require 'app/views/produto/show.php';
+        $this->view->render('produto/show', [
+            'produto' => $produto,
+            'produtoFotos' => $produtoFotos
+        ]);
     }
 
     public function create(): void
@@ -42,7 +46,7 @@ class ProdutoController
             'categorias' => $this->categoriaModel->getAll()
         ];
         
-        require 'app/views/produto/create.php';
+        $this->view->render('produto/create', $data);
     }
 
     public function store(): void
@@ -86,7 +90,7 @@ class ProdutoController
             'produto' => $produto
         ];
         
-        require 'app/views/produto/edit.php';
+        $this->view->render('produto/edit', $data);
     }
 
     public function update(): void
@@ -125,7 +129,7 @@ class ProdutoController
     private function notFound(): never
     {
         http_response_code(404);
-        require 'app/views/errors/404.php';
+        $this->view->render('errors/404');
         exit;
     }
 }

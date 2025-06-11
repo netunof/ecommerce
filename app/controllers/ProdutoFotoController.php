@@ -1,36 +1,48 @@
 <?php
+
+declare(strict_types=1);
+
 namespace App\Controllers;
 
 use App\Models\ProdutoFotoModel;
+use App\Views\ViewRenderer;
 
-class ProdutoFotoController {
-    private $produtoFotoModel;
-    
-    public function __construct() {
-        $this->produtoFotoModel = new ProdutoFotoModel();
-    }
-    
-    public function store($produtoId, $fotos) {
-        if (!$fotos) {
+class ProdutoFotoController 
+{
+    public function __construct(
+        private ProdutoFotoModel $produtoFotoModel = new ProdutoFotoModel(),
+        private ViewRenderer $view = new ViewRenderer()
+    ) {}
+
+    public function store(int $produtoId, array $fotos): bool
+    {
+        if (empty($fotos)) {
             return false;
         }
         
+        $success = true;
         foreach ($fotos as $foto) {
-            if(!$this->produtoFotoModel->create($produtoId, $foto)){
-                die('Erro ao criar');
+            if (!$this->produtoFotoModel->create($produtoId, $foto)) {
+                $success = false;
+                break;
             }
         }
+        
+        return $success;
     }
-    
-    public function delete($id) {
+
+    public function delete(int $id): void
+    {
         if (!$this->produtoFotoModel->delete($id)) {
-            die('Erro ao apagar');
+            http_response_code(500);
+            die('Error deleting product photo');
         }
     }
-    
-    private function notFound() {
+
+    private function notFound(): never
+    {
         http_response_code(404);
-        echo "404 - Produto não encontrado";
-        exit();
+        $this->view->render('errors/404');
+        exit;
     }
 }

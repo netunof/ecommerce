@@ -1,29 +1,36 @@
 <?php
+
+declare(strict_types=1);
+
 namespace App\Controllers;
 
 use App\Models\{CategoriaModel, MarcaModel, ProdutoModel};
+use App\Views\ViewRenderer;
 
-class HomeController {
-    private $categoriaModel;
-    private $marcaModel;
-    private $produtoModel;
-    
-    public function __construct() {
-        $this->categoriaModel = new CategoriaModel();
-        $this->marcaModel = new MarcaModel();
-        $this->produtoModel = new ProdutoModel();
-    }
-    public function home() {
+class HomeController 
+{
+    public function __construct(
+        private CategoriaModel $categoriaModel = new CategoriaModel(),
+        private MarcaModel $marcaModel = new MarcaModel(),
+        private ProdutoModel $produtoModel = new ProdutoModel(),
+        private ViewRenderer $view = new ViewRenderer()
+    ) {}
+
+    public function home(): void
+    {
         $data = [
             'categorias' => $this->categoriaModel->getAll(),
             'marcas' => $this->marcaModel->getAll(),
             'produtos' => $this->produtoModel->getAll()
         ];
-        require_once 'app/views/home.php';
+        
+        $this->view->render('home', $data);
     }
-    private function notFound() {
+
+    private function notFound(): never
+    {
         http_response_code(404);
-        echo "404 - Categoria não encontrada";
-        exit();
+        $this->view->render('errors/404');
+        exit;
     }
 }

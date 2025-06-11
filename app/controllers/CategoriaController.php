@@ -1,70 +1,98 @@
 <?php
+
+declare(strict_types=1);
+
 namespace App\Controllers;
 
 use App\Models\CategoriaModel;
+use App\Views\ViewRenderer;
 
-class CategoriaController {
-    private $categoriaModel;
-    
-    public function __construct() {
-        $this->categoriaModel = new CategoriaModel();
-    }
-    
-    public function index() {
+class CategoriaController 
+{
+    public function __construct(
+        private CategoriaModel $categoriaModel = new CategoriaModel(),
+        private ViewRenderer $view = new ViewRenderer()
+    ) {}
+
+    public function index(): void
+    {
         $categorias = $this->categoriaModel->getAll();
-        require_once 'app/views/categoria/index.php';
+        $this->view->render('categoria/index', ['categorias' => $categorias]);
     }
-    
-    public function show($id) {
+
+    public function show(int $id): void
+    {
         $categoria = $this->categoriaModel->find($id);
-        if ($categoria) {
-            require_once 'app/views/categoria/show.php';
-        } else {
+        
+        if (!$categoria) {
             $this->notFound();
         }
-    }
-    
-    public function create() {
-        require_once 'app/views/categoria/create.php';
+
+        $this->view->render('categoria/show', ['categoria' => $categoria]);
     }
 
-    public function store() {
+    public function create(): void
+    {
+        $this->view->render('categoria/create');
+    }
+
+    public function store(): void
+    {
         $data = [
-                'categoria_nome' => $_POST['categoria_nome']
-            ];
+            'categoria_nome' => filter_input(INPUT_POST, 'categoria_nome', FILTER_SANITIZE_SPECIAL_CHARS)
+        ];
+
         if ($this->categoriaModel->create($data)) {
             header('Location: /categorias');
-        } else {
-            die('Erro ao criar');
+            exit;
         }
-    }
-    
-    public function edit($id) {
-        $categoria = $this->categoriaModel->find($id);
-        require_once 'app/views/categoria/edit.php';
+
+        http_response_code(500);
+        die('Error creating brand');
     }
 
-    public function update() {
-        $id = $_POST['categoria_id'];
-        $nome = $_POST['categoria_nome'];
-        if($this->categoriaModel->update($id, $nome)){
-            header('Location: /categorias');
-        } else {
-            die('Erro ao atualizar');
+    public function edit(int $id): void
+    {
+        $categoria = $this->categoriaModel->find($id);
+        
+        if (!$categoria) {
+            $this->notFound();
         }
+
+        $this->view->render('categoria/edit', ['categoria' => $categoria]);
     }
-    
-    public function delete($id) {
+
+    public function update(): void
+    {
+        $id = filter_input(INPUT_POST, 'categoria_id', FILTER_VALIDATE_INT);
+        $data = [
+            'categoria_nome' => filter_input(INPUT_POST, 'categoria_nome', FILTER_SANITIZE_SPECIAL_CHARS)
+        ];
+
+        if ($this->categoriaModel->update($id, $data)) {
+            header('Location: /categorias');
+            exit;
+        }
+
+        http_response_code(500);
+        die('Error updating brand');
+    }
+
+    public function delete(int $id): void
+    {
         if ($this->categoriaModel->delete($id)) {
             header('Location: /categorias');
-        } else {
-            die('Erro ao apagar');
+            exit;
         }
+
+        http_response_code(500);
+        die('Error deleting brand');
     }
-    
-    private function notFound() {
+
+    private function notFound(): never
+    {
         http_response_code(404);
-        echo "404 - Categoria não encontrada";
-        exit();
+        $this->view->render('errors/404');
+        exit;
     }
 }

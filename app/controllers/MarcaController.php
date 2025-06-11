@@ -1,69 +1,98 @@
 <?php
+
+declare(strict_types=1);
+
 namespace App\Controllers;
 
-use app\Models\MarcaModel;
-class MarcaController {
-    private $marcaModel;
-    
-    public function __construct() {
-        $this->marcaModel = new MarcaModel();
-    }
-    
-    public function index() {
+use App\Models\MarcaModel;
+use App\Views\ViewRenderer;
+
+class MarcaController 
+{
+    public function __construct(
+        private MarcaModel $marcaModel = new MarcaModel(),
+        private ViewRenderer $view = new ViewRenderer()
+    ) {}
+
+    public function index(): void
+    {
         $marcas = $this->marcaModel->getAll();
-        require_once 'app/views/marca/index.php';
+        $this->view->render('marca/index', ['marcas' => $marcas]);
     }
-    
-    public function show($id) {
+
+    public function show(int $id): void
+    {
         $marca = $this->marcaModel->find($id);
-        if ($marca) {
-            require_once 'app/views/marca/show.php';
-        } else {
+        
+        if (!$marca) {
             $this->notFound();
         }
-    }
-    
-    public function create() {
-        require_once 'app/views/marca/create.php';
+
+        $this->view->render('marca/show', ['marca' => $marca]);
     }
 
-    public function store() {
+    public function create(): void
+    {
+        $this->view->render('marca/create');
+    }
+
+    public function store(): void
+    {
         $data = [
-                'marca_nome' => $_POST['marca_nome']
-            ];
+            'marca_nome' => filter_input(INPUT_POST, 'marca_nome', FILTER_SANITIZE_SPECIAL_CHARS)
+        ];
+
         if ($this->marcaModel->create($data)) {
             header('Location: /marcas');
-        } else {
-            die('Erro ao criar');
+            exit;
         }
-    }
-    
-    public function edit($id) {
-        $marca = $this->marcaModel->find($id);
-        require_once 'app/views/marca/edit.php';
+
+        http_response_code(500);
+        die('Error creating brand');
     }
 
-    public function update() {
-        $id = $_POST['marca_id'];
-        $nome = $_POST['marca_nome'];
-        if($this->marcaModel->update($id, $nome)){
-            header('Location: /marcas');
-        } else {
-            die('Erro ao atualizar');
+    public function edit(int $id): void
+    {
+        $marca = $this->marcaModel->find($id);
+        
+        if (!$marca) {
+            $this->notFound();
         }
+
+        $this->view->render('marca/edit', ['marca' => $marca]);
     }
-    
-    public function delete($id) {
+
+    public function update(): void
+    {
+        $id = filter_input(INPUT_POST, 'marca_id', FILTER_VALIDATE_INT);
+        $data = [
+            'marca_nome' => filter_input(INPUT_POST, 'marca_nome', FILTER_SANITIZE_SPECIAL_CHARS)
+        ];
+
+        if ($this->marcaModel->update($id, $data)) {
+            header('Location: /marcas');
+            exit;
+        }
+
+        http_response_code(500);
+        die('Error updating brand');
+    }
+
+    public function delete(int $id): void
+    {
         if ($this->marcaModel->delete($id)) {
             header('Location: /marcas');
-        } else {
-            die('Erro ao apagar');
+            exit;
         }
+
+        http_response_code(500);
+        die('Error deleting brand');
     }
-    
-    private function notFound() {
+
+    private function notFound(): never
+    {
         http_response_code(404);
-        echo "404 - Marca não encontrada";
-        exit();
+        $this->view->render('errors/404');
+        exit;
     }
 }

@@ -84,10 +84,6 @@ switch ($request) {
         $produtoController->create();
         break;
     
-        case preg_match('/^\/produto\/debug\/?$/', $request) ? true : false:
-        $produtoController->debug();
-        break;
-    
     case preg_match('/^\/produto\/store\/?$/', $request) ? true : false:
         $produtoController->store();
         break;
@@ -106,6 +102,36 @@ switch ($request) {
         
     case preg_match('/^\/produto\/(\d+)\/delete\/?$/', $request, $matches) ? true : false:
         $produtoController->delete($matches[1]);
+        break;
+    
+    #CLIENTES
+    case '/clientes':
+    case '/clientes/':
+        $clienteController->index();
+        break;
+        
+    case preg_match('/^\/cliente\/create\/?$/', $request) ? true : false:
+        $clienteController->create();
+        break;
+    
+    case preg_match('/^\/cliente\/store\/?$/', $request) ? true : false:
+        $clienteController->store();
+        break;
+        
+    case preg_match('/^\/cliente\/(\d+)\/?$/', $request, $matches) ? true : false:
+        $clienteController->show($matches[1]);
+        break;
+        
+    case preg_match('/^\/cliente\/(\d+)\/edit\/?$/', $request, $matches) ? true : false:
+        $clienteController->edit($matches[1]);
+        break;
+
+    case preg_match('/^\/cliente\/(\d+)\/update\/?$/', $request, $matches) ? true : false:
+        $clienteController->update();
+        break;
+        
+    case preg_match('/^\/cliente\/(\d+)\/delete\/?$/', $request, $matches) ? true : false:
+        $clienteController->delete($matches[1]);
         break;
     
     default:

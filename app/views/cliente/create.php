@@ -1,4 +1,5 @@
 <?php include_once __DIR__.'/../layout/cabecalho.php';?>
+
 <div class="mx-auto col-6">
     <h3 class="text-info mt-3">Cadastrar uma categoria</h3>
 </div>
