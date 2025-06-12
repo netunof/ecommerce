@@ -68,10 +68,6 @@
                                         </td>
                                         <td class="text-end">
                                             <div class="btn-group btn-group-sm" role="group">
-                                                <a href="/produto/<?= htmlspecialchars($produto->produto_id) ?>" 
-                                                   class="btn btn-outline-primary" title="Visualizar">
-                                                    <i class="fas fa-eye"></i>
-                                                </a>
                                                 <a href="/produto/<?= htmlspecialchars($produto->produto_id) ?>/edit" 
                                                    class="btn btn-outline-secondary" title="Editar">
                                                     <i class="fas fa-edit"></i>

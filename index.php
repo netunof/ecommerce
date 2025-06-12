@@ -5,13 +5,21 @@ use App\Controllers\{ProdutoController, CategoriaController, MarcaController, Pr
 
 $request = $_SERVER['REQUEST_URI'];
 $produtoController = new ProdutoController();
+$produtoFotoController = new ProdutoFotoController();
 $marcaController = new MarcaController();
 $categoriaController = new CategoriaController();
 $homeController = new HomeController();
 
 switch ($request) {
     case '/':
-        $homeController->home();
+        $filters = [
+            'produto_nome' => $_GET['search'] ?? '',
+            'marca_fk' => $_GET['marca'] ?? 0,
+            'categoria_fk' => $_GET['categoria'] ?? 0,
+            'preco_min' => $_GET['min_price'] ?? 0,
+            'preco_max' => $_GET['max_price'] ?? PHP_FLOAT_MAX
+        ];
+        $homeController->home($filters);
         break;
     case '/admin':
         require_once 'app/views/admin.php';
@@ -103,6 +111,11 @@ switch ($request) {
     case preg_match('/^\/produto\/(\d+)\/delete\/?$/', $request, $matches) ? true : false:
         $produtoController->delete($matches[1]);
         break;
+    
+    case preg_match('/^\/produtoFoto\/(\d+)\/delete\/?$/', $request, $matches) ? true : false:
+        $produtoFotoController->delete($matches[1]);
+        break;
+
     
     #CLIENTES
     case '/clientes':

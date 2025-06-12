@@ -15,10 +15,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
     
     <!-- Favicon -->
-    <link rel="icon" href="/public/assets/img/favicon.ico" type="image/x-icon">
-    
-    <!-- Custom CSS -->
-    <link rel="stylesheet" href="/public/assets/css/style.css">
+    <link rel="icon" href="/public/img/favicon.ico" type="image/x-icon">
 </head>
 
 <body>
@@ -27,7 +24,7 @@
             <div class="container">
                 <div class="navbar-brand-container">
                     <a class="navbar-brand" href="/">
-                        <img src="/public/assets/img/logo.png" alt="Digicommerce Logo" class="img-fluid logo" width="300">
+                        <img src="/public/img/logo.png" alt="Digicommerce Logo" class="img-fluid logo" width="300">
                     </a>
                 </div>
                 

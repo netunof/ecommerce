@@ -16,12 +16,17 @@ class HomeController
         private ViewRenderer $view = new ViewRenderer()
     ) {}
 
-    public function home(): void
+    public function home(array $filters = []): void
     {
         $data = [
             'categorias' => $this->categoriaModel->getAll(),
             'marcas' => $this->marcaModel->getAll(),
-            'produtos' => $this->produtoModel->getAll()
+            'produtos' => $this->produtoModel->getProdutosComFoto([
+                'produto_nome' => filter_input(INPUT_GET, 'produto_nome', FILTER_SANITIZE_SPECIAL_CHARS),
+                'marca_fk' => filter_input(INPUT_GET, 'marca_fk', FILTER_VALIDATE_INT),
+                'categoria_fk' => filter_input(INPUT_GET, 'categoria_fk', FILTER_VALIDATE_INT),
+                'preco_min' => filter_input(INPUT_GET, 'preco_min', FILTER_VALIDATE_INT),
+                'preco_max' => filter_input(INPUT_GET, 'preco_max', FILTER_VALIDATE_INT)])
         ];
         
         $this->view->render('home', $data);

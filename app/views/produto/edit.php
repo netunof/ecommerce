@@ -12,7 +12,7 @@
                 </a>
             </div>
 
-            <form action="update" method="POST" class="needs-validation" novalidate>
+            <form action="update" method="POST" class="needs-validation" enctype="multipart/form-data" novalidate>
                 <input type="hidden" name="produto_id" value="<?= htmlspecialchars($produto->produto_id) ?>">
                 
                 <div class="row g-4">
@@ -100,26 +100,26 @@
                         </div>
                     </div>
                     
-                    <!-- Photo Management Section -->
+                    <!-- FOTOS -->
                     <div class="col-12">
                         <div class="card">
                             <div class="card-body">
                                 <h5 class="card-title text-muted border-bottom pb-2">Fotos do Produto</h5>
                                 
-                                <!-- Current Photos Gallery -->
+                                <!-- ATUAIS -->
                                 <div class="mb-4">
                                     <h6 class="mb-3">Fotos Atuais</h6>
-                                    <?php if (!empty($produto->fotos)): ?>
+                                    <?php if (!empty($fotos)): ?>
                                         <div class="row g-3" id="current-photos">
-                                            <?php foreach ($produto->fotos as $foto): ?>
+                                            <?php foreach ($fotos as $foto): ?>
                                                 <div class="col-6 col-md-3 col-lg-2 photo-item">
                                                     <div class="card h-100">
-                                                        <img src="/uploads/produtos/<?= htmlspecialchars($foto->foto_nome) ?>" 
+                                                        <img src="/public/img/produtos/<?= htmlspecialchars($foto->file_name) ?>" 
                                                              class="card-img-top img-thumbnail" 
                                                              alt="Foto do produto <?= htmlspecialchars($produto->produto_nome) ?>">
                                                         <div class="card-body p-2 text-center">
                                                             <button type="button" class="btn btn-sm btn-outline-danger delete-photo"
-                                                                    data-foto-id="<?= htmlspecialchars($foto->foto_id) ?>">
+                                                                    data-foto-id="<?= htmlspecialchars($foto->produto_foto_id) ?>">
                                                                 <i class="bi bi-trash"></i> Remover
                                                             </button>
                                                         </div>
@@ -132,7 +132,7 @@
                                     <?php endif; ?>
                                 </div>
                                 
-                                <!-- Add New Photos -->
+                                <!-- NOVAS -->
                                 <div class="mb-3">
                                     <label for="novas_fotos" class="form-label">Adicionar Novas Fotos</label>
                                     <input type="file" class="form-control" id="novas_fotos" 
@@ -140,19 +140,19 @@
                                     <div class="form-text">Formatos aceitos: JPEG, PNG, WEBP. Máx. 5MB por imagem.</div>
                                 </div>
                                 
-                                <!-- Primary Photo Selection -->
+                                <!-- ANTIGAS -->
                                 <?php if (!empty($produto->fotos)): ?>
                                     <div class="mb-3">
                                         <label class="form-label">Foto Principal</label>
                                         <div class="btn-group" role="group">
                                             <?php foreach ($produto->fotos as $foto): ?>
                                                 <input type="radio" class="btn-check" name="foto_principal" 
-                                                       id="foto_principal_<?= $foto->foto_id ?>" 
-                                                       value="<?= $foto->foto_id ?>"
-                                                       <?= ($foto->foto_id == $produto->foto_principal_id) ? 'checked' : '' ?>>
-                                                <label class="btn btn-outline-primary" for="foto_principal_<?= $foto->foto_id ?>">
+                                                       id="foto_principal_<?= $foto->produto_foto_id ?>" 
+                                                       value="<?= $foto->produto_foto_id ?>"
+                                                       <?= ($foto->produto_foto_id == $produto->foto_principal_id) ? 'checked' : '' ?>>
+                                                <label class="btn btn-outline-primary" for="foto_principal_<?= $foto->produto_foto_id ?>">
                                                     <img src="/uploads/produtos/<?= htmlspecialchars($foto->foto_nome) ?>" 
-                                                         class="img-thumbnail" style="height: 50px; width: auto;">
+                                                         class="img-thumbnail" width="50">
                                                 </label>
                                             <?php endforeach; ?>
                                         </div>
@@ -163,7 +163,7 @@
                     </div>
                 </div>
                 
-                <!-- Form Actions -->
+                <!-- BOTÕES -->
                 <div class="d-flex justify-content-end gap-2 mt-4">
                     <button type="reset" class="btn btn-outline-danger">
                         <i class="bi bi-arrow-counterclockwise me-1"></i> Limpar
@@ -177,7 +177,7 @@
     </div>
 </main>
 
-<!-- Photo Delete Confirmation Modal -->
+<!-- DELETE MODAL -->
 <div class="modal fade" id="deletePhotoModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -198,7 +198,7 @@
 </div>
 
 <script>
-// Bootstrap form validation
+// VALIDAÇÕES
 (() => {
     'use strict'
     const forms = document.querySelectorAll('.needs-validation')
@@ -231,7 +231,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Confirm deletion
     document.getElementById('confirmDeletePhoto').addEventListener('click', function() {
         if (fotoIdToDelete) {
-            fetch(`/produtos/delete_photo/${fotoIdToDelete}`, {
+            fetch(`/produtoFoto/${fotoIdToDelete}/delete`, {
                 method: 'DELETE',
                 headers: {
                     'X-Requested-With': 'XMLHttpRequest',

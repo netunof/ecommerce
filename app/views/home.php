@@ -2,12 +2,12 @@
 
 <div class="container-fluid mt-4">
     <div class="row">
-        <!-- Filters Sidebar -->
+        <!-- FILTROS -->
         <div class="col-lg-3 col-md-4 mb-4">
             <div class="card shadow-sm">
                 <div class="card-body">
                     <form action="index.php" method="GET" id="filterForm">
-                        <!-- Categories Section -->
+                        <!-- CATEGORIAS -->
                         <div class="mb-4">
                             <h5 class="fw-bold mb-3 border-bottom pb-2">Categorias</h5>
                             <?php if (!empty($data['categorias'])): ?>
@@ -32,7 +32,7 @@
                             <?php endif; ?>
                         </div>
 
-                        <!-- Brands Section -->
+                        <!-- MARCAS -->
                         <div class="mb-4">
                             <h5 class="fw-bold mb-3 border-bottom pb-2">Marcas</h5>
                             <?php if (!empty($data['marcas'])): ?>
@@ -57,7 +57,7 @@
                             <?php endif; ?>
                         </div>
 
-                        <!-- Price Range Filter -->
+                        <!-- PREÇO -->
                         <div class="mb-4">
                             <h5 class="fw-bold mb-3 border-bottom pb-2">Faixa de Preço</h5>
                             <div class="px-2">
@@ -79,7 +79,7 @@
             </div>
         </div>
 
-        <!-- Products Listing -->
+        <!-- PRODUTOS -->
         <div class="col-lg-9 col-md-8">
             <div class="d-flex justify-content-between align-items-center mb-4">
                 <h2 class="mb-0">Produtos</h2>
@@ -103,23 +103,28 @@
                     <?php foreach ($data['produtos'] as $produto): ?>
                         <div class="col-xl-3 col-lg-4 col-md-6">
                             <div class="card h-100 shadow-sm product-card">
-                                <!-- Product Image -->
+                                <!-- FOTO -->
                                 <div class="position-relative">
                                     <a href="produto/<?= $produto->produto_id ?>">
-                                        <img src="/public/img/produtos/<?= htmlspecialchars($produto->imagem_principal ?? 'default.jpg') ?>" 
+                                        <img src="/public/img/produtos/<?= htmlspecialchars($produto->file_name ?? 'default.jpg') ?>" 
                                              class="card-img-top p-3 object-fit-contain" 
                                              alt="<?= htmlspecialchars($produto->produto_nome) ?>"
                                              style="height: 200px;">
                                     </a>
                                 </div>
                                 
-                                <!-- Product Body -->
+                                <!-- DETALHES -->
                                 <div class="card-body d-flex flex-column">
                                     <h5 class="card-title">
                                         <a href="produto/<?= $produto->produto_id ?>" class="text-decoration-none text-dark">
                                             <?= htmlspecialchars($produto->produto_nome) ?>
                                         </a>
                                     </h5>
+                                    <h6 class="card-title">
+                                        <a href="produto/<?= $produto->produto_id ?>" class="text-decoration-none text-dark">
+                                            R$<?= htmlspecialchars($produto->produto_preco) ?>
+                                        </a>
+                                    </h6>
                                     
                                     <div class="mt-auto">   
                                         <button class="btn btn-outline-primary w-100 add-to-cart" 
@@ -140,7 +145,7 @@
                 <?php endif; ?>
             </div>
 
-            <!-- Pagination -->
+            <!-- PAGINAÇÃO -->
             <?php if (!empty($data['pagination'])): ?>
                 <nav class="mt-5">
                     <ul class="pagination justify-content-center">

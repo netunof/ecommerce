@@ -20,7 +20,7 @@ class ProdutoFotoController
             return false;
         }
         
-        $allowedTypes = ['image/jpeg', 'image/png'];
+        $allowedTypes = ['image/jpeg', 'image/png', 'image/webp'];
         $maxSize = 5 * 1024 * 1024;
         $uploadDir = 'public/img/produtos/';
         
@@ -50,8 +50,19 @@ class ProdutoFotoController
             $destination = $uploadDir . $filename;
             
             if (move_uploaded_file($fotos['tmp_name'][$i], $destination)) {
-                // Store only the filename in database
-                if (!$this->produtoFotoModel->create($produtoId, $filename)) {
+                // Prepare data for new table structure
+                $fotoData = [
+                    'file_name' => $filename,
+                    'file_path' => $destination,
+                    'file_size' => $fotos['size'][$i],
+                    'mime_type' => $fotos['type'][$i],
+                    'produto_fk' => $produtoId,
+                    'is_primary' => ($i === 0), // First image as primary by default
+                    'created_by' => $_SESSION['user_id'] ?? null, // Assuming you have auth
+                    'active' => true
+                ];
+                
+                if (!$this->produtoFotoModel->create($fotoData)) {
                     $success = false;
                     // Delete the file if db insert failed
                     unlink($destination);
@@ -66,12 +77,16 @@ class ProdutoFotoController
 
     public function delete(int $id): void
     {
-        // First get the filename from database
+        // First get the file info from database
         $foto = $this->produtoFotoModel->getById($id);
         if ($foto) {
-            $filePath = 'uploads/produtos/' . $foto->file_name;
-            if (file_exists($filePath)) {
-                unlink($filePath);
+            if (file_exists($foto->file_path)) {
+                unlink($foto->file_path);
+            }
+            
+            // Check if this was a primary image
+            if ($foto->is_primary) {
+                $this->produtoFotoModel->setNewPrimary($foto->produto_fk, $id);
             }
         }
         
@@ -79,6 +94,22 @@ class ProdutoFotoController
             http_response_code(500);
             die('Error deleting product photo');
         }
+    }
+
+    public function setAsPrimary(int $fotoId): void
+    {
+        $foto = $this->produtoFotoModel->getById($fotoId);
+        if (!$foto) {
+            $this->notFound();
+        }
+
+        if ($this->produtoFotoModel->setAsPrimary($fotoId, $foto->produto_fk)) {
+            header('Location: /produtos/edit/' . $foto->produto_fk);
+            exit;
+        }
+
+        http_response_code(500);
+        die('Error setting photo as primary');
     }
 
     private function notFound(): never

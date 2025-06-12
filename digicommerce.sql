@@ -77,18 +77,21 @@ CREATE TABLE produto(
 
 DROP TABLE produto_foto;
 
-CREATE TABLE produto_foto(
-	produto_foto_id SERIAL PRIMARY KEY                      ,
-  	file_name VARCHAR (500) UNIQUE NOT NULL                 ,
-    file_content BYTEA NOT NULL                             ,
-    produto_fk SERIAL REFERENCES produto ON DELETE CASCADE  ,
-	created_by VARCHAR (100)                                ,
-	created_at TIMESTAMP                                    ,
-	updated_by VARCHAR (100)                                ,
-	updated_at TIMESTAMP                                    ,
-	active BOOL default TRUE
+CREATE TABLE produto_foto (
+    produto_foto_id SERIAL PRIMARY KEY,
+    file_name VARCHAR(255) NOT NULL,
+    file_path VARCHAR(512) NOT NULL,
+    file_size BIGINT,
+    mime_type VARCHAR(100),
+    produto_fk INTEGER NOT NULL REFERENCES produto(produto_id) ON DELETE CASCADE,
+    is_primary BOOLEAN DEFAULT FALSE,
+    created_by VARCHAR(100) NOT NULL,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    updated_by VARCHAR(100),
+    updated_at TIMESTAMP WITH TIME ZONE,
+    active BOOLEAN DEFAULT TRUE,
+    CONSTRAINT unique_file_per_product UNIQUE (produto_fk, file_name)
 );
-
 DROP TABLE estado;
 
 CREATE TABLE estado(
