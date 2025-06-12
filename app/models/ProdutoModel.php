@@ -45,15 +45,17 @@ class ProdutoModel {
         $query = $this->db->prepare("INSERT INTO produto (produto_nome, produto_descricao, marca_fk, categoria_fk, produto_preco, produto_estoque, created_at) 
             VALUES (:produto_nome, :produto_descricao, :marca_fk, :categoria_fk, :produto_preco, :produto_estoque, NOW())");
 
-        return ['queryResult' => 
-            $query->execute([
+        $queryResult = $query->execute([
             ':produto_nome' => $data['produto_nome'],
             ':produto_descricao' => $data['produto_descricao'],
             ':marca_fk' => $data['marca_fk'],
             ':categoria_fk' => $data['categoria_fk'],
             ':produto_preco' => $data['produto_preco'],
-            ':produto_estoque' => $data['produto_estoque']
-       ]), 'produtoId' => Database::lastId()];
+            ':produto_estoque' => $data['produto_estoque']]);
+        return [
+            'queryResult' => $queryResult,
+            'produtoId' => (int)$this->db->lastInsertId()
+        ];
     }
     
     public function update($produtoId, $data) {
