@@ -1,16 +1,68 @@
-<?php include_once __DIR__.'/../layout/cabecalho.php';?>
+<?php include_once __DIR__.'/../layout/cabecalho.php'; ?>
 
-<div class="mx-auto col-6">
-    <h3 class="text-info mt-3">Cadastrar uma categoria</h3>
-</div>
+<main class="container py-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <div>
+                    <h1 class="h3 text-primary">
+                        <i class="fas fa-tags me-2"></i>Nova Categoria
+                    </h1>
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="/">Home</a></li>
+                            <li class="breadcrumb-item"><a href="/categorias">Categorias</a></li>
+                            <li class="breadcrumb-item active">Nova</li>
+                        </ol>
+                    </nav>
+                </div>
+            </div>
 
-<form action="store" method="POST" class="col-6 mx-auto mb-3">
-    <div class="mb-3">
-        <label for="categoria_nome" class="form-label">Nome</label>
-        <input type="text" class="form-control" id="categoria_nome" aria-describedby="emailHelp" name="categoria_nome" autofocus>
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <form action="store" method="POST" class="needs-validation" novalidate>
+                        
+                        <div class="mb-4">
+                            <label for="categoria_nome" class="form-label fw-bold">Nome da Categoria *</label>
+                            <input type="text" class="form-control form-control-lg" id="categoria_nome" 
+                                   name="categoria_nome" required autofocus
+                                   placeholder="Ex: Eletrônicos, Roupas, Alimentos..."
+                                   minlength="2" maxlength="50">
+                            <div class="invalid-feedback">
+                                Por favor, insira um nome válido (2-50 caracteres).
+                            </div>
+                        </div>
+
+                        <div class="d-flex justify-content-between pt-3 border-top">
+                            <a href="/categorias" class="btn btn-outline-secondary">
+                                <i class="fas fa-arrow-left me-1"></i> Cancelar
+                            </a>
+                            <button type="submit" class="btn btn-primary px-4">
+                                <i class="fas fa-save me-1"></i> Salvar
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
     </div>
-    <button type="submit" class="btn btn-primary">Salvar</button>
-    <button type="button" onclick="location.href='/categorias'" class="btn btn-secondary">Voltar</button>
-</form>
+</main>
+
+<script>
+// Form validation
+(() => {
+    'use strict'
+    const forms = document.querySelectorAll('.needs-validation')
+    Array.from(forms).forEach(form => {
+        form.addEventListener('submit', event => {
+            if (!form.checkValidity()) {
+                event.preventDefault()
+                event.stopPropagation()
+            }
+            form.classList.add('was-validated')
+        }, false)
+    })
+})()
+</script>
 
 <?php include_once __DIR__ . '/../layout/rodape.php'; ?>
