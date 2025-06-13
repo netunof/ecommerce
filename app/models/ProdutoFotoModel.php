@@ -127,7 +127,7 @@ class ProdutoFotoModel {
         }
     }
     
-    public function setNewPrimary(int $produtoId, int $excludeId = null): bool {
+    public function setNewPrimary(int $produtoId, int $excludeId = 0): bool {
         try {
             $query = $this->db->prepare("
                 UPDATE produto_foto 

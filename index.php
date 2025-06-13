@@ -1,7 +1,14 @@
 <?php
 require_once 'vendor/autoload.php';
 
-use App\Controllers\{ProdutoController, CategoriaController, MarcaController, ProdutoFotoController, HomeController};
+use App\Controllers\{
+    ProdutoController, 
+    CategoriaController, 
+    MarcaController, 
+    ProdutoFotoController, 
+    HomeController,
+    ClienteController
+};
 
 $request = $_SERVER['REQUEST_URI'];
 $produtoController = new ProdutoController();
@@ -9,6 +16,7 @@ $produtoFotoController = new ProdutoFotoController();
 $marcaController = new MarcaController();
 $categoriaController = new CategoriaController();
 $homeController = new HomeController();
+$clienteController = new ClienteController();
 
 switch ($request) {
     case '/':
@@ -21,10 +29,33 @@ switch ($request) {
         ];
         $homeController->home($filters);
         break;
+        
     case '/admin':
         require_once 'app/views/admin.php';
         break;
-#CATEGORIAS
+
+    # AUTHENTICATION ROUTES
+    case '/login':
+        $clienteController->loginForm();
+        break;
+        
+    case '/login/submit':
+        $clienteController->login();
+        break;
+        
+    case '/logout':
+        $clienteController->logout();
+        break;
+        
+    case '/register':
+        $clienteController->registerForm();
+        break;
+        
+    case '/register/submit':
+        $clienteController->register();
+        break;
+
+    # CATEGORIAS
     case '/categorias/':
     case '/categorias':
         $categoriaController->index();
@@ -53,7 +84,8 @@ switch ($request) {
     case preg_match('/^\/categoria\/(\d+)\/delete\/?$/', $request, $matches) ? true : false:
         $categoriaController->delete($matches[1]);
         break;
-#MARCAS
+
+    # MARCAS
     case '/marcas/':
     case '/marcas':
         $marcaController->index();
@@ -82,7 +114,8 @@ switch ($request) {
     case preg_match('/^\/marca\/(\d+)\/delete\/?$/', $request, $matches) ? true : false:
         $marcaController->delete($matches[1]);
         break;
-#PRODUTOS
+
+    # PRODUTOS
     case '/produtos':
     case '/produtos/':
         $produtoController->index();
@@ -116,8 +149,7 @@ switch ($request) {
         $produtoFotoController->delete($matches[1]);
         break;
 
-    
-    #CLIENTES
+    # CLIENTES
     case '/clientes':
     case '/clientes/':
         $clienteController->index();
@@ -140,25 +172,24 @@ switch ($request) {
         break;
 
     case preg_match('/^\/cliente\/(\d+)\/update\/?$/', $request, $matches) ? true : false:
-        $clienteController->update();
+        $clienteController->update($matches[1]);
         break;
         
     case preg_match('/^\/cliente\/(\d+)\/delete\/?$/', $request, $matches) ? true : false:
         $clienteController->delete($matches[1]);
         break;
     
+    # PASSWORD ROUTES
+    case preg_match('/^\/cliente\/(\d+)\/change-password\/?$/', $request, $matches) ? true : false:
+        $clienteController->changePasswordForm($matches[1]);
+        break;
+        
+    case preg_match('/^\/cliente\/(\d+)\/update-password\/?$/', $request, $matches) ? true : false:
+        $clienteController->updatePassword($matches[1]);
+        break;
+
     default:
         http_response_code(404);
         echo "404 - Page not found";
         break;
 }
-
-/*
-Array ( [produto_fotos] => Array ( 
-[name] => Array ( [0] => primeira.jpg [1] => segunda.jpg ) 
-[full_path] => Array ( [0] => primeira.jpg [1] => segunda.jpg ) 
-[type] => Array ( [0] => image/jpeg [1] => image/jpeg ) 
-[tmp_name] => Array ( [0] => /private/var/folders/wb/pr5zph914m36_135w0n2m0740000gn/T/phpuh1f3a3rir57eoa7EDa [1] => /private/var/folders/wb/pr5zph914m36_135w0n2m0740000gn/T/phpusgt5dl6i1gj5YAClom ) 
-[error] => Array ( [0] => 0 [1] => 0 ) 
-[size] => Array ( [0] => 25929 [1] => 11424 ) ) )
- */

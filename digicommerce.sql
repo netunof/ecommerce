@@ -11,6 +11,7 @@ CREATE TABLE cliente (
     cliente_cpf VARCHAR(20) UNIQUE NOT NULL                 ,
     cliente_email VARCHAR(50) NOT NULL                      ,
     cliente_telefone VARCHAR(20)                            ,
+    cliente_senha VARCHAR(255)                            ,
 	created_by VARCHAR (100)                                ,
 	created_at TIMESTAMP                                    ,
 	updated_by VARCHAR (100)                                ,
