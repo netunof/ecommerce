@@ -78,7 +78,6 @@ class ClienteModel
     public function update(int $id, array $data): bool 
     {
         try {
-            // Prepare base query
             $queryString = "
                 UPDATE cliente 
                 SET 
@@ -89,7 +88,7 @@ class ClienteModel
                     updated_at = NOW()
             ";
             
-            // Add password update if provided
+            // Senha vazia
             if (!empty($data['cliente_senha'])) {
                 $queryString .= ", cliente_senha = :senha";
                 $data['senha'] = $data['cliente_senha'];
@@ -106,7 +105,7 @@ class ClienteModel
                 ':email' => $data['cliente_email'],
                 ':telefone' => $data['cliente_telefone']
             ];
-            
+            //Senha vazia
             if (!empty($data['cliente_senha'])) {
                 $params[':senha'] = $data['cliente_senha'];
             }
@@ -162,5 +161,8 @@ class ClienteModel
             error_log("Database error in ClienteModel::updatePassword: " . $e->getMessage());
             return false;
         }
+    }
+    public function lastInsertId(){
+        return Database::lastId();
     }
 }

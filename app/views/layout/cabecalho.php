@@ -1,4 +1,4 @@
-<?php session_start(); ?>
+<?php if (session_status() === PHP_SESSION_NONE) session_start(); ?>
 <!DOCTYPE html>
 <html lang="pt-BR">
 
@@ -66,8 +66,8 @@
                 
                 <div class="col-md-3 text-center text-md-end">
                     <div class="d-flex justify-content-center justify-content-md-end align-items-center gap-3">
-                        <a href="<?= isset($_SESSION['email']) ? '/perfil' : '/login' ?>" class="text-dark text-decoration-none">
-                            <i class="fas fa-user me-1"></i> <?= isset($_SESSION['email']) ? 'Minha Conta' : 'Entrar' ?>
+                        <a href="<?= isset($_SESSION['cliente_email']) ? '/perfil' : '/login' ?>" class="text-dark text-decoration-none">
+                            <i class="fas fa-user me-1"></i> <?= isset($_SESSION['cliente_email']) ? $_SESSION['cliente_nome'] : 'Entrar' ?>
                         </a>
                         <a href="/carrinho" class="text-dark text-decoration-none position-relative">
                             <i class="fas fa-shopping-cart fs-5"></i>

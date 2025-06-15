@@ -57,6 +57,31 @@ switch ($path) {
         $clienteController->register();
         break;
 
+    # PERFIL DO CLIENTE
+    case '/perfil':
+        $clienteController->profile();
+        break;
+        
+    case '/perfil/atualizar':
+        $clienteController->updateProfile();
+        break;
+        
+    case '/perfil/endereco':
+        $clienteController->address();
+        break;
+        
+    case '/perfil/endereco/atualizar':
+        $clienteController->updateAddress();
+        break;
+        
+    case '/perfil/pedidos':
+        $clienteController->orders();
+        break;
+        
+    case '/perfil/excluir':
+        $clienteController->delete($_SESSION['cliente_id'] ?? 0);
+        break;
+
     # CATEGORIAS
     case '/categorias/':
     case '/categorias':
@@ -151,7 +176,7 @@ switch ($path) {
         $produtoFotoController->delete($matches[1]);
         break;
 
-    # CLIENTES
+    # CLIENTES (ADMIN)
     case '/clientes':
     case '/clientes/':
         $clienteController->index();

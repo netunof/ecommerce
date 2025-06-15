@@ -14,7 +14,7 @@
                         <div class="alert alert-danger"><?= htmlspecialchars($error) ?></div>
                     <?php endif; ?>
                     
-                    <form action="/login" method="POST">
+                    <form action="/login/submit" method="POST">
                         <div class="mb-3">
                             <label for="email" class="form-label">Email</label>
                             <input type="email" class="form-control" id="email" name="email" required>

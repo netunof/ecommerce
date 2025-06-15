@@ -137,7 +137,7 @@
                                                 </div>
                                             <?php endforeach; ?>
                                         </div>
-                                        <input type="hidden" name="deleted_photos" id="deleted_photos" value="">
+                                        <input type="hidden" name="deleted_photos[]" id="deleted_photos" value="">
                                     <?php else: ?>
                                         <div class="alert alert-info">Nenhuma foto cadastrada para este produto.</div>
                                     <?php endif; ?>

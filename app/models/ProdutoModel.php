@@ -20,11 +20,13 @@ class ProdutoModel {
             FROM produto p 
             LEFT JOIN (
                 SELECT pf.* FROM produto_foto pf 
-                INNER JOIN (
-                    SELECT produto_fk, MIN(produto_foto_id) as min_id 
-                    FROM produto_foto 
-                    GROUP BY produto_fk
-                ) as first ON pf.produto_foto_id = first.min_id
+                WHERE pf.produto_foto_id = COALESCE(
+                    (SELECT pf2.produto_foto_id FROM produto_foto pf2 
+                    WHERE pf2.produto_fk = pf.produto_fk AND pf2.is_primary = TRUE 
+                    LIMIT 1),
+                    (SELECT MIN(pf3.produto_foto_id) FROM produto_foto pf3 
+                    WHERE pf3.produto_fk = pf.produto_fk)
+                )
             ) f ON f.produto_fk = p.produto_id
             WHERE (p.produto_nome LIKE '%' || :produto_nome || '%' OR :produto_nome = '')
             AND (p.marca_fk = :marca_fk OR :marca_fk = 0)
@@ -45,9 +47,6 @@ class ProdutoModel {
         $params[':categoria_fk'] = (int)$params[':categoria_fk'];
         $params[':preco_min'] = (float)$params[':preco_min'];
         $params[':preco_max'] = (float)$params[':preco_max'];
-        
-        error_log("Executing query: " . $query->queryString);
-        error_log("With parameters: " . print_r($params, true));
         
         $query->execute($params);
 

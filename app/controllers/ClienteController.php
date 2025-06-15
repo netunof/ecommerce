@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Controllers;
 
+use App\Models\EnderecoModel;
 use App\Models\ClienteModel;
 use App\Views\ViewRenderer;
 
@@ -11,7 +12,8 @@ class ClienteController
 {
     public function __construct(
         private ClienteModel $clienteModel = new ClienteModel(),
-        private ViewRenderer $view = new ViewRenderer()
+        private ViewRenderer $view = new ViewRenderer(),
+        private EnderecoModel $enderecoModel = new EnderecoModel()
     ) {}
 
     public function index(): void
@@ -42,7 +44,8 @@ class ClienteController
             'cliente_nome' => filter_input(INPUT_POST, 'cliente_nome', FILTER_SANITIZE_SPECIAL_CHARS),
             'cliente_cpf' => filter_input(INPUT_POST, 'cliente_cpf', FILTER_SANITIZE_SPECIAL_CHARS),
             'cliente_email' => filter_input(INPUT_POST, 'cliente_email', FILTER_SANITIZE_EMAIL),
-            'cliente_telefone' => filter_input(INPUT_POST, 'cliente_telefone', FILTER_SANITIZE_SPECIAL_CHARS)
+            'cliente_telefone' => filter_input(INPUT_POST, 'cliente_telefone', FILTER_SANITIZE_SPECIAL_CHARS),
+            'cliente_senha' => password_hash(filter_input(INPUT_POST, 'senha', FILTER_SANITIZE_SPECIAL_CHARS), PASSWORD_DEFAULT)
         ];
 
         if ($this->clienteModel->create($data)) {
@@ -71,7 +74,8 @@ class ClienteController
             'cliente_nome' => filter_input(INPUT_POST, 'cliente_nome', FILTER_SANITIZE_SPECIAL_CHARS),
             'cliente_cpf' => filter_input(INPUT_POST, 'cliente_cpf', FILTER_SANITIZE_SPECIAL_CHARS),
             'cliente_email' => filter_input(INPUT_POST, 'cliente_email', FILTER_SANITIZE_EMAIL),
-            'cliente_telefone' => filter_input(INPUT_POST, 'cliente_telefone', FILTER_SANITIZE_SPECIAL_CHARS)
+            'cliente_telefone' => filter_input(INPUT_POST, 'cliente_telefone', FILTER_SANITIZE_SPECIAL_CHARS),
+            'cliente_senha' => password_hash(filter_input(INPUT_POST, 'nova_senha', FILTER_SANITIZE_SPECIAL_CHARS), PASSWORD_DEFAULT)
         ];
 
         if ($this->clienteModel->update($id, $data)) {
@@ -107,10 +111,11 @@ class ClienteController
         $cliente = $this->clienteModel->authenticate($email, $password);
 
         if ($cliente) {
+            session_start();
             $_SESSION['cliente_id'] = $cliente->cliente_id;
             $_SESSION['cliente_nome'] = $cliente->cliente_nome;
             $_SESSION['cliente_email'] = $cliente->cliente_email;
-            
+
             header('Location: /');
             exit;
         }
@@ -151,6 +156,113 @@ class ClienteController
         }
 
         $this->view->render('auth/register', ['error' => 'Erro ao cadastrar cliente']);
+    }
+
+    public function profile(): void
+    {
+        session_start();
+        if (!isset($_SESSION['cliente_id'])) {
+            header('Location: /login');
+            exit;
+        }
+
+        $cliente = $this->clienteModel->find($_SESSION['cliente_id']);
+        
+        $this->view->render('cliente/profile', [
+            'cliente' => $cliente,
+        ]);
+    }
+    public function address(): void
+    {
+        session_start();
+        if (!isset($_SESSION['cliente_id'])) {
+            header('Location: /login');
+            exit;
+        }
+
+        $cliente = $this->clienteModel->find($_SESSION['cliente_id']);
+        $endereco = $this->enderecoModel->findByClienteId($_SESSION['cliente_id']);
+        
+        $this->view->render('cliente/address', [
+            'endereco' => $endereco,
+            'cliente'=> $cliente
+        ]);
+    }
+
+    public function updateProfile(): void
+    {
+        session_start();
+        if (!isset($_SESSION['cliente_id'])) {
+            header('Location: /login');
+            exit;
+        }
+
+        $id = $_SESSION['cliente_id'];
+        $data = [
+            'cliente_nome' => filter_input(INPUT_POST, 'cliente_nome', FILTER_SANITIZE_SPECIAL_CHARS),
+            'cliente_cpf' => filter_input(INPUT_POST, 'cliente_cpf', FILTER_SANITIZE_SPECIAL_CHARS),
+            'cliente_email' => filter_input(INPUT_POST, 'cliente_email', FILTER_SANITIZE_EMAIL),
+            'cliente_telefone' => filter_input(INPUT_POST, 'cliente_telefone', FILTER_SANITIZE_SPECIAL_CHARS)
+        ];
+
+        // Atualiza a senha apenas se for fornecida
+        $novaSenha = filter_input(INPUT_POST, 'nova_senha', FILTER_SANITIZE_SPECIAL_CHARS);
+        if (!empty($novaSenha)) {
+            $data['cliente_senha'] = password_hash($novaSenha, PASSWORD_DEFAULT);
+        }
+
+        if ($this->clienteModel->update($id, $data)) {
+            $_SESSION['cliente_nome'] = $data['cliente_nome'];
+            $_SESSION['cliente_email'] = $data['cliente_email'];
+            
+            header('Location: /perfil?success=1');
+            exit;
+        }
+
+        header('Location: /perfil?error=1');
+        exit;
+    }
+
+    public function updateAddress(): void
+    {
+        session_start();
+        if (!isset($_SESSION['cliente_id'])) {
+            header('Location: /login');
+            exit;
+        }
+
+        $data = [
+            'cep' => filter_input(INPUT_POST, 'cep', FILTER_SANITIZE_SPECIAL_CHARS),
+            'logradouro' => filter_input(INPUT_POST, 'logradouro', FILTER_SANITIZE_SPECIAL_CHARS),
+            'numero' => filter_input(INPUT_POST, 'numero', FILTER_SANITIZE_SPECIAL_CHARS),
+            'cidade' => filter_input(INPUT_POST, 'cidade', FILTER_SANITIZE_SPECIAL_CHARS),
+            'estado' => filter_input(INPUT_POST, 'estado', FILTER_SANITIZE_SPECIAL_CHARS)
+        ];
+
+        if ($this->enderecoModel->createOrUpdate($_SESSION['cliente_id'], $data)) {
+            header('Location: /perfil?success=1');
+            exit;
+        }
+
+        header('Location: /perfil?error=1');
+        exit;
+    }
+
+    public function orders(): void
+    {
+        session_start();
+        if (!isset($_SESSION['cliente_id'])) {
+            header('Location: /login');
+            exit;
+        }
+
+        // Aqui você precisaria implementar um OrderModel para buscar os pedidos
+        // $pedidos = $this->orderModel->findByClienteId($_SESSION['cliente_id']);
+        
+        // Por enquanto vamos apenas renderizar a view
+        $this->view->render('cliente/orders', [
+            // 'pedidos' => $pedidos
+        ]);
     }
 
     private function notFound(): never

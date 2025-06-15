@@ -14,7 +14,7 @@
                         <div class="alert alert-danger"><?= htmlspecialchars($error) ?></div>
                     <?php endif; ?>
                     
-                    <form action="/registro" method="POST" class="needs-validation" novalidate>
+                    <form action="/registro/submit" method="POST" class="needs-validation" novalidate>
                         <div class="mb-3">
                             <label for="nome" class="form-label">Nome Completo *</label>
                             <input type="text" class="form-control" id="nome" name="nome" required>
