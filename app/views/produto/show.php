@@ -10,7 +10,7 @@
                     <?php if (!empty($produtoFotos)): ?>
                         <img id="mainProductImage" 
                              class="img-fluid h-100 object-fit-contain" 
-                             src="/public/img/produtos/<?= htmlspecialchars($produtoFotos[0]->file_name) ?>" 
+                             src="/public/img/produtos/<?= htmlspecialchars($primaryPhoto ? $primaryPhoto->file_name : $produtoFotos[0]->file_name) ?>" 
                              alt="<?= htmlspecialchars($produto->produto_nome) ?>">
                     <?php else: ?>
                         <div class="d-flex align-items-center justify-content-center h-100">
@@ -42,16 +42,43 @@
                 
                 <div class="d-flex align-items-center mb-4">
                     <span class="h3 text-primary fw-bold me-3">R$ <?= number_format($produto->produto_preco, 2, ',', '.') ?></span>
+                    <?php if ($produto->produto_estoque > 0): ?>
+                        <span class="badge bg-success">Em estoque</span>
+                    <?php else: ?>
+                        <span class="badge bg-danger">Esgotado</span>
+                    <?php endif; ?>
                 </div>
 
-                <div class="d-flex gap-2 mb-4">
-                    <div class="input-group" style="width: 120px;">
-                        <button class="btn btn-outline-secondary" type="button" onclick="updateQuantity(-1)">-</button>
-                        <input type="number" id="productQuantity" class="form-control text-center" value="1" min="1">
-                        <button class="btn btn-outline-secondary" type="button" onclick="updateQuantity(1)">+</button>
+                <?php if ($produto->produto_estoque > 0): ?>
+                <form action="/carrinho/adicionar" method="POST" class="mb-4">
+                    <input type="hidden" name="produto_id" value="<?= $produto->produto_id ?>">
+                    
+                    <div class="d-flex gap-2 align-items-center">
+                        <div class="input-group" style="width: 140px;">
+                            <button class="btn btn-outline-secondary" type="button" onclick="updateQuantity(-1)">-</button>
+                            <input type="number" id="productQuantity" name="quantidade" 
+                                   class="form-control text-center" 
+                                   value="1" min="1" max="<?= $produto->produto_estoque ?>">
+                            <button class="btn btn-outline-secondary" type="button" onclick="updateQuantity(1)">+</button>
+                        </div>
+                        
+                        <button type="submit" class="btn btn-primary flex-grow-1">
+                            <i class="bi bi-cart-plus me-2"></i>Adicionar ao Carrinho
+                        </button>
                     </div>
-                    <button class="btn btn-primary flex-grow-1" type="button">
-                        <i class="bi bi-cart-plus me-2"></i>Adicionar ao Carrinho
+                    
+                    <div class="mt-2 text-muted small">
+                        Disponível: <?= $produto->produto_estoque ?> unidades
+                    </div>
+                </form>
+                <?php endif; ?>
+
+                <div class="d-flex gap-2 mb-4">
+                    <a href="/carrinho" class="btn btn-outline-primary flex-grow-1">
+                        <i class="bi bi-cart-fill me-2"></i>Ver Carrinho
+                    </a>
+                    <button class="btn btn-outline-secondary">
+                        <i class="bi bi-heart me-2"></i>Favoritar
                     </button>
                 </div>
 
@@ -85,9 +112,27 @@
     function updateQuantity(change) {
         const quantityInput = document.getElementById('productQuantity');
         let newValue = parseInt(quantityInput.value) + change;
+        const maxStock = <?= $produto->produto_estoque ?? 100 ?>;
+        
         if (newValue < 1) newValue = 1;
+        if (newValue > maxStock) newValue = maxStock;
+        
         quantityInput.value = newValue;
     }
+
+    // Feedback visual ao adicionar ao carrinho
+    document.querySelector('form[action="/carrinho/adicionar"]')?.addEventListener('submit', function(e) {
+        const submitBtn = this.querySelector('button[type="submit"]');
+        submitBtn.innerHTML = '<i class="bi bi-check-circle me-2"></i>Adicionado';
+        submitBtn.classList.remove('btn-primary');
+        submitBtn.classList.add('btn-success');
+        
+        setTimeout(() => {
+            submitBtn.innerHTML = '<i class="bi bi-cart-plus me-2"></i>Adicionar ao Carrinho';
+            submitBtn.classList.remove('btn-success');
+            submitBtn.classList.add('btn-primary');
+        }, 2000);
+    });
 </script>
 
 <?php include_once __DIR__ . '/../layout/rodape.php'; ?>

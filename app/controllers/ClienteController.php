@@ -10,11 +10,16 @@ use App\Views\ViewRenderer;
 
 class ClienteController 
 {
-    public function __construct(
-        private ClienteModel $clienteModel = new ClienteModel(),
-        private ViewRenderer $view = new ViewRenderer(),
-        private EnderecoModel $enderecoModel = new EnderecoModel()
-    ) {}
+    private ClienteModel $clienteModel;
+    private ViewRenderer $view;
+    private EnderecoModel $enderecoModel;
+
+    public function __construct()
+    {
+        $this->clienteModel = new ClienteModel();
+        $this->view = new ViewRenderer();
+        $this->enderecoModel = new EnderecoModel();
+    }
 
     public function index(): void
     {
@@ -45,7 +50,7 @@ class ClienteController
             'cliente_cpf' => filter_input(INPUT_POST, 'cliente_cpf', FILTER_SANITIZE_SPECIAL_CHARS),
             'cliente_email' => filter_input(INPUT_POST, 'cliente_email', FILTER_SANITIZE_EMAIL),
             'cliente_telefone' => filter_input(INPUT_POST, 'cliente_telefone', FILTER_SANITIZE_SPECIAL_CHARS),
-            'cliente_senha' => password_hash(filter_input(INPUT_POST, 'senha', FILTER_SANITIZE_SPECIAL_CHARS), PASSWORD_DEFAULT)
+            'cliente_senha' => password_hash(filter_input(INPUT_POST, 'cliente_senha', FILTER_SANITIZE_SPECIAL_CHARS), PASSWORD_DEFAULT)
         ];
 
         if ($this->clienteModel->create($data)) {
@@ -110,13 +115,20 @@ class ClienteController
 
         $cliente = $this->clienteModel->authenticate($email, $password);
 
-        if ($cliente) {
+         if ($cliente) {
             session_start();
             $_SESSION['cliente_id'] = $cliente->cliente_id;
             $_SESSION['cliente_nome'] = $cliente->cliente_nome;
             $_SESSION['cliente_email'] = $cliente->cliente_email;
-
-            header('Location: /');
+            
+            // Recuperar carrinho não logado se existir
+            if (isset($_SESSION['carrinho_nao_logado'])) {
+                $_SESSION['carrinho'] = $_SESSION['carrinho_nao_logado'];
+                $_SESSION['cart_count'] = array_sum(array_column($_SESSION['carrinho'], 'quantidade'));
+                unset($_SESSION['carrinho_nao_logado']);
+            }
+            
+            header('Location: ' . ($_GET['redirect'] ?? '/'));
             exit;
         }
 

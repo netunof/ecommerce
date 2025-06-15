@@ -7,7 +7,8 @@ use App\Controllers\{
     MarcaController, 
     ProdutoFotoController, 
     HomeController,
-    ClienteController
+    ClienteController,
+    CarrinhoController
 };
 
 $request = $_SERVER['REQUEST_URI'];
@@ -17,6 +18,7 @@ $marcaController = new MarcaController();
 $categoriaController = new CategoriaController();
 $homeController = new HomeController();
 $clienteController = new ClienteController();
+$carrinhoController = new CarrinhoController();
 
 $path = parse_url($request, PHP_URL_PATH);
 
@@ -213,6 +215,27 @@ switch ($path) {
         
     case preg_match('/^\/cliente\/(\d+)\/update-password\/?$/', $request, $matches) ? true : false:
         $clienteController->updatePassword($matches[1]);
+        break;
+
+    # CARRINHO
+    case '/carrinho':
+        $carrinhoController->index();
+        break;
+        
+    case '/carrinho/adicionar':
+        $carrinhoController->adicionar();
+        break;
+        
+    case '/carrinho/atualizar':
+        $carrinhoController->atualizar();
+        break;
+        
+    case preg_match('/^\/carrinho\/remover\/(\d+)\/?$/', $path, $matches) ? true : false:
+        $carrinhoController->remover($matches[1]);
+        break;
+        
+    case '/carrinho/limpar':
+        $carrinhoController->limpar();
         break;
 
     default:
