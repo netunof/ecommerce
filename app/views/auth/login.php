@@ -38,7 +38,7 @@
                 </div>
                 
                 <div class="card-footer text-center py-3">
-                    <p class="mb-0">Não tem uma conta? <a href="/registrar" class="text-decoration-none">Cadastre-se</a></p>
+                    <p class="mb-0">Não tem uma conta? <a href="/registro" class="text-decoration-none">Cadastre-se</a></p>
                 </div>
             </div>
         </div>

@@ -18,10 +18,12 @@ $categoriaController = new CategoriaController();
 $homeController = new HomeController();
 $clienteController = new ClienteController();
 
-switch ($request) {
+$path = parse_url($request, PHP_URL_PATH);
+
+switch ($path) {
     case '/':
         $filters = [
-            'produto_nome' => $_GET['search'] ?? '',
+            'produto_nome' => $_GET['produto_nome'] ?? ($_GET['q'] ?? ''),
             'marca_fk' => $_GET['marca'] ?? 0,
             'categoria_fk' => $_GET['categoria'] ?? 0,
             'preco_min' => $_GET['min_price'] ?? 0,
@@ -29,12 +31,12 @@ switch ($request) {
         ];
         $homeController->home($filters);
         break;
-        
+         
     case '/admin':
         require_once 'app/views/admin.php';
         break;
 
-    # AUTHENTICATION ROUTES
+    # AUTH
     case '/login':
         $clienteController->loginForm();
         break;
@@ -47,11 +49,11 @@ switch ($request) {
         $clienteController->logout();
         break;
         
-    case '/register':
+    case '/registro':
         $clienteController->registerForm();
         break;
         
-    case '/register/submit':
+    case '/registro/submit':
         $clienteController->register();
         break;
 

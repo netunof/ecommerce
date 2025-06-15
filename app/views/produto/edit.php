@@ -16,7 +16,7 @@
                 <input type="hidden" name="produto_id" value="<?= htmlspecialchars($produto->produto_id) ?>">
                 
                 <div class="row g-4">
-                    <!-- Left Column - Product Info -->
+                    <!-- INFO PRODUTO -->
                     <div class="col-md-6">
                         <div class="card h-100">
                             <div class="card-body">
@@ -60,7 +60,7 @@
                         </div>
                     </div>
                     
-                    <!-- Right Column - Product Details -->
+                    <!-- DETALHE PRODUTO -->
                     <div class="col-md-6">
                         <div class="card h-100">
                             <div class="card-body">
@@ -114,11 +114,21 @@
                                             <?php foreach ($fotos as $foto): ?>
                                                 <div class="col-6 col-md-3 col-lg-2 photo-item">
                                                     <div class="card h-100">
-                                                        <img src="/public/img/produtos/<?= htmlspecialchars($foto->file_name) ?>" 
-                                                             class="card-img-top img-thumbnail" 
-                                                             alt="Foto do produto <?= htmlspecialchars($produto->produto_nome) ?>">
+                                                        <img src="/<?= htmlspecialchars($foto->file_path) ?>" 
+                                                            class="card-img-top img-thumbnail" 
+                                                            alt="Foto do produto <?= htmlspecialchars($produto->produto_nome) ?>">
                                                         <div class="card-body p-2 text-center">
-                                                            <button type="button" class="btn btn-sm btn-outline-danger delete-photo"
+                                                            <div class="form-check">
+                                                                <input class="form-check-input" type="radio" 
+                                                                    name="primary_photo" 
+                                                                    id="primary_<?= $foto->produto_foto_id ?>"
+                                                                    value="<?= $foto->produto_foto_id ?>"
+                                                                    <?= $foto->is_primary ? 'checked' : '' ?>>
+                                                                <label class="form-check-label small" for="primary_<?= $foto->produto_foto_id ?>">
+                                                                    Principal
+                                                                </label>
+                                                            </div>
+                                                            <button type="button" class="btn btn-sm btn-outline-danger delete-photo mt-2"
                                                                     data-foto-id="<?= htmlspecialchars($foto->produto_foto_id) ?>">
                                                                 <i class="bi bi-trash"></i> Remover
                                                             </button>
@@ -127,6 +137,7 @@
                                                 </div>
                                             <?php endforeach; ?>
                                         </div>
+                                        <input type="hidden" name="deleted_photos" id="deleted_photos" value="">
                                     <?php else: ?>
                                         <div class="alert alert-info">Nenhuma foto cadastrada para este produto.</div>
                                     <?php endif; ?>
@@ -219,6 +230,8 @@
 document.addEventListener('DOMContentLoaded', function() {
     const deleteModal = new bootstrap.Modal(document.getElementById('deletePhotoModal'))
     let fotoIdToDelete = null;
+    const deletedPhotosInput = document.getElementById('deleted_photos');
+    let deletedPhotos = [];
     
     // Set up delete buttons
     document.querySelectorAll('.delete-photo').forEach(button => {
@@ -231,33 +244,20 @@ document.addEventListener('DOMContentLoaded', function() {
     // Confirm deletion
     document.getElementById('confirmDeletePhoto').addEventListener('click', function() {
         if (fotoIdToDelete) {
-            fetch(`/produtoFoto/${fotoIdToDelete}/delete`, {
-                method: 'DELETE',
-                headers: {
-                    'X-Requested-With': 'XMLHttpRequest',
-                    'Content-Type': 'application/json'
-                }
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    // Remove the photo element from the DOM
-                    document.querySelector(`.photo-item [data-foto-id="${fotoIdToDelete}"]`).closest('.photo-item').remove()
-                    // Show success message
-                    alert('Foto removida com sucesso!')
-                } else {
-                    alert('Erro ao remover foto: ' + (data.message || 'Erro desconhecido'))
-                }
-                deleteModal.hide()
-            })
-            .catch(error => {
-                console.error('Error:', error)
-                alert('Ocorreu um erro ao tentar remover a foto.')
-                deleteModal.hide()
-            })
+            // Add to deleted photos array
+            deletedPhotos.push(fotoIdToDelete);
+            deletedPhotosInput.value = deletedPhotos.join(',');
+            
+            // Remove the photo element from the DOM
+            document.querySelector(`.photo-item [data-foto-id="${fotoIdToDelete}"]`).closest('.photo-item').remove();
+            
+            // Show success message
+            alert('Foto marcada para remoção! As alterações serão salvas quando você enviar o formulário.');
+            
+            deleteModal.hide();
         }
-    })
-})
+    });
+});
 </script>
 
 <?php include_once __DIR__ . '/../layout/rodape.php'; ?>

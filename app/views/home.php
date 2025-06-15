@@ -6,7 +6,7 @@
         <div class="col-lg-3 col-md-4 mb-4">
             <div class="card shadow-sm">
                 <div class="card-body">
-                    <form action="index.php" method="GET" id="filterForm">
+                    <form action="/" method="GET" id="filterForm">
                         <!-- CATEGORIAS -->
                         <div class="mb-4">
                             <h5 class="fw-bold mb-3 border-bottom pb-2">Categorias</h5>
@@ -63,17 +63,17 @@
                             <div class="px-2">
                                 <div class="row mb-2">
                                     <div class="col">
-                                        <input type="number" class="form-control form-control-sm" placeholder="Mínimo" name="preco_min">
+                                        <input type="number" class="form-control form-control-sm" placeholder="Mínimo" name="preco_min" value="0">
                                     </div>
                                     <div class="col">
-                                        <input type="number" class="form-control form-control-sm" placeholder="Máximo" name="preco_max">
+                                        <input type="number" class="form-control form-control-sm" placeholder="Máximo" name="preco_max" value="999999">
                                     </div>
                                 </div>
                             </div>
                         </div>
 
                         <button type="submit" class="btn btn-primary w-100">Aplicar Filtros</button>
-                        <button type="reset" class="btn btn-outline-secondary w-100 mt-2">Limpar Filtros</button>
+                        <button type="reset" class="btn btn-outline-secondary w-100 mt-2" onclick="document.location='/';">Limpar Filtros</button>
                     </form>
                 </div>
             </div>

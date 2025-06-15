@@ -44,11 +44,6 @@
                                         <th scope="row"><?= htmlspecialchars($marca->marca_id) ?></th>
                                         <td>
                                             <div class="d-flex align-items-center">
-                                                <?php if($marca->logo): ?>
-                                                    <img src="/uploads/marcas/thumb_<?= htmlspecialchars($marca->logo) ?>" 
-                                                         class="rounded me-3" width="40" height="40" 
-                                                         alt="<?= htmlspecialchars($marca->marca_nome) ?>">
-                                                <?php endif; ?>
                                                 <a href="/marca/<?= htmlspecialchars($marca->marca_id) ?>" 
                                                    class="text-decoration-none">
                                                     <?= htmlspecialchars($marca->marca_nome) ?>
@@ -57,10 +52,6 @@
                                         </td>
                                         <td class="text-end">
                                             <div class="btn-group btn-group-sm" role="group">
-                                                <a href="/marca/<?= htmlspecialchars($marca->marca_id) ?>" 
-                                                   class="btn btn-outline-primary" title="Visualizar">
-                                                    <i class="fas fa-eye"></i>
-                                                </a>
                                                 <a href="/marca/<?= htmlspecialchars($marca->marca_id) ?>/edit" 
                                                    class="btn btn-outline-secondary" title="Editar">
                                                     <i class="fas fa-edit"></i>

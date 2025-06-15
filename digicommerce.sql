@@ -86,7 +86,7 @@ CREATE TABLE produto_foto (
     mime_type VARCHAR(100),
     produto_fk INTEGER NOT NULL REFERENCES produto(produto_id) ON DELETE CASCADE,
     is_primary BOOLEAN DEFAULT FALSE,
-    created_by VARCHAR(100) NOT NULL,
+    created_by VARCHAR(100),
     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     updated_by VARCHAR(100),
     updated_at TIMESTAMP WITH TIME ZONE,

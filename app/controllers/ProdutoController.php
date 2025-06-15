@@ -111,9 +111,10 @@ class ProdutoController
 
             header('Location: /produtos');
             exit;
+        } else {
+            $this->handleError('Erro ao modificar');
         }
 
-        $this->handleError('Error updating product');
     }
 
     public function delete(string $produtoId): void
@@ -140,12 +141,15 @@ class ProdutoController
 
     private function handlePhotoUpload(int $produtoId, array $fotos): void
     {
-        if (!empty($fotos['name'][0]) && $fotos['error'][0] !== UPLOAD_ERR_NO_FILE) {
+        if (!empty($fotos['name'][0])) {
             $uploadResult = $this->produtoFotoController->store($produtoId, $fotos);
-            
+
             if (!$uploadResult) {
                 error_log('Failed to upload product photos for product ID: ' . $produtoId);
             }
+
+        } else {
+            error_log('No files received or empty file array');
         }
     }
 

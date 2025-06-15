@@ -75,7 +75,7 @@ class ProdutoFotoModel {
                 ':created_by' => $fotoData['created_by'] ?? null
             ]);
         } catch (\PDOException $e) {
-            error_log("Database error in create: " . $e->getMessage());
+            echo $e->getMessage();
             return false;
         }
     }
