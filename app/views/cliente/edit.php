@@ -66,36 +66,4 @@
     </div>
 </main>
 
-<script>
-// Bootstrap form validation
-(() => {
-    'use strict'
-    const forms = document.querySelectorAll('.needs-validation')
-    
-    Array.from(forms).forEach(form => {
-        form.addEventListener('submit', event => {
-            if (!form.checkValidity()) {
-                event.preventDefault()
-                event.stopPropagation()
-            }
-
-            // Password confirmation validation
-            const novaSenha = document.getElementById('nova_senha').value;
-            const confirmarNovaSenha = document.getElementById('confirmar_nova_senha').value;
-            
-            if (novaSenha !== confirmarNovaSenha) {
-                event.preventDefault();
-                event.stopPropagation();
-                alert('As novas senhas não coincidem!');
-                document.getElementById('confirmar_nova_senha').classList.add('is-invalid');
-            } else {
-                document.getElementById('confirmar_nova_senha').classList.remove('is-invalid');
-            }
-            
-            form.classList.add('was-validated')
-        }, false)
-    })
-})()
-</script>
-
 <?php include_once __DIR__ . '/../layout/rodape.php'; ?>

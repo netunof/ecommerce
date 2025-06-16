@@ -280,6 +280,22 @@ document.getElementById('novaMarcaModal').addEventListener('hidden.bs.modal', fu
     document.getElementById('formNovaMarca').classList.remove('was-validated');
 });
 
+//Vai para a barra de pesquisa ao clicar no botão do rodapé
+document.getElementById('focusSearchLink').addEventListener('click', function(e) {
+e.preventDefault(); // Impede o comportamento padrão do link
+
+// Verifica se o campo de pesquisa existe na página atual
+const searchInput = document.getElementById('searchInput');
+if (searchInput) {
+    searchInput.focus();
+    
+    // Rolagem suave até o campo (opcional)
+    searchInput.scrollIntoView({
+        behavior: 'smooth',
+        block: 'center'
+    });
+}});
+
 // Inicializa todas as funções quando o DOM estiver carregado
 document.addEventListener('DOMContentLoaded', function() {
     setupFormValidation();

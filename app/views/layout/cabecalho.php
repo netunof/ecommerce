@@ -56,7 +56,8 @@
                 <div class="col-md-6">
                     <form class="search-box mx-auto" action="/" method="get">
                         <div class="input-group">
-                            <input class="form-control border-end-0" type="search" name="produto_nome" placeholder="O que você procura?" required>
+                            <input class="form-control border-end-0" type="search" name="produto_nome" 
+                            placeholder="O que você procura?" id="searchInput" required>
                             <button class="btn btn-primary" type="submit">
                                 <i class="fa-solid fa-magnifying-glass"></i>
                             </button>

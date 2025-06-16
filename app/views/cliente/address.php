@@ -99,22 +99,4 @@
     </div>
 </main>
 
-<script>
-document.getElementById('cep').addEventListener('blur', function() {
-    const cep = this.value.replace(/\D/g, '');
-    if (cep.length !== 8) return;
-    
-    fetch(`https://viacep.com.br/ws/${cep}/json/`)
-        .then(response => response.json())
-        .then(data => {
-            if (!data.erro) {
-                document.getElementById('logradouro').value = data.logradouro;
-                document.getElementById('cidade').value = data.localidade;
-                document.getElementById('estado').value = data.uf;
-                document.getElementById('numero').focus();
-            }
-        });
-});
-</script>
-
 <?php include_once __DIR__ . '/../layout/rodape.php'; ?>

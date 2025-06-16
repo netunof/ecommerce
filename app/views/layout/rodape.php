@@ -6,10 +6,10 @@
                     <div class="col-md-3">
                         <h5 class="text-uppercase mb-4">O que deseja?</h5>
                         <ul class="list-unstyled">
-                            <li class="mb-2"><a href="index.php" class="text-white text-decoration-none"><i class="fas fa-home me-2"></i> Página inicial</a></li>
-                            <li class="mb-2"><a href="clientelogin.php" class="text-white text-decoration-none"><i class="fas fa-sign-in-alt me-2"></i> Login</a></li>
+                            <li class="mb-2"><a href="/" class="text-white text-decoration-none"><i class="fas fa-home me-2"></i> Página inicial</a></li>
+                            <li class="mb-2"><a href="/login" class="text-white text-decoration-none"><i class="fas fa-sign-in-alt me-2"></i> Login</a></li>
                             <li class="mb-2"><a href="admin.php" class="text-white text-decoration-none"><i class="fas fa-lock me-2"></i> Área admin</a></li>
-                            <li class="mb-2"><a href="/produtos" class="text-white text-decoration-none"><i class="fas fa-search me-2"></i> Buscar produto</a></li>
+                            <li class="mb-2"><a href="#" class="text-white text-decoration-none" id="focusSearchLink"></a><i class="fas fa-search me-2"></i> Buscar produto</a></li>
                         </ul>
                     </div>
                     
@@ -36,7 +36,7 @@
                         <ul class="list-unstyled">
                             <li class="mb-2"><a href="/termos-servico" class="text-white text-decoration-none"><i class="fas fa-file-contract me-2"></i> Termos de serviço</a></li>
                             <li class="mb-2"><a href="/termos-uso" class="text-white text-decoration-none"><i class="fas fa-file-signature me-2"></i> Termos de uso</a></li>
-                            <li class="mb-2"><a href="/privacidade" class="text-white text-decoration-none"><i class="fas fa-shield-alt me-2"></i> Política de privacidade</a></li>
+                            <li class="mb-2"><a href="/politica" class="text-white text-decoration-none"><i class="fas fa-shield-alt me-2"></i> Política de privacidade</a></li>
                         </ul>
                     </div>
                 </div>

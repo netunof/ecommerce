@@ -19,7 +19,7 @@ class CarrinhoController
 
     public function index(): void
     {
-        session_start();
+        session_status() === PHP_SESSION_NONE ? session_start() : false;
         $carrinho = $_SESSION['carrinho'] ?? [];
         $produtos = [];
         $total = 0;
@@ -42,7 +42,7 @@ class CarrinhoController
 
     public function adicionar(): void
     {
-        session_start();
+        session_status() === PHP_SESSION_NONE ? session_start() : false;
         $produtoId = filter_input(INPUT_POST, 'produto_id', FILTER_VALIDATE_INT);
         $quantidade = filter_input(INPUT_POST, 'quantidade', FILTER_VALIDATE_INT, ['options' => ['min_range' => 1]]);
 
@@ -71,7 +71,7 @@ class CarrinhoController
 
     public function atualizar(): void
     {
-        session_start();
+        session_status() === PHP_SESSION_NONE ? session_start() : false;
         $produtoId = filter_input(INPUT_POST, 'produto_id', FILTER_VALIDATE_INT);
         $quantidade = filter_input(INPUT_POST, 'quantidade', FILTER_VALIDATE_INT, ['options' => ['min_range' => 1]]);
 
@@ -89,7 +89,7 @@ class CarrinhoController
 
     public function remover(int $produtoId): void
     {
-        session_start();
+        session_status() === PHP_SESSION_NONE ? session_start() : false;
         
         if (isset($_SESSION['carrinho'][$produtoId])) {
             unset($_SESSION['carrinho'][$produtoId]);
@@ -102,7 +102,7 @@ class CarrinhoController
 
     public function limpar(): void
     {
-        session_start();
+        session_status() === PHP_SESSION_NONE ? session_start() : false;
         unset($_SESSION['carrinho']);
         unset($_SESSION['cart_count']);
         header('Location: /carrinho');

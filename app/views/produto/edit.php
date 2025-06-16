@@ -5,7 +5,7 @@
         <div class="col-lg-12">
             <div class="d-flex justify-content-between align-items-center mb-4">
                 <h1 class="h3 text-primary">
-                    Editar Produto: <?= htmlspecialchars($produto->produto_nome) ?>
+                    Editar Produto: <?= isset($produto) && is_object($produto) ? htmlspecialchars($produto->produto_nome) : '' ?>
                 </h1>
                 <a href="/produtos" class="btn btn-outline-secondary">
                     Voltar
@@ -13,7 +13,8 @@
             </div>
 
             <form action="update" method="POST" class="needs-validation" enctype="multipart/form-data" novalidate>
-                <input type="hidden" name="produto_id" value="<?= htmlspecialchars($produto->produto_id) ?>">
+                <input type="hidden" name="produto_id" 
+                value="<?= isset($produto) && is_object($produto) ? htmlspecialchars($produto->produto_id) : '' ?>">
                 
                 <div class="row g-4">
                     <!-- INFO PRODUTO -->
@@ -25,7 +26,8 @@
                                 <div class="mb-3">
                                     <label for="produto_nome" class="form-label">Nome do Produto *</label>
                                     <input type="text" class="form-control" id="produto_nome" name="produto_nome" 
-                                           value="<?= htmlspecialchars($produto->produto_nome) ?>" required>
+                                    value="<?= isset($produto) && is_object($produto) ? htmlspecialchars($produto->produto_nome) : '' ?>" 
+                                    required>
                                     <div class="invalid-feedback">Por favor, informe o nome do produto.</div>
                                 </div>
                                 

@@ -238,6 +238,10 @@ switch ($path) {
         $carrinhoController->limpar();
         break;
 
+    #UTILIDADES
+    case '/politica':
+        require_once 'app/views/politica.php';
+        break;
     default:
         http_response_code(404);
         echo "404 - Page not found";

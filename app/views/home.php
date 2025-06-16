@@ -106,25 +106,25 @@
                                 <!-- FOTO -->
                                 <div class="position-relative">
                                     <a href="produto/<?= $produto->produto_id ?>">
-                                        <img src="/public/img/produtos/<?= htmlspecialchars($produto->file_name ?? 'default.jpg') ?>" 
+                                        <img src="/<?= htmlspecialchars($produto->file_path ?? 'default.jpg') ?>" 
                                              class="card-img-top p-3 object-fit-contain" 
-                                             alt="<?= htmlspecialchars($produto->produto_nome) ?>"
+                                             alt="Produto sem foto"
                                              style="height: 200px;">
                                     </a>
                                 </div>
                                 
                                 <!-- DETALHES -->
                                 <div class="card-body d-flex flex-column">
-                                    <h5 class="card-title">
+                                    <h6 class="card-title" title="<?= htmlspecialchars($produto->produto_nome) ?>">
                                         <a href="produto/<?= $produto->produto_id ?>" class="text-decoration-none text-dark">
-                                            <?= htmlspecialchars($produto->produto_nome) ?>
+                                            <?= mb_substr(htmlspecialchars($produto->produto_nome), 0, 50, 'UTF-8').'...' ?>
                                         </a>
-                                    </h5>
-                                    <h6 class="card-title">
+                                    </h6>
+                                    <h7 class="card-title">
                                         <a href="produto/<?= $produto->produto_id ?>" class="text-decoration-none text-dark">
                                             R$<?= htmlspecialchars($produto->produto_preco) ?>
                                         </a>
-                                    </h6>
+                                    </h7>
                                     
                                     <div class="mt-auto">   
                                         <button class="btn btn-outline-primary w-100 add-to-cart" 
