@@ -16,7 +16,7 @@ class ProdutoModel {
     }
     
     public function getProdutosComFoto($data) {
-        $query = $this->db->prepare("SELECT p.*, f.file_name 
+        $query = $this->db->prepare("SELECT p.*, f.file_path 
             FROM produto p 
             LEFT JOIN (
                 SELECT pf.* FROM produto_foto pf 
@@ -54,7 +54,18 @@ class ProdutoModel {
     }
     
     public function find($produtoId) {
-        $query = $this->db->prepare("SELECT * FROM produto WHERE produto_id = :produto_id");
+        $query = $this->db->prepare("SELECT p.*, f.file_path FROM produto p 
+        LEFT JOIN (
+                SELECT pf.* FROM produto_foto pf 
+                WHERE pf.produto_foto_id = COALESCE(
+                    (SELECT pf2.produto_foto_id FROM produto_foto pf2 
+                    WHERE pf2.produto_fk = pf.produto_fk AND pf2.is_primary = TRUE 
+                    LIMIT 1),
+                    (SELECT MIN(pf3.produto_foto_id) FROM produto_foto pf3 
+                    WHERE pf3.produto_fk = pf.produto_fk)
+                )
+            ) f ON f.produto_fk = p.produto_id
+        WHERE produto_id = :produto_id");
         
         $query->execute([':produto_id' => $produtoId]);
         

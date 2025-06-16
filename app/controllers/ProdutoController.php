@@ -79,6 +79,7 @@ class ProdutoController
         
         if (!$produto) {
             $this->notFound();
+            return;
         }
 
         $this->view->render('produto/edit', [
@@ -99,9 +100,10 @@ class ProdutoController
         if ($updateResult['queryResult']) {
             $this->handlePhotoUpload($produtoId, $_FILES['novas_fotos'] ?? []);
             
-            // Handle photo deletions if any
+            // Deleta fotos se houver alguma selecionada
             if (!empty($_POST['deleted_photos'])) {
-                $this->handlePhotoDeletions($_POST['deleted_photos']);
+            $deletedPhotos = explode(',', $_POST['deleted_photos']);
+                $this->handlePhotoDeletions($deletedPhotos);
             }
 
             // Handle primary photo change if needed
@@ -112,7 +114,7 @@ class ProdutoController
             header('Location: /produtos');
             exit;
         } else {
-            $this->handleError('Erro ao modificar');
+            echo 'Erro ao modificar';
         }
 
     }
@@ -131,7 +133,7 @@ class ProdutoController
     {
         return [
             'produto_nome' => filter_input(INPUT_POST, 'produto_nome', FILTER_SANITIZE_SPECIAL_CHARS),
-            'produto_descricao' => filter_input(INPUT_POST, 'produto_descricao', FILTER_SANITIZE_SPECIAL_CHARS),
+            'produto_descricao' => filter_input(INPUT_POST, 'produto_descricao', FILTER_SANITIZE_STRING),
             'marca_fk' => filter_input(INPUT_POST, 'marca_fk', FILTER_VALIDATE_INT),
             'categoria_fk' => filter_input(INPUT_POST, 'categoria_fk', FILTER_VALIDATE_INT),
             'produto_preco' => filter_input(INPUT_POST, 'produto_preco', FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION),
@@ -145,18 +147,20 @@ class ProdutoController
             $uploadResult = $this->produtoFotoController->store($produtoId, $fotos);
 
             if (!$uploadResult) {
-                error_log('Failed to upload product photos for product ID: ' . $produtoId);
+                echo('Erro ao subir as fotos para o produto: ' . $produtoId);
             }
 
         } else {
-            error_log('No files received or empty file array');
+            echo 'Nenhum arquivo encontrado';
         }
     }
 
     private function handlePhotoDeletions(array $photoIds): void
     {
         foreach ($photoIds as $photoId) {
-            $this->produtoFotoController->delete((int)$photoId);
+            if (!empty($photoId)) {
+                $this->produtoFotoController->delete((int)$photoId);
+            }
         }
     }
 

@@ -5,10 +5,10 @@
         <div class="col-lg-12">
             <div class="d-flex justify-content-between align-items-center mb-4">
                 <h1 class="h3 text-primary">
-                    <i class="bi bi-pencil-square me-2"></i>Editar Produto: <?= htmlspecialchars($produto->produto_nome) ?>
+                    Editar Produto: <?= htmlspecialchars($produto->produto_nome) ?>
                 </h1>
                 <a href="/produtos" class="btn btn-outline-secondary">
-                    <i class="bi bi-arrow-left me-1"></i> Voltar
+                    Voltar
                 </a>
             </div>
 
@@ -30,36 +30,58 @@
                                 </div>
                                 
                                 <div class="mb-3">
-                                    <label for="categoria_fk" class="form-label">Categoria *</label>
-                                    <select name="categoria_fk" id="categoria_fk" class="form-select" required>
-                                        <option value="" disabled>Selecione uma categoria</option>
-                                        <?php foreach ($data['categorias'] as $categoria): ?>
-                                        <option value="<?= htmlspecialchars($categoria->categoria_id) ?>" 
-                                            <?= ($produto->categoria_fk == $categoria->categoria_id) ? 'selected' : '' ?>>
-                                            <?= htmlspecialchars($categoria->categoria_nome) ?>
-                                        </option>
-                                        <?php endforeach; ?>
-                                    </select>
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <label for="categoria_fk" class="form-label">Categoria *</label>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-11">
+                                            <select name="categoria_fk" id="categoria_fk" class="form-select" required>
+                                                <option value="" selected disabled>Selecione uma categoria</option>
+                                                <?php foreach ($data['categorias'] as $categoria): ?>
+                                                    <option value="<?= htmlspecialchars($categoria->categoria_id) ?>"
+                                                    <?= $categoria->categoria_id == $produto->categoria_fk ? 'selected' : ''?>>
+                                                    <?= htmlspecialchars($categoria->categoria_nome) ?>
+                                                </option>
+                                                <?php endforeach; ?>
+                                            </select>
+                                        </div>
+                                        <div class="col-1" title="Nova categoria">
+                                            <button type="button" class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#novaCategoriaModal">
+                                                <i class="fa-solid fa-plus"></i>
+                                            </button>
+                                        </div>
+                                    </div>
                                     <div class="invalid-feedback">Por favor, selecione uma categoria.</div>
                                 </div>
                                 
                                 <div class="mb-3">
-                                    <label for="marca_fk" class="form-label">Marca *</label>
-                                    <select name="marca_fk" id="marca_fk" class="form-select" required>
-                                        <option value="" disabled>Selecione uma marca</option>
-                                        <?php foreach ($data['marcas'] as $marca): ?>
-                                        <option value="<?= htmlspecialchars($marca->marca_id) ?>" 
-                                            <?= ($produto->marca_fk == $marca->marca_id) ? 'selected' : '' ?>>
-                                            <?= htmlspecialchars($marca->marca_nome) ?>
-                                        </option>
-                                        <?php endforeach; ?>
-                                    </select>
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <label for="marca_fk" class="form-label">Marca *</label>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-11">
+                                            <select name="marca_fk" id="marca_fk" class="form-select" required>
+                                                <option value="" selected disabled>Selecione uma marca</option>
+                                                <?php foreach ($data['marcas'] as $marca): ?>
+                                                    <option value="<?= htmlspecialchars($marca->marca_id) ?>"
+                                                    <?= $marca->marca_id == $produto->marca_fk ? 'selected' : ''?>>
+                                                    <?= htmlspecialchars($marca->marca_nome) ?>
+                                                </option>
+                                                <?php endforeach; ?>
+                                            </select>
+                                        </div>
+                                        <div class="col-1" title="Nova marca">
+                                            <button type="button" class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#novaMarcaModal">
+                                                <i class="fa-solid fa-plus"></i>
+                                            </button>
+                                        </div>
+                                    </div>
                                     <div class="invalid-feedback">Por favor, selecione uma marca.</div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    
+
                     <!-- DETALHE PRODUTO -->
                     <div class="col-md-6">
                         <div class="card h-100">
@@ -94,7 +116,7 @@
                                 <div class="mb-3">
                                     <label for="produto_descricao" class="form-label">Descrição</label>
                                     <textarea class="form-control" id="produto_descricao" name="produto_descricao" 
-                                              rows="5" placeholder="Descreva detalhes sobre o produto..."><?= htmlspecialchars($produto->produto_descricao) ?></textarea>
+                                              rows="5" placeholder="Descreva detalhes sobre o produto..."><?= nl2br(htmlspecialchars($produto->produto_descricao)) ?></textarea>
                                 </div>
                             </div>
                         </div>
@@ -116,7 +138,7 @@
                                                     <div class="card h-100">
                                                         <img src="/<?= htmlspecialchars($foto->file_path) ?>" 
                                                             class="card-img-top img-thumbnail" 
-                                                            alt="Foto do produto <?= htmlspecialchars($produto->produto_nome) ?>">
+                                                            alt="Produto sem foto">
                                                         <div class="card-body p-2 text-center">
                                                             <div class="form-check">
                                                                 <input class="form-check-input" type="radio" 
@@ -130,14 +152,13 @@
                                                             </div>
                                                             <button type="button" class="btn btn-sm btn-outline-danger delete-photo mt-2"
                                                                     data-foto-id="<?= htmlspecialchars($foto->produto_foto_id) ?>">
-                                                                <i class="bi bi-trash"></i> Remover
+                                                                <i class="fa-solid fa-trash"></i>
                                                             </button>
                                                         </div>
                                                     </div>
                                                 </div>
                                             <?php endforeach; ?>
                                         </div>
-                                        <input type="hidden" name="deleted_photos[]" id="deleted_photos" value="">
                                     <?php else: ?>
                                         <div class="alert alert-info">Nenhuma foto cadastrada para este produto.</div>
                                     <?php endif; ?>
@@ -147,7 +168,7 @@
                                 <div class="mb-3">
                                     <label for="novas_fotos" class="form-label">Adicionar Novas Fotos</label>
                                     <input type="file" class="form-control" id="novas_fotos" 
-                                           name="novas_fotos[]" multiple accept="image/jpeg, image/png, image/webp">
+                                           name="novas_fotos[]" accept="image/jpeg, image/png, image/webp" data-max-files="5" multiple>
                                     <div class="form-text">Formatos aceitos: JPEG, PNG, WEBP. Máx. 5MB por imagem.</div>
                                 </div>
                                 
@@ -162,7 +183,7 @@
                                                        value="<?= $foto->produto_foto_id ?>"
                                                        <?= ($foto->produto_foto_id == $produto->foto_principal_id) ? 'checked' : '' ?>>
                                                 <label class="btn btn-outline-primary" for="foto_principal_<?= $foto->produto_foto_id ?>">
-                                                    <img src="/uploads/produtos/<?= htmlspecialchars($foto->foto_nome) ?>" 
+                                                    <img src="/<?= htmlspecialchars($foto->foto_path) ?>" 
                                                          class="img-thumbnail" width="50">
                                                 </label>
                                             <?php endforeach; ?>
@@ -176,20 +197,70 @@
                 
                 <!-- BOTÕES -->
                 <div class="d-flex justify-content-end gap-2 mt-4">
-                    <button type="reset" class="btn btn-outline-danger">
-                        <i class="bi bi-arrow-counterclockwise me-1"></i> Limpar
-                    </button>
-                    <button type="submit" class="btn btn-primary">
-                        <i class="bi bi-check-circle me-1"></i> Salvar Alterações
-                    </button>
+                    <button type="reset" class="btn btn-outline-danger">Limpar</button>
+                    <button type="submit" class="btn btn-primary">Salvar Alterações</button>
                 </div>
             </form>
+
+            <!-- Modal Categoria -->
+            <div class="modal fade" id="novaCategoriaModal" tabindex="-1" aria-labelledby="novaCategoriaModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="novaCategoriaModalLabel">Adicionar Nova Categoria</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <form id="formNovaCategoria">
+                                <div class="mb-3">
+                                    <label for="nova_categoria_nome" class="form-label">Nome da Categoria</label>
+                                    <input type="text" class="form-control" id="nova_categoria_nome" required>
+                                    <div class="invalid-feedback">Por favor, informe o nome da categoria.</div>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                            <button type="button" class="btn btn-primary" id="salvarNovaCategoria">Salvar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Modal Marca -->
+            <div class="modal fade" id="novaMarcaModal" tabindex="-1" aria-labelledby="novaMarcaModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="novaMarcaModalLabel">Adicionar Nova Marca</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <form id="formNovaMarca">
+                                <div class="mb-3">
+                                    <label for="nova_marca_nome" class="form-label">Nome da Marca</label>
+                                    <input type="text" class="form-control" id="nova_marca_nome" required>
+                                    <div class="invalid-feedback">Por favor, informe o nome da marca.</div>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="nova_marca_logo" class="form-label">Logo (Opcional)</label>
+                                    <input type="file" class="form-control" id="nova_marca_logo" accept="image/png, image/jpeg, image/svg+xml">
+                                </div>
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                            <button type="button" class="btn btn-primary" id="salvarNovaMarca">Salvar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </main>
 
 <!-- DELETE MODAL -->
-<div class="modal fade" id="deletePhotoModal" tabindex="-1" aria-hidden="true">
+<div class="modal fade" id="deletePhotoModal" tabindex="-1" aria-hidden="false" aria-modal="true" role="dialog">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -207,57 +278,5 @@
         </div>
     </div>
 </div>
-
-<script>
-// VALIDAÇÕES
-(() => {
-    'use strict'
-    const forms = document.querySelectorAll('.needs-validation')
-    
-    Array.from(forms).forEach(form => {
-        form.addEventListener('submit', event => {
-            if (!form.checkValidity()) {
-                event.preventDefault()
-                event.stopPropagation()
-            }
-            
-            form.classList.add('was-validated')
-        }, false)
-    })
-})()
-
-// Photo deletion handling
-document.addEventListener('DOMContentLoaded', function() {
-    const deleteModal = new bootstrap.Modal(document.getElementById('deletePhotoModal'))
-    let fotoIdToDelete = null;
-    const deletedPhotosInput = document.getElementById('deleted_photos');
-    let deletedPhotos = [];
-    
-    // Set up delete buttons
-    document.querySelectorAll('.delete-photo').forEach(button => {
-        button.addEventListener('click', function() {
-            fotoIdToDelete = this.getAttribute('data-foto-id')
-            deleteModal.show()
-        })
-    })
-    
-    // Confirm deletion
-    document.getElementById('confirmDeletePhoto').addEventListener('click', function() {
-        if (fotoIdToDelete) {
-            // Add to deleted photos array
-            deletedPhotos.push(fotoIdToDelete);
-            deletedPhotosInput.value = deletedPhotos.join(',');
-            
-            // Remove the photo element from the DOM
-            document.querySelector(`.photo-item [data-foto-id="${fotoIdToDelete}"]`).closest('.photo-item').remove();
-            
-            // Show success message
-            alert('Foto marcada para remoção! As alterações serão salvas quando você enviar o formulário.');
-            
-            deleteModal.hide();
-        }
-    });
-});
-</script>
 
 <?php include_once __DIR__ . '/../layout/rodape.php'; ?>

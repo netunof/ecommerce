@@ -26,7 +26,7 @@
                                 <tr>
                                     <td>
                                         <div class="d-flex align-items-center">
-                                            <img src="/public/img/produtos/default.jpg" alt="<?= htmlspecialchars($produto->produto_nome) ?>" width="50" class="me-3">
+                                            <img src="<?= htmlspecialchars($produto->file_path)?>" alt="" width="50" class="me-3">
                                             <?= htmlspecialchars($produto->produto_nome) ?>
                                         </div>
                                     </td>

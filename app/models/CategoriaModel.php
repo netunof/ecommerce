@@ -8,7 +8,7 @@ use PDOException;
 
 class CategoriaModel 
 {
-    private \PDO $db;
+    private PDO $db;
     
     public function __construct() 
     {
@@ -32,19 +32,11 @@ class CategoriaModel
     
     public function create(array $data): bool 
     {
-        try {
-            $query = $this->db->prepare("
-                INSERT INTO categoria (categoria_nome, created_at) 
-                VALUES (:nome, NOW())
-            ");
-            
-            return $query->execute([
-                ':nome' => $data['categoria_nome'] ?? null
-            ]);
-        } catch (PDOException $e) {
-            // Log error here
-            return false;
-        }
+        $query = $this->db->prepare("INSERT INTO categoria (categoria_nome, created_at) 
+        VALUES (:categoria_nome, CURRENT_TIMESTAMP)");
+        return $query->execute([
+            ':categoria_nome' => $data['categoria_nome']
+        ]);
     }
     
     public function update(int $id, string $nome): bool 
@@ -79,5 +71,10 @@ class CategoriaModel
             // Log error here
             return false;
         }
+    }
+
+    public function lastId()
+    {
+        return $this->db->lastInsertId();
     }
 }

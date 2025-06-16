@@ -38,17 +38,36 @@ class CategoriaController
 
     public function store(): void
     {
-        $data = [
-            'categoria_nome' => filter_input(INPUT_POST, 'categoria_nome', FILTER_SANITIZE_SPECIAL_CHARS)
-        ];
-
-        if ($this->categoriaModel->create($data)) {
+        // Verifica se é uma requisição AJAX
+        $isAjax = !empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest';
+        
+        $data = $this->getValidatedData();
+        
+        $result = $this->categoriaModel->create($data);
+        
+        if ($isAjax) {
+            header('Content-Type: application/json');
+            if ($result) {
+                echo json_encode([
+                    'success' => true,
+                    'categoria_id' => $this->categoriaModel->lastId(),
+                    'categoria_nome' => $data['categoria_nome']
+                ]);
+            } else {
+                echo json_encode([
+                    'success' => false,
+                    'message' => 'Erro ao criar categoria'
+                ]);
+            }
+            exit;
+        }
+        
+        if ($result) {
             header('Location: /categorias');
             exit;
         }
-
-        http_response_code(500);
-        die('Error creating brand');
+        
+        $this->handleError('Erro ao criar categoria');
     }
 
     public function edit(int $id): void
@@ -87,6 +106,39 @@ class CategoriaController
 
         http_response_code(500);
         die('Error deleting brand');
+    }
+
+    private function getValidatedData(): array
+    {
+        $nome = filter_input(INPUT_POST, 'categoria_nome', FILTER_SANITIZE_SPECIAL_CHARS);
+        
+        if (empty($nome)) {
+            $nome = filter_input(INPUT_POST, 'categoria_nome', FILTER_SANITIZE_SPECIAL_CHARS);
+        }
+
+        if (empty($nome)) {
+            $this->handleError('Nome da categoria é obrigatório');
+        }
+
+        return [
+            'categoria_nome' => $nome
+        ];
+    }
+
+    private function handleError(string $message, bool $isAjax = false): never
+    {
+        if ($isAjax) {
+            header('Content-Type: application/json');
+            echo json_encode([
+                'success' => false,
+                'message' => $message
+            ]);
+            exit;
+        }
+
+        $_SESSION['error_message'] = $message;
+        header('Location: ' . ($_SERVER['HTTP_REFERER'] ?? '/categorias'));
+        exit;
     }
 
     private function notFound(): never

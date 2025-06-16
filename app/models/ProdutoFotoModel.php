@@ -61,9 +61,13 @@ class ProdutoFotoModel {
                     :is_primary, 
                     :created_by, 
                     NOW(),
-                    TRUE
+                    :active
                 )
             ");
+            
+            // Convert boolean values to PostgreSQL compatible format
+            $isPrimary = isset($fotoData['is_primary']) ? ($fotoData['is_primary'] ? 'TRUE' : 'FALSE') : 'FALSE';
+            $active = isset($fotoData['active']) ? ($fotoData['active'] ? 'TRUE' : 'FALSE') : 'TRUE';
             
             return $query->execute([
                 ':file_name' => $fotoData['file_name'],
@@ -71,11 +75,12 @@ class ProdutoFotoModel {
                 ':file_size' => $fotoData['file_size'],
                 ':mime_type' => $fotoData['mime_type'],
                 ':produto_fk' => $fotoData['produto_fk'],
-                ':is_primary' => $fotoData['is_primary'] ?? false,
-                ':created_by' => $fotoData['created_by'] ?? null
+                ':is_primary' => $isPrimary,
+                ':created_by' => $fotoData['created_by'] ?? null,
+                ':active' => $active
             ]);
         } catch (\PDOException $e) {
-            echo $e->getMessage();
+            error_log("Database error in create: " . $e->getMessage());
             return false;
         }
     }

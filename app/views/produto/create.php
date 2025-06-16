@@ -15,28 +15,50 @@
                         </div>
                         
                         <div class="mb-3">
-                            <label for="categoria_fk" class="form-label">Categoria *</label>
-                            <select name="categoria_fk" id="categoria_fk" class="form-select" required>
-                                <option value="" selected disabled>Selecione uma categoria</option>
-                                <?php foreach ($data['categorias'] as $categoria): ?>
-                                <option value="<?= htmlspecialchars($categoria->categoria_id) ?>">
-                                    <?= htmlspecialchars($categoria->categoria_nome) ?>
-                                </option>
-                                <?php endforeach; ?>
-                            </select>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <label for="categoria_fk" class="form-label">Categoria *</label>
+                            </div>
+                            <div class="row">
+                                <div class="col-11">
+                                    <select name="categoria_fk" id="categoria_fk" class="form-select" required>
+                                        <option value="" selected disabled>Selecione uma categoria</option>
+                                        <?php foreach ($data['categorias'] as $categoria): ?>
+                                            <option value="<?= htmlspecialchars($categoria->categoria_id) ?>">
+                                            <?= htmlspecialchars($categoria->categoria_nome) ?>
+                                        </option>
+                                        <?php endforeach; ?>
+                                    </select>
+                                </div>
+                                <div class="col-1" title="Nova categoria">
+                                    <button type="button" class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#novaCategoriaModal">
+                                        <i class="fa-solid fa-plus"></i>
+                                    </button>
+                                </div>
+                            </div>
                             <div class="invalid-feedback">Por favor, selecione uma categoria.</div>
                         </div>
                         
                         <div class="mb-3">
-                            <label for="marca_fk" class="form-label">Marca *</label>
-                            <select name="marca_fk" id="marca_fk" class="form-select" required>
-                                <option value="" selected disabled>Selecione uma marca</option>
-                                <?php foreach ($data['marcas'] as $marca): ?>
-                                <option value="<?= htmlspecialchars($marca->marca_id) ?>">
-                                    <?= htmlspecialchars($marca->marca_nome) ?>
-                                </option>
-                                <?php endforeach; ?>
-                            </select>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <label for="marca_fk" class="form-label">Marca *</label>
+                            </div>
+                            <div class="row">
+                                <div class="col-11">
+                                    <select name="marca_fk" id="marca_fk" class="form-select" required>
+                                        <option value="" selected disabled>Selecione uma marca</option>
+                                        <?php foreach ($data['marcas'] as $marca): ?>
+                                            <option value="<?= htmlspecialchars($marca->marca_id) ?>">
+                                            <?= htmlspecialchars($marca->marca_nome) ?>
+                                        </option>
+                                        <?php endforeach; ?>
+                                    </select>
+                                </div>
+                                <div class="col-1" title="Nova marca">
+                                    <button type="button" class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#novaMarcaModal">
+                                        <i class="fa-solid fa-plus"></i>
+                                    </button>
+                                </div>
+                            </div>
                             <div class="invalid-feedback">Por favor, selecione uma marca.</div>
                         </div>
                         
@@ -84,6 +106,59 @@
                     </button>
                 </div>
             </form>
+            <!-- Modal Categoria -->
+            <div class="modal fade" id="novaCategoriaModal" tabindex="-1" aria-labelledby="novaCategoriaModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="novaCategoriaModalLabel">Adicionar Nova Categoria</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <form id="formNovaCategoria">
+                                <div class="mb-3">
+                                    <label for="nova_categoria_nome" class="form-label">Nome da Categoria</label>
+                                    <input type="text" class="form-control" id="nova_categoria_nome" required>
+                                    <div class="invalid-feedback">Por favor, informe o nome da categoria.</div>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                            <button type="button" class="btn btn-primary" id="salvarNovaCategoria">Salvar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Modal Marca -->
+            <div class="modal fade" id="novaMarcaModal" tabindex="-1" aria-labelledby="novaMarcaModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="novaMarcaModalLabel">Adicionar Nova Marca</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <form id="formNovaMarca">
+                                <div class="mb-3">
+                                    <label for="nova_marca_nome" class="form-label">Nome da Marca</label>
+                                    <input type="text" class="form-control" id="nova_marca_nome" required>
+                                    <div class="invalid-feedback">Por favor, informe o nome da marca.</div>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="nova_marca_logo" class="form-label">Logo (Opcional)</label>
+                                    <input type="file" class="form-control" id="nova_marca_logo" accept="image/png, image/jpeg, image/svg+xml">
+                                </div>
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                            <button type="button" class="btn btn-primary" id="salvarNovaMarca">Salvar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </main>

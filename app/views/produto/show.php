@@ -10,8 +10,8 @@
                     <?php if (!empty($produtoFotos)): ?>
                         <img id="mainProductImage" 
                              class="img-fluid h-100 object-fit-contain" 
-                             src="/public/img/produtos/<?= htmlspecialchars($primaryPhoto ? $primaryPhoto->file_name : $produtoFotos[0]->file_name) ?>" 
-                             alt="<?= htmlspecialchars($produto->produto_nome) ?>">
+                             src="/<?= htmlspecialchars($primaryPhoto ? $primaryPhoto->file_path : $produtoFotos[0]->file_path) ?>" 
+                             alt="Produto foto">
                     <?php else: ?>
                         <div class="d-flex align-items-center justify-content-center h-100">
                             <span class="text-muted">No images available</span>
@@ -25,7 +25,7 @@
                     <?php foreach ($produtoFotos as $index => $foto): ?>
                         <div class="border rounded p-1 cursor-pointer" style="width: 80px; height: 80px;">
                             <img class="img-fluid h-100 object-fit-cover" 
-                                 src="/public/img/produtos/<?= htmlspecialchars($foto->file_name) ?>" 
+                                 src="/<?= htmlspecialchars($foto->file_path) ?>" 
                                  alt="Thumbnail <?= $index + 1 ?>"
                                  onclick="document.getElementById('mainProductImage').src = this.src">
                         </div>
@@ -85,7 +85,7 @@
                 <div class="card mb-4">
                     <div class="card-body">
                         <h5 class="card-title">Descrição do Produto</h5>
-                        <p class="card-text"><?= nl2br(htmlspecialchars($produto->produto_descricao)) ?></p>
+                        <p class="card-text"><?= nl2br($produto->produto_descricao) ?></p>
                     </div>
                 </div>
 
@@ -107,32 +107,5 @@
         </div>
     </div>
 </div>
-
-<script>
-    function updateQuantity(change) {
-        const quantityInput = document.getElementById('productQuantity');
-        let newValue = parseInt(quantityInput.value) + change;
-        const maxStock = <?= $produto->produto_estoque ?? 100 ?>;
-        
-        if (newValue < 1) newValue = 1;
-        if (newValue > maxStock) newValue = maxStock;
-        
-        quantityInput.value = newValue;
-    }
-
-    // Feedback visual ao adicionar ao carrinho
-    document.querySelector('form[action="/carrinho/adicionar"]')?.addEventListener('submit', function(e) {
-        const submitBtn = this.querySelector('button[type="submit"]');
-        submitBtn.innerHTML = '<i class="bi bi-check-circle me-2"></i>Adicionado';
-        submitBtn.classList.remove('btn-primary');
-        submitBtn.classList.add('btn-success');
-        
-        setTimeout(() => {
-            submitBtn.innerHTML = '<i class="bi bi-cart-plus me-2"></i>Adicionar ao Carrinho';
-            submitBtn.classList.remove('btn-success');
-            submitBtn.classList.add('btn-primary');
-        }, 2000);
-    });
-</script>
 
 <?php include_once __DIR__ . '/../layout/rodape.php'; ?>

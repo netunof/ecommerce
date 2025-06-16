@@ -72,37 +72,33 @@ class ProdutoFotoController
         return $success;
     }
 
-    public function delete(int $id): void
+    public function delete(int $id): bool
     {
         $foto = $this->produtoFotoModel->getById($id);
-        if ($foto) {
-            if (file_exists($foto->file_path)) {
-                unlink($foto->file_path);
-            }
-            
-            if ($foto->is_primary) {
-                $this->produtoFotoModel->setNewPrimary($foto->produto_fk, $id);
-            }
+        if (!$foto) {
+            return false;
         }
         
-        if (!$this->produtoFotoModel->delete($id)) {
-            http_response_code(500);
-            die('Error deleting product photo');
+        if (file_exists($foto->file_path)) {
+            unlink($foto->file_path);
         }
+        
+        if ($foto->is_primary) {
+            $this->produtoFotoModel->setNewPrimary($foto->produto_fk, $id);
+        }
+        
+        return $this->produtoFotoModel->delete($id);
     }
 
-    public function setAsPrimary(int $fotoId): void
+    public function setAsPrimary(int $fotoId): bool
     {
         $foto = $this->produtoFotoModel->getById($fotoId);
         if (!$foto) {
             $this->notFound();
+            return false;
         }
 
-        if (!$this->produtoFotoModel->setAsPrimary($fotoId, $foto->produto_fk)) {
-            http_response_code(500);
-            die('Erro ao definir como primária');
-        }
-
+        return $this->produtoFotoModel->setAsPrimary($fotoId, $foto->produto_fk);
     }
 
     private function notFound(): never

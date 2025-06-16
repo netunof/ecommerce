@@ -21,7 +21,8 @@ class MarcaModel {
         return $query->fetch(\PDO::FETCH_OBJ);
     }
     
-    public function create($data) {
+    public function create($data) 
+    {
         $query = $this->db->prepare("INSERT INTO marca (marca_nome, created_at) 
         VALUES (:marca_nome, CURRENT_TIMESTAMP)");
         return $query->execute([
@@ -44,4 +45,8 @@ class MarcaModel {
         return $query->execute([':marca_id' => $id]);
     }
     
+    public function lastId()
+    {
+        return $this->db->lastInsertId();
+    }
 }

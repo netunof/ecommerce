@@ -161,33 +161,4 @@
     </div>
 </div>
 
-<script>
-    // Add to cart functionality
-    document.querySelectorAll('.add-to-cart').forEach(button => {
-        button.addEventListener('click', function() {
-            const productId = this.getAttribute('data-product-id');
-            // Implement your cart add logic here
-            console.log('Added product ID:', productId);
-            
-            // Show feedback
-            const originalText = this.innerHTML;
-            this.innerHTML = '<i class="bi bi-check-circle-fill me-2"></i>Adicionado';
-            this.classList.add('btn-success');
-            this.classList.remove('btn-outline-primary');
-            
-            setTimeout(() => {
-                this.innerHTML = originalText;
-                this.classList.remove('btn-success');
-                this.classList.add('btn-outline-primary');
-            }, 2000);
-        });
-    });
-
-    // Sorting functionality
-    document.querySelector('select').addEventListener('change', function() {
-        // Implement sorting logic here
-        console.log('Sort by:', this.value);
-    });
-</script>
-
 <?php include_once 'layout/rodape.php'; ?>

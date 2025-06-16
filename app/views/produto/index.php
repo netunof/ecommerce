@@ -43,10 +43,10 @@
                                         <th scope="row"><?= htmlspecialchars($produto->produto_id) ?></th>
                                         <td>
                                             <div class="d-flex align-items-center">
-                                                <?php if(isset($produto->foto_principal) && !empty($produto->foto_principal)): ?>
-                                                    <img src="/uploads/produtos/thumb_<?= htmlspecialchars($produto->foto_principal) ?>" 
+                                                <?php if(isset($produto->file_path) && !empty($produto->file_path)): ?>
+                                                    <img src="/<?= htmlspecialchars($produto->file_path) ?>" 
                                                          class="rounded me-3" width="40" height="40" 
-                                                         alt="<?= htmlspecialchars($produto->produto_nome) ?>">
+                                                         alt="Produto sem foto">
                                                 <?php else: ?>
                                                     <div class="rounded bg-light text-muted d-flex align-items-center justify-content-center me-3" 
                                                          style="width:40px;height:40px">

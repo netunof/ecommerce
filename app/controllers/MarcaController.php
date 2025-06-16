@@ -38,17 +38,36 @@ class MarcaController
 
     public function store(): void
     {
-        $data = [
-            'marca_nome' => filter_input(INPUT_POST, 'marca_nome', FILTER_SANITIZE_SPECIAL_CHARS)
-        ];
-
-        if ($this->marcaModel->create($data)) {
+        // Verifica se é uma requisição AJAX
+        $isAjax = !empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest';
+        
+        $data = $this->getValidatedData();
+        
+        $result = $this->marcaModel->create($data);
+        
+        if ($isAjax) {
+            header('Content-Type: application/json');
+            if ($result) {
+                echo json_encode([
+                    'success' => true,
+                    'marca_id' => $this->marcaModel->lastId(),
+                    'marca_nome' => $data['marca_nome']
+                ]);
+            } else {
+                echo json_encode([
+                    'success' => false,
+                    'message' => 'Erro ao criar marca'
+                ]);
+            }
+            exit;
+        }
+        
+        if ($result) {
             header('Location: /marcas');
             exit;
         }
-
-        http_response_code(500);
-        die('Error creating brand');
+        
+        $this->handleError('Erro ao criar marca');
     }
 
     public function edit(int $id): void
@@ -87,6 +106,39 @@ class MarcaController
 
         http_response_code(500);
         die('Error deleting brand');
+    }
+
+    private function getValidatedData(): array
+    {
+        $nome = filter_input(INPUT_POST, 'marca_nome', FILTER_SANITIZE_SPECIAL_CHARS);
+        
+        if (empty($nome)) {
+            $nome = filter_input(INPUT_POST, 'marca_nome', FILTER_SANITIZE_SPECIAL_CHARS);
+        }
+
+        if (empty($nome)) {
+            $this->handleError('Nome da marca é obrigatório');
+        }
+
+        return [
+            'marca_nome' => $nome
+        ];
+    }
+
+    private function handleError(string $message, bool $isAjax = false): never
+    {
+        if ($isAjax) {
+            header('Content-Type: application/json');
+            echo json_encode([
+                'success' => false,
+                'message' => $message
+            ]);
+            exit;
+        }
+
+        $_SESSION['error_message'] = $message;
+        header('Location: ' . ($_SERVER['HTTP_REFERER'] ?? '/marcas'));
+        exit;
     }
 
     private function notFound(): never
