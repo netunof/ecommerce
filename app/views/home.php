@@ -139,12 +139,14 @@
             </div>
 
             <!-- PAGINAÇÃO -->
-            <?php if (!empty($data['pagination'])): ?>
+            <?php if (!empty($data['pagination']) && $data['pagination']['total_pages'] > 1): ?>
                 <nav class="mt-5">
                     <ul class="pagination justify-content-center">
                         <?php foreach ($data['pagination']['links'] as $link): ?>
                             <li class="page-item <?= $link['active'] ? 'active' : '' ?>">
-                                <a class="page-link" href="<?= $link['url'] ?>"><?= $link['label'] ?></a>
+                                <a class="page-link" href="<?= htmlspecialchars($link['url']) ?>">
+                                    <?= $link['label'] ?>
+                                </a>
                             </li>
                         <?php endforeach; ?>
                     </ul>

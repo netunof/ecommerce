@@ -253,7 +253,8 @@ const setupBrandManagement = () => {
     }
     
     try {
-      const formData = new FormData(form);
+      const formData = new FormData();
+      formData.append('marca_nome', nome);
       
       const response = await fetch('/marca/store', {
         method: 'POST',
