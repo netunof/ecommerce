@@ -70,6 +70,11 @@
                         <a href="<?= isset($_SESSION['cliente_email']) ? '/perfil' : '/login' ?>" class="text-dark text-decoration-none">
                             <i class="fas fa-user me-1"></i> <?= isset($_SESSION['cliente_email']) ? $_SESSION['cliente_nome'] : 'Entrar' ?>
                         </a>
+                        <?php if(isset($_SESSION['cliente_email'])){ ?>
+                            <a href="/logout" class="text-dark text-decoration-none" title="Sair">
+                                <i class="fas fa-sign-out-alt me-1"></i>
+                            </a>
+                        <?php } ?>
                         <a href="/carrinho" class="text-dark text-decoration-none position-relative">
                             <i class="fas fa-shopping-cart fs-5"></i>
                             <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-primary">

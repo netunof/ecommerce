@@ -5,7 +5,7 @@
         <div class="col-md-3">
             <div class="card mb-4">
                 <div class="card-body text-center">
-                    <img src="/public/img/user-avatar.png" alt="Avatar" class="rounded-circle mb-3" width="100">
+                    <img src="" alt="Avatar" class="rounded-circle mb-3" width="100">
                     <h5 class="card-title"><?= htmlspecialchars($cliente->cliente_nome) ?></h5>
                     <p class="text-muted mb-1"><?= htmlspecialchars($cliente->cliente_email) ?></p>
                     <p class="text-muted"><?= htmlspecialchars($cliente->cliente_telefone) ?></p>

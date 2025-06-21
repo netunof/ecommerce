@@ -1,307 +1,315 @@
-// Função para validação de formulários
-function setupFormValidation() {
-    'use strict';
-    const forms = document.querySelectorAll('.needs-validation');
-    
-    Array.from(forms).forEach(form => {
-        form.addEventListener('submit', event => {
-            if (!form.checkValidity()) {
-                event.preventDefault();
-                event.stopPropagation();
-            }
+// Utility functions
+const debounce = (fn, delay = 300) => {
+  let timeoutId;
+  return (...args) => {
+    clearTimeout(timeoutId);
+    timeoutId = setTimeout(() => fn.apply(this, args), delay);
+  };
+};
 
-            // Validação específica para formulários de cliente
-            if (form.querySelector('#confirmar_senha')) {
-                const senha = document.getElementById('cliente_senha').value;
-                const confirmarSenha = document.getElementById('confirmar_senha').value;
-                
-                if (senha !== confirmarSenha) {
-                    event.preventDefault();
-                    event.stopPropagation();
-                    alert('As senhas não coincidem!');
-                    document.getElementById('confirmar_senha').classList.add('is-invalid');
-                } else {
-                    document.getElementById('confirmar_senha').classList.remove('is-invalid');
-                }
-            }
+const showAlert = (message, type = 'error') => {
+  const alertDiv = document.createElement('div');
+  alertDiv.className = `alert alert-${type === 'error' ? 'danger' : 'success'} alert-dismissible fade show`;
+  alertDiv.setAttribute('role', 'alert');
+  alertDiv.innerHTML = `
+    ${message}
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+  `;
+  document.body.prepend(alertDiv);
+  setTimeout(() => alertDiv.remove(), 5000);
+};
 
-            form.classList.add('was-validated');
-        }, false);
-    });
-}
+// Form validation
+const setupFormValidation = () => {
+  const forms = document.querySelectorAll('.needs-validation');
+  
+  forms.forEach(form => {
+    form.addEventListener('submit', event => {
+      if (!form.checkValidity()) {
+        event.preventDefault();
+        event.stopPropagation();
+      }
 
-// Função para busca de CEP
-function setupCepLookup() {
-    const cepField = document.getElementById('cep');
-    if (cepField) {
-        cepField.addEventListener('blur', function() {
-            const cep = this.value.replace(/\D/g, '');
-            if (cep.length !== 8) return;
-            
-            fetch(`https://viacep.com.br/ws/${cep}/json/`)
-                .then(response => response.json())
-                .then(data => {
-                    if (!data.erro) {
-                        document.getElementById('logradouro').value = data.logradouro || '';
-                        document.getElementById('cidade').value = data.localidade || '';
-                        document.getElementById('estado').value = data.uf || '';
-                        if (document.getElementById('numero')) {
-                            document.getElementById('numero').focus();
-                        }
-                    }
-                })
-                .catch(error => console.error('Erro ao buscar CEP:', error));
-        });
-    }
-}
-
-// Função para manipulação de fotos de produtos
-function setupProductPhotos() {
-    const deleteModal = document.getElementById('deletePhotoModal');
-    if (deleteModal) {
-        const modalInstance = new bootstrap.Modal(deleteModal);
-        let fotoIdToDelete = null;
+      // Password confirmation validation
+      const confirmPasswordField = form.querySelector('#confirmar_senha');
+      if (confirmPasswordField) {
+        const password = document.getElementById('cliente_senha').value;
+        const confirmPassword = confirmPasswordField.value;
         
-        // Adiciona evento nos botões de deletar
-        document.querySelectorAll('.delete-photo').forEach(button => {
-            button.addEventListener('click', function() {
-                fotoIdToDelete = this.getAttribute('data-foto-id');
-                document.getElementById('foto_id_to_delete').value = fotoIdToDelete;
-                modalInstance.show();
-            });
-        });
-        
-        // Confirmação de deleção
-        document.getElementById('confirmDeletePhoto')?.addEventListener('click', function() {
-            if (fotoIdToDelete) {
-                fetch(`/produtoFoto/${fotoIdToDelete}/delete`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-Requested-With': 'XMLHttpRequest'
-                    }
-                })
-                .then(response => {
-                    if (!response.ok) {
-                        return response.text().then(text => {
-                            throw new Error(text || 'Network response was not ok');
-                        });
-                    }
-                    return response.json().catch(() => {
-                        // Fallback for empty but successful responses
-                        return { success: true };
-                    });
-                })
-                .then(data => {
-                    if (data.success) {
-                        const photoItem = document.querySelector(`.photo-item [data-foto-id="${fotoIdToDelete}"]`)?.closest('.photo-item');
-                        if (photoItem) photoItem.remove();
-                    } else {
-                        alert('Erro ao remover foto: ' + (data.message || 'Erro desconhecido'));
-                    }
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    alert('Erro ao remover foto: ' + error.message);
-                })
-                .finally(() => {
-                    modalInstance.hide();  // ← This ensures the modal closes in all cases
-                });
-            }
-        });
-    }
-}
-
-// Função para adicionar ao carrinho
-function setupAddToCart() {
-    document.querySelectorAll('.add-to-cart').forEach(button => {
-        button.addEventListener('click', function() {
-            const productId = this.getAttribute('data-product-id');
-            // Implemente sua lógica de carrinho aqui
-            console.log('Added product ID:', productId);
-            
-            // Feedback visual
-            const originalText = this.innerHTML;
-            this.innerHTML = '<i class="bi bi-check-circle-fill me-2"></i>Adicionado';
-            this.classList.add('btn-success');
-            this.classList.remove('btn-outline-primary');
-            
-            setTimeout(() => {
-                this.innerHTML = originalText;
-                this.classList.remove('btn-success');
-                this.classList.add('btn-outline-primary');
-            }, 2000);
-        });
-    });
-}
-
-// Função para atualizar quantidade
-function setupQuantityControls() {
-    function updateQuantity(change) {
-        const quantityInput = document.getElementById('productQuantity');
-        if (quantityInput) {
-            let newValue = parseInt(quantityInput.value) + change;
-            const maxStock = parseInt(quantityInput.max) || 100;
-            
-            if (newValue < 1) newValue = 1;
-            if (newValue > maxStock) newValue = maxStock;
-            
-            quantityInput.value = newValue;
+        if (password !== confirmPassword) {
+          event.preventDefault();
+          event.stopPropagation();
+          showAlert('As senhas não coincidem!');
+          confirmPasswordField.classList.add('is-invalid');
+        } else {
+          confirmPasswordField.classList.remove('is-invalid');
         }
-    }
+      }
 
-    const minusBtn = document.querySelector('button[onclick="updateQuantity(-1)"]');
-    const plusBtn = document.querySelector('button[onclick="updateQuantity(1)"]');
+      form.classList.add('was-validated');
+    }, false);
+  });
+};
+
+// CEP lookup with debounce
+const setupCepLookup = () => {
+  const cepField = document.getElementById('cep');
+  if (!cepField) return;
+
+  const handleCepLookup = debounce(async () => {
+    const cep = cepField.value.replace(/\D/g, '');
+    if (cep.length !== 8) return;
     
-    if (minusBtn && plusBtn) {
-        minusBtn.removeAttribute('onclick');
-        plusBtn.removeAttribute('onclick');
+    try {
+      const response = await fetch(`https://viacep.com.br/ws/${cep}/json/`);
+      if (!response.ok) throw new Error('CEP não encontrado');
+      
+      const data = await response.json();
+      if (data.erro) throw new Error('CEP não encontrado');
+
+      document.getElementById('logradouro').value = data.logradouro || '';
+      document.getElementById('cidade').value = data.localidade || '';
+      document.getElementById('estado').value = data.uf || '';
+      
+      const numeroField = document.getElementById('numero');
+      if (numeroField) numeroField.focus();
+    } catch (error) {
+      console.error('Erro ao buscar CEP:', error);
+      showAlert('CEP não encontrado ou erro na consulta');
+    }
+  });
+
+  cepField.addEventListener('blur', handleCepLookup);
+};
+
+// Product photos management
+const setupProductPhotos = () => {
+  const deleteModal = document.getElementById('deletePhotoModal');
+  if (!deleteModal) return;
+
+  const modalInstance = new bootstrap.Modal(deleteModal);
+  let fotoIdToDelete = null;
+  
+  // Delete photo handlers
+  document.querySelectorAll('.delete-photo').forEach(button => {
+    button.addEventListener('click', () => {
+      fotoIdToDelete = button.dataset.fotoId;
+      document.getElementById('foto_id_to_delete').value = fotoIdToDelete;
+      modalInstance.show();
+    });
+  });
+  
+  // Confirm deletion
+  document.getElementById('confirmDeletePhoto')?.addEventListener('click', async () => {
+    if (!fotoIdToDelete) return;
+
+    try {
+      const response = await fetch(`/produtoFoto/${fotoIdToDelete}/delete`, {
+        method: 'POST',
+        headers: {
+          'X-Requested-With': 'XMLHttpRequest'
+        }
+      });
+
+      const data = await response.json().catch(() => ({ success: response.ok }));
+      
+      if (data.success) {
+        document.querySelector(`.photo-item [data-foto-id="${fotoIdToDelete}"]`)?.closest('.photo-item')?.remove();
+      } else {
+        throw new Error(data.message || 'Erro desconhecido');
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      showAlert(`Erro ao remover foto: ${error.message}`);
+    } finally {
+      modalInstance.hide();
+    }
+  });
+};
+
+// Cart functionality
+const setupAddToCart = () => {
+  document.querySelectorAll('.add-to-cart').forEach(button => {
+    button.addEventListener('click', async function() {
+      const productId = this.dataset.productId;
+      
+      try {
+        // Example API call - replace with your actual implementation
+        // const response = await fetch('/cart/add', {
+        //   method: 'POST',
+        //   body: JSON.stringify({ productId }),
+        //   headers: { 'Content-Type': 'application/json' }
+        // });
+        // if (!response.ok) throw new Error('Failed to add to cart');
         
-        minusBtn.addEventListener('click', () => updateQuantity(-1));
-        plusBtn.addEventListener('click', () => updateQuantity(1));
-    }
-}
+        // Visual feedback
+        const originalText = this.innerHTML;
+        this.innerHTML = '<i class="bi bi-check-circle-fill me-2"></i>Adicionado';
+        this.classList.replace('btn-outline-primary', 'btn-success');
+        
+        setTimeout(() => {
+          this.innerHTML = originalText;
+          this.classList.replace('btn-success', 'btn-outline-primary');
+        }, 2000);
+      } catch (error) {
+        console.error('Error adding to cart:', error);
+        showAlert('Erro ao adicionar ao carrinho');
+      }
+    });
+  });
+};
 
-// Função para ordenação
-function setupSorting() {
-    const sortSelect = document.querySelector('select.form-select');
-    if (sortSelect) {
-        sortSelect.addEventListener('change', function() {
-            console.log('Sort by:', this.value);
-            // Implemente sua lógica de ordenação aqui
-        });
-    }
-}
+// Quantity controls
+const setupQuantityControls = () => {
+  const updateQuantity = (change) => {
+    const quantityInput = document.getElementById('productQuantity');
+    if (!quantityInput) return;
 
-// Adicionar nova categoria
-document.getElementById('salvarNovaCategoria').addEventListener('click', function() {
+    let newValue = parseInt(quantityInput.value) + change;
+    const maxStock = parseInt(quantityInput.max) || 100;
+    
+    newValue = Math.max(1, Math.min(newValue, maxStock));
+    quantityInput.value = newValue;
+  };
+
+  document.querySelector('button[onclick="updateQuantity(-1)"]')?.addEventListener('click', () => updateQuantity(-1));
+  document.querySelector('button[onclick="updateQuantity(1)"]')?.addEventListener('click', () => updateQuantity(1));
+};
+
+// Sorting functionality
+const setupSorting = () => {
+  const sortSelect = document.querySelector('select.form-select');
+  if (!sortSelect) return;
+
+  sortSelect.addEventListener('change', function() {
+    // Implement your sorting logic here
+    console.log('Sort by:', this.value);
+  });
+};
+
+// Category management
+const setupCategoryManagement = () => {
+  const modal = document.getElementById('novaCategoriaModal');
+  if (!modal) return;
+
+  const form = document.getElementById('formNovaCategoria');
+  const saveBtn = document.getElementById('salvarNovaCategoria');
+
+  saveBtn?.addEventListener('click', async () => {
     const nome = document.getElementById('nova_categoria_nome').value.trim();
-    const form = document.getElementById('formNovaCategoria');
-    
     if (!nome) {
-        form.classList.add('was-validated');
-        return;
+      form.classList.add('was-validated');
+      return;
     }
     
-    const formData = new FormData();
-    formData.append('categoria_nome', nome);
-    
-    fetch('/categoria/store', {
+    try {
+      const formData = new FormData();
+      formData.append('categoria_nome', nome);
+      
+      const response = await fetch('/categoria/store', {
         method: 'POST',
         body: formData,
-        headers: {
-            'X-Requested-With': 'XMLHttpRequest'
-        }
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            // Adiciona a nova opção ao select
-            const select = document.getElementById('categoria_fk');
-            const option = document.createElement('option');
-            option.value = data.categoria_id;
-            option.textContent = nome;
-            select.appendChild(option);
-            select.value = data.categoria_id;
-            
-            // Fecha o modal e limpa o formulário
-            const modal = bootstrap.Modal.getInstance(document.getElementById('novaCategoriaModal'));
-            modal.hide();
-            form.reset();
-            form.classList.remove('was-validated');
-        } else {
-            alert('Erro ao criar categoria: ' + (data.message || 'Erro desconhecido'));
-        }
-    })
-    .catch(error => {
-        console.error('Error:', error);
-        alert('Erro ao criar categoria');
-    });
-});
+        headers: { 'X-Requested-With': 'XMLHttpRequest' }
+      });
+      
+      const data = await response.json();
+      if (!data.success) throw new Error(data.message || 'Erro desconhecido');
 
-// Adicionar nova marca
-document.getElementById('salvarNovaMarca').addEventListener('click', function() {
+      // Add new category to select
+      const select = document.getElementById('categoria_fk');
+      const option = new Option(nome, data.categoria_id);
+      select.add(option);
+      select.value = data.categoria_id;
+      
+      // Close modal and reset form
+      bootstrap.Modal.getInstance(modal).hide();
+      form.reset();
+      form.classList.remove('was-validated');
+    } catch (error) {
+      console.error('Error:', error);
+      showAlert(`Erro ao criar categoria: ${error.message}`);
+    }
+  });
+
+  modal.addEventListener('hidden.bs.modal', () => {
+    form.reset();
+    form.classList.remove('was-validated');
+  });
+};
+
+// Brand management
+const setupBrandManagement = () => {
+  const modal = document.getElementById('novaMarcaModal');
+  if (!modal) return;
+
+  const form = document.getElementById('formNovaMarca');
+  const saveBtn = document.getElementById('salvarNovaMarca');
+
+  saveBtn?.addEventListener('click', async () => {
     const nome = document.getElementById('nova_marca_nome').value.trim();
-    const form = document.getElementById('formNovaMarca');
-    const logoInput = document.getElementById('nova_marca_logo');
-    
     if (!nome) {
-        form.classList.add('was-validated');
-        return;
+      form.classList.add('was-validated');
+      return;
     }
     
-    const formData = new FormData();
-    formData.append('marca_nome', nome);
-    if (logoInput.files[0]) {
-        formData.append('marca_logo', logoInput.files[0]);
-    }
-    
-    fetch('/marca/store', {
+    try {
+      const formData = new FormData(form);
+      
+      const response = await fetch('/marca/store', {
         method: 'POST',
         body: formData,
-        headers: {
-            'X-Requested-With': 'XMLHttpRequest'
-        }
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            // Adiciona a nova opção ao select
-            const select = document.getElementById('marca_fk');
-            const option = document.createElement('option');
-            option.value = data.marca_id;
-            option.textContent = nome;
-            select.appendChild(option);
-            select.value = data.marca_id;
-            
-            // Fecha o modal e limpa o formulário
-            const modal = bootstrap.Modal.getInstance(document.getElementById('novaMarcaModal'));
-            modal.hide();
-            form.reset();
-            form.classList.remove('was-validated');
-        } else {
-            alert('Erro ao criar marca: ' + (data.message || 'Erro desconhecido'));
-        }
-    })
-    .catch(error => {
-        console.error('Error:', error);
-        alert('Erro ao criar marca');
-    });
-});
+        headers: { 'X-Requested-With': 'XMLHttpRequest' }
+      });
+      
+      const data = await response.json();
+      if (!data.success) throw new Error(data.message || 'Erro desconhecido');
 
-// Resetar modais quando fechados
-document.getElementById('novaCategoriaModal').addEventListener('hidden.bs.modal', function() {
-    document.getElementById('formNovaCategoria').reset();
-    document.getElementById('formNovaCategoria').classList.remove('was-validated');
-});
+      // Add new brand to select
+      const select = document.getElementById('marca_fk');
+      const option = new Option(nome, data.marca_id);
+      select.add(option);
+      select.value = data.marca_id;
+      
+      // Close modal and reset form
+      bootstrap.Modal.getInstance(modal).hide();
+      form.reset();
+      form.classList.remove('was-validated');
+    } catch (error) {
+      console.error('Error:', error);
+      showAlert(`Erro ao criar marca: ${error.message}`);
+    }
+  });
 
-document.getElementById('novaMarcaModal').addEventListener('hidden.bs.modal', function() {
-    document.getElementById('formNovaMarca').reset();
-    document.getElementById('formNovaMarca').classList.remove('was-validated');
-});
+  modal.addEventListener('hidden.bs.modal', () => {
+    form.reset();
+    form.classList.remove('was-validated');
+  });
+};
 
-//Vai para a barra de pesquisa ao clicar no botão do rodapé
-document.getElementById('focusSearchLink').addEventListener('click', function(e) {
-e.preventDefault(); // Impede o comportamento padrão do link
-
-// Verifica se o campo de pesquisa existe na página atual
-const searchInput = document.getElementById('searchInput');
-if (searchInput) {
-    searchInput.focus();
-    
-    // Rolagem suave até o campo (opcional)
-    searchInput.scrollIntoView({
+// Search focus
+const setupSearchFocus = () => {
+  document.getElementById('focusSearchLink')?.addEventListener('click', (e) => {
+    e.preventDefault();
+    const searchInput = document.getElementById('searchInput');
+    if (searchInput) {
+      searchInput.focus();
+      searchInput.scrollIntoView({
         behavior: 'smooth',
         block: 'center'
-    });
-}});
+      });
+    }
+  });
+};
 
-// Inicializa todas as funções quando o DOM estiver carregado
-document.addEventListener('DOMContentLoaded', function() {
-    setupFormValidation();
-    setupCepLookup();
-    setupProductPhotos();
-    setupAddToCart();
-    setupQuantityControls();
-    setupSorting();
+// Initialize all functionality
+document.addEventListener('DOMContentLoaded', () => {
+  setupFormValidation();
+  setupCepLookup();
+  setupProductPhotos();
+  setupAddToCart();
+  setupQuantityControls();
+  setupSorting();
+  setupCategoryManagement();
+  setupBrandManagement();
+  setupSearchFocus();
 });

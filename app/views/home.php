@@ -1,4 +1,4 @@
-<?php require_once 'layout/cabecalho.php'; ?>
+<?php require_once 'layout/cabecalho.php';?>
 
 <div class="container-fluid mt-4">
     <div class="row">
@@ -125,13 +125,6 @@
                                             R$<?= htmlspecialchars($produto->produto_preco) ?>
                                         </a>
                                     </h7>
-                                    
-                                    <div class="mt-auto">   
-                                        <button class="btn btn-outline-primary w-100 add-to-cart" 
-                                                data-product-id="<?= $produto->produto_id ?>">
-                                            <i class="bi bi-cart-plus me-2"></i>Adicionar
-                                        </button>
-                                    </div>
                                 </div>
                             </div>
                         </div>

@@ -15,8 +15,10 @@ class ProdutoModel {
         return $query->fetchAll(\PDO::FETCH_OBJ);
     }
     
-    public function getProdutosComFoto($data) {
-        $query = $this->db->prepare("SELECT p.*, f.file_path 
+    public function getProdutosComFoto($data) 
+    {
+        // Construir a query base
+        $query = "SELECT p.*, f.file_path 
             FROM produto p 
             LEFT JOIN (
                 SELECT pf.* FROM produto_foto pf 
@@ -29,29 +31,57 @@ class ProdutoModel {
                 )
             ) f ON f.produto_fk = p.produto_id
             WHERE (p.produto_nome LIKE '%' || :produto_nome || '%' OR :produto_nome = '')
-            AND (p.marca_fk = :marca_fk OR :marca_fk = 0)
-            AND (p.categoria_fk = :categoria_fk OR :categoria_fk = 0)
-            AND (p.produto_preco BETWEEN :preco_min AND :preco_max)
-            ORDER BY p.produto_id");
+            AND (p.produto_preco BETWEEN :preco_min AND :preco_max)";
         
+        // Preparar parâmetros base
         $params = [
             ':produto_nome' => $data['produto_nome'] ?? '',
-            ':marca_fk' => $data['marca_fk'] ?? 0,
-            ':categoria_fk' => $data['categoria_fk'] ?? 0,
-            ':preco_min' => $data['preco_min'] ?? 0,
-            ':preco_max' => $data['preco_max'] ?? PHP_FLOAT_MAX
+            ':preco_min' => (float)($data['preco_min'] ?? 0),
+            ':preco_max' => (float)($data['preco_max'] ?? PHP_FLOAT_MAX)
         ];
         
-        // Força a tipagem
-        $params[':marca_fk'] = (int)$params[':marca_fk'];
-        $params[':categoria_fk'] = (int)$params[':categoria_fk'];
-        $params[':preco_min'] = (float)$params[':preco_min'];
-        $params[':preco_max'] = (float)$params[':preco_max'];
+        // Tratar filtro de marcas (pode ser array ou valor único)
+        if (!empty($data['marca_fk'])) {
+            if (is_array($data['marca_fk']) && count($data['marca_fk']) > 0) {
+                $marcaIds = array_map('intval', $data['marca_fk']);
+                $placeholders = [];
+                foreach ($marcaIds as $index => $marcaId) {
+                    $placeholder = ":marca_fk_$index";
+                    $placeholders[] = $placeholder;
+                    $params[$placeholder] = $marcaId;
+                }
+                $query .= " AND p.marca_fk IN (" . implode(',', $placeholders) . ")";
+            } else {
+                $query .= " AND p.marca_fk = :marca_fk";
+                $params[':marca_fk'] = (int)$data['marca_fk'];
+            }
+        }
         
-        $query->execute($params);
+        // Tratar filtro de categorias (pode ser array ou valor único)
+        if (!empty($data['categoria_fk'])) {
+            if (is_array($data['categoria_fk']) && count($data['categoria_fk']) > 0) {
+                $categoriaIds = array_map('intval', $data['categoria_fk']);
+                $placeholders = [];
+                foreach ($categoriaIds as $index => $categoriaId) {
+                    $placeholder = ":categoria_fk_$index";
+                    $placeholders[] = $placeholder;
+                    $params[$placeholder] = $categoriaId;
+                }
+                $query .= " AND p.categoria_fk IN (" . implode(',', $placeholders) . ")";
+            } else {
+                $query .= " AND p.categoria_fk = :categoria_fk";
+                $params[':categoria_fk'] = (int)$data['categoria_fk'];
+            }
+        }
+        
+        $query .= " ORDER BY p.produto_id";
+        
+        $stmt = $this->db->prepare($query);
+        $stmt->execute($params);
 
-        return $query->fetchAll(\PDO::FETCH_OBJ);
+        return $stmt->fetchAll(\PDO::FETCH_OBJ);
     }
+
     
     public function find($produtoId) {
         $query = $this->db->prepare("SELECT p.*, f.file_path FROM produto p 

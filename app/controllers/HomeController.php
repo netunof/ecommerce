@@ -23,12 +23,12 @@ class HomeController
             'marcas' => $this->marcaModel->getAll(),
             'produtos' => $this->produtoModel->getProdutosComFoto([
                 'produto_nome' => filter_input(INPUT_GET, 'produto_nome', FILTER_SANITIZE_SPECIAL_CHARS),
-                'marca_fk' => filter_input(INPUT_GET, 'marca_fk', FILTER_VALIDATE_INT),
-                'categoria_fk' => filter_input(INPUT_GET, 'categoria_fk', FILTER_VALIDATE_INT),
-                'preco_min' => filter_input(INPUT_GET, 'preco_min', FILTER_VALIDATE_INT),
-                'preco_max' => filter_input(INPUT_GET, 'preco_max', FILTER_VALIDATE_INT)])
+                'marca_fk' => filter_input(INPUT_GET, 'marca_id', FILTER_VALIDATE_INT, FILTER_REQUIRE_ARRAY) ?: [],
+                'categoria_fk' => filter_input(INPUT_GET, 'categoria_id', FILTER_VALIDATE_INT, FILTER_REQUIRE_ARRAY) ?: [],
+                'preco_min' => filter_input(INPUT_GET, 'preco_min', FILTER_VALIDATE_FLOAT),
+                'preco_max' => filter_input(INPUT_GET, 'preco_max', FILTER_VALIDATE_FLOAT)
+            ])
         ];
-        
         $this->view->render('home', $data);
     }
 
