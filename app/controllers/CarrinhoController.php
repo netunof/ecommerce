@@ -3,17 +3,21 @@ declare(strict_types=1);
 
 namespace App\Controllers;
 
-use App\Models\ProdutoModel;
+use App\Models\{ProdutoModel, PedidoModel, PedidoItemModel};
 use App\Views\ViewRenderer;
 
 class CarrinhoController 
 {
     private ProdutoModel $produtoModel;
+    private PedidoModel $pedidoModel;
+    private PedidoItemModel $pedidoItemModel;
     private ViewRenderer $view;
 
     public function __construct()
     {
         $this->produtoModel = new ProdutoModel();
+        $this->pedidoModel = new PedidoModel();
+        $this->pedidoItemModel = new PedidoItemModel();
         $this->view = new ViewRenderer();
     }
 
@@ -107,5 +111,61 @@ class CarrinhoController
         unset($_SESSION['cart_count']);
         header('Location: /carrinho');
         exit;
+    }
+
+    public function finalizar(): void
+    {
+        session_status() === PHP_SESSION_NONE ? session_start() : false;
+        
+        if (!isset($_SESSION['cliente_id'])) {
+            $_SESSION['redirect_url'] = '/carrinho/finalizar';
+            header('Location: /login');
+            exit;
+        }
+
+        if (empty($_SESSION['carrinho'])) {
+            header('Location: /carrinho');
+            exit;
+        }
+
+        $clienteId = $_SESSION['cliente_id'];
+        $total = $this->getTotalCarrinho();
+        
+        // Criar pedido
+        $pedidoId = $this->pedidoModel->create([
+            'cliente_fk' => $clienteId,
+            'total' => $total
+        ]);
+
+        // Adicionar itens ao pedido
+        foreach ($_SESSION['carrinho'] as $produtoId => $item) {
+            $produto = $this->produtoModel->find($produtoId);
+            if ($produto) {
+                $this->pedidoItemModel->create([
+                    'produto_fk' => $produtoId,
+                    'pedido_fk' => $pedidoId,
+                    'pedido_item_quantidade' => $item['quantidade']
+                ]);
+            }
+        }
+
+        // Limpar carrinho
+        $this->limpar();
+
+        // Redirecionar para confirmação
+        header("Location: /pedido/confirmacao/$pedidoId");
+        exit;
+    }
+
+    private function getTotalCarrinho(): float
+    {
+        $total = 0;
+        foreach ($_SESSION['carrinho'] ?? [] as $produtoId => $item) {
+            $produto = $this->produtoModel->find($produtoId);
+            if ($produto) {
+                $total += $item['quantidade'] * $produto->produto_preco;
+            }
+        }
+        return $total;
     }
 }

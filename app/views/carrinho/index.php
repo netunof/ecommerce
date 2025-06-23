@@ -26,7 +26,9 @@
                                 <tr>
                                     <td>
                                         <div class="d-flex align-items-center">
-                                            <img src="<?= htmlspecialchars($produto->file_path)?>" alt="" width="50" class="me-3">
+                                            <img src="/<?= htmlspecialchars($produto->file_path ?? 'default.jpg') ?>" 
+                                                 alt="<?= htmlspecialchars($produto->produto_nome) ?>" 
+                                                 width="50" class="me-3">
                                             <?= htmlspecialchars($produto->produto_nome) ?>
                                         </div>
                                     </td>
@@ -34,13 +36,16 @@
                                     <td>
                                         <form action="/carrinho/atualizar" method="POST" class="d-flex">
                                             <input type="hidden" name="produto_id" value="<?= $produto->produto_id ?>">
-                                            <input type="number" name="quantidade" value="<?= $produto->quantidade ?>" min="1" class="form-control form-control-sm" style="width: 70px;">
+                                            <input type="number" name="quantidade" value="<?= $produto->quantidade ?>" 
+                                                   min="1" max="<?= $produto->produto_estoque ?>" 
+                                                   class="form-control form-control-sm" style="width: 70px;">
                                             <button type="submit" class="btn btn-sm btn-outline-primary ms-2">Atualizar</button>
                                         </form>
                                     </td>
                                     <td>R$ <?= number_format($produto->subtotal, 2, ',', '.') ?></td>
                                     <td>
-                                        <a href="/carrinho/remover/<?= $produto->produto_id ?>" class="btn btn-sm btn-outline-danger">Remover</a>
+                                        <a href="/carrinho/remover/<?= $produto->produto_id ?>" 
+                                           class="btn btn-sm btn-outline-danger">Remover</a>
                                     </td>
                                 </tr>
                             <?php endforeach; ?>
@@ -58,7 +63,9 @@
                     <a href="/produtos" class="btn btn-outline-secondary">Continuar comprando</a>
                     <div>
                         <a href="/carrinho/limpar" class="btn btn-outline-danger me-2">Limpar carrinho</a>
-                        <a href="<?= isset($_SESSION['cliente_id']) ? '/checkout' : '/login?redirect=/checkout' ?>" class="btn btn-primary">Finalizar compra</a>
+                        <form action="/carrinho/finalizar" method="POST" class="d-inline">
+                            <button type="submit" class="btn btn-primary">Finalizar compra</button>
+                        </form>
                     </div>
                 </div>
             <?php endif; ?>

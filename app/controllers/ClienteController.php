@@ -295,6 +295,80 @@ class ClienteController
         ]);
     }
 
+    public function changePasswordForm(int $id): void
+    {
+        session_start();
+        // Verify if the logged-in user matches the requested ID or is admin
+        if (!isset($_SESSION['cliente_id']) || ($_SESSION['cliente_id'] != $id && !$this->isAdmin())) {
+            header('Location: /login');
+            exit;
+        }
+
+        $cliente = $this->clienteModel->find($id);
+        
+        if (!$cliente) {
+            $this->notFound();
+        }
+
+        $this->view->render('cliente/change_password', [
+            'cliente' => $cliente,
+            'cliente_id' => $id
+        ]);
+    }
+
+    public function updatePassword(int $id): void
+    {
+        session_start();
+        // Verify if the logged-in user matches the requested ID or is admin
+        if (!isset($_SESSION['cliente_id']) || ($_SESSION['cliente_id'] != $id && !$this->isAdmin())) {
+            header('Location: /login');
+            exit;
+        }
+
+        $currentPassword = filter_input(INPUT_POST, 'current_password', FILTER_SANITIZE_SPECIAL_CHARS);
+        $newPassword = filter_input(INPUT_POST, 'new_password', FILTER_SANITIZE_SPECIAL_CHARS);
+        $confirmPassword = filter_input(INPUT_POST, 'confirm_password', FILTER_SANITIZE_SPECIAL_CHARS);
+
+        // Validate passwords match
+        if ($newPassword !== $confirmPassword) {
+            $this->view->render('cliente/change_password', [
+                'cliente_id' => $id,
+                'error' => 'As senhas não coincidem'
+            ]);
+            return;
+        }
+
+        // Verify current password if not admin
+        if (!$this->isAdmin()) {
+            $cliente = $this->clienteModel->find($id);
+            if (!$cliente || !password_verify($currentPassword, $cliente->cliente_senha)) {
+                $this->view->render('cliente/change_password', [
+                    'cliente_id' => $id,
+                    'error' => 'Senha atual incorreta'
+                ]);
+                return;
+            }
+        }
+
+        // Update password
+        if ($this->clienteModel->updatePassword($id, $newPassword)) {
+            header('Location: /perfil?success=2');
+            exit;
+        }
+
+        $this->view->render('cliente/change_password', [
+            'cliente_id' => $id,
+            'error' => 'Erro ao atualizar senha'
+        ]);
+    }
+
+    private function isAdmin(): bool
+    {
+        // Implement your admin check logic here
+        // For example, you might have an admin flag in session
+        return isset($_SESSION['is_admin']) && $_SESSION['is_admin'] === true;
+    }
+    
     private function notFound(): never
     {
         http_response_code(404);

@@ -8,7 +8,8 @@ use App\Controllers\{
     ProdutoFotoController, 
     HomeController,
     ClienteController,
-    CarrinhoController
+    CarrinhoController,
+    PedidoController
 };
 
 $request = $_SERVER['REQUEST_URI'];
@@ -74,10 +75,6 @@ switch ($path) {
         
     case '/perfil/endereco/atualizar':
         $clienteController->updateAddress();
-        break;
-        
-    case '/perfil/pedidos':
-        $clienteController->orders();
         break;
         
     case '/perfil/excluir':
@@ -231,11 +228,31 @@ switch ($path) {
         break;
         
     case preg_match('/^\/carrinho\/remover\/(\d+)\/?$/', $path, $matches) ? true : false:
-        $carrinhoController->remover($matches[1]);
+        $carrinhoController->remover((int)$matches[1]);
         break;
         
     case '/carrinho/limpar':
         $carrinhoController->limpar();
+        break;
+        
+    case '/carrinho/finalizar':
+        $carrinhoController->finalizar();
+        break;
+
+    # PEDIDOS
+    case preg_match('/^\/pedido\/confirmacao\/(\d+)\/?$/', $path, $matches) ? true : false:
+        $pedidoController = new PedidoController();
+        $pedidoController->confirmacao((int)$matches[1]);
+        break;
+        
+    case '/perfil/pedidos':
+        $pedidoController = new PedidoController();
+        $pedidoController->listar();
+        break;
+        
+    case preg_match('/^\/pedido\/detalhes\/(\d+)\/?$/', $path, $matches) ? true : false:
+        $pedidoController = new PedidoController();
+        $pedidoController->detalhes((int)$matches[1]);
         break;
 
     #UTILIDADES
