@@ -38,7 +38,7 @@ class CarrinhoController
             }
         }
 
-        $this->view->render('carrinho/index', [
+        $this->view->render('carrinho/carrinho', [
             'produtos' => $produtos,
             'total' => $total
         ]);
@@ -47,6 +47,7 @@ class CarrinhoController
     public function adicionar(): void
     {
         session_status() === PHP_SESSION_NONE ? session_start() : false;
+
         $produtoId = filter_input(INPUT_POST, 'produto_id', FILTER_VALIDATE_INT);
         $quantidade = filter_input(INPUT_POST, 'quantidade', FILTER_VALIDATE_INT, ['options' => ['min_range' => 1]]);
 
@@ -116,28 +117,27 @@ class CarrinhoController
     public function finalizar(): void
     {
         session_status() === PHP_SESSION_NONE ? session_start() : false;
-        
+        //verifica se o cliente está logado
         if (!isset($_SESSION['cliente_id'])) {
             $_SESSION['redirect_url'] = '/carrinho/finalizar';
             header('Location: /login');
             exit;
         }
-
+        //verifica se o carrinho está vazio
         if (empty($_SESSION['carrinho'])) {
             header('Location: /carrinho');
             exit;
         }
 
-        $clienteId = $_SESSION['cliente_id'];
         $total = $this->getTotalCarrinho();
         
         // Criar pedido
         $pedidoId = $this->pedidoModel->create([
-            'cliente_fk' => $clienteId,
+            'cliente_fk' => $_SESSION['cliente_id'],
             'total' => $total
         ]);
 
-        // Adicionar itens ao pedido
+        // Adicionar itens do carrinho ao pedido
         foreach ($_SESSION['carrinho'] as $produtoId => $item) {
             $produto = $this->produtoModel->find($produtoId);
             if ($produto) {

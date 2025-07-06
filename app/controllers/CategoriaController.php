@@ -17,7 +17,7 @@ class CategoriaController
     public function index(): void
     {
         $categorias = $this->categoriaModel->getAll();
-        $this->view->render('categoria/index', ['categorias' => $categorias]);
+        $this->view->render('categoria/categorias', ['categorias' => $categorias]);
     }
 
     public function show(int $id): void
@@ -28,12 +28,12 @@ class CategoriaController
             $this->notFound();
         }
 
-        $this->view->render('categoria/show', ['categoria' => $categoria]);
+        $this->view->render('categoria/categoria', ['categoria' => $categoria]);
     }
 
     public function create(): void
     {
-        $this->view->render('categoria/create');
+        $this->view->render('categoria/categoriaCreate');
     }
 
     public function store(): void
@@ -78,7 +78,7 @@ class CategoriaController
             $this->notFound();
         }
 
-        $this->view->render('categoria/edit', ['categoria' => $categoria]);
+        $this->view->render('categoria/categoriaEdit', ['categoria' => $categoria]);
     }
 
     public function update(): void

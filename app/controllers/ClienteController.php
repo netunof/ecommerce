@@ -24,7 +24,7 @@ class ClienteController
     public function index(): void
     {
         $clientes = $this->clienteModel->getAll();
-        $this->view->render('cliente/index', ['clientes' => $clientes]);
+        $this->view->render('cliente/clientes', ['clientes' => $clientes]);
     }
 
     public function show(int $id): void
@@ -35,12 +35,12 @@ class ClienteController
             $this->notFound();
         }
 
-        $this->view->render('cliente/show', ['cliente' => $cliente]);
+        $this->view->render('cliente/cliente', ['cliente' => $cliente]);
     }
 
     public function create(): void
     {
-        $this->view->render('cliente/create');
+        $this->view->render('cliente/clienteCreate');
     }
 
     public function store(): void
@@ -70,7 +70,7 @@ class ClienteController
             $this->notFound();
         }
 
-        $this->view->render('cliente/edit', ['cliente' => $cliente]);
+        $this->view->render('cliente/clienteEdit', ['cliente' => $cliente]);
     }
 
     public function update(int $id): void
@@ -198,7 +198,7 @@ class ClienteController
 
         $cliente = $this->clienteModel->find($_SESSION['cliente_id']);
         
-        $this->view->render('cliente/profile', [
+        $this->view->render('cliente/clienteProfile', [
             'cliente' => $cliente,
         ]);
     }
@@ -213,7 +213,7 @@ class ClienteController
         $cliente = $this->clienteModel->find($_SESSION['cliente_id']);
         $endereco = $this->enderecoModel->findByClienteId($_SESSION['cliente_id']);
         
-        $this->view->render('cliente/address', [
+        $this->view->render('cliente/clienteAddress', [
             'endereco' => $endereco,
             'cliente'=> $cliente
         ]);
@@ -290,7 +290,7 @@ class ClienteController
         // $pedidos = $this->orderModel->findByClienteId($_SESSION['cliente_id']);
         
         // Por enquanto vamos apenas renderizar a view
-        $this->view->render('cliente/orders', [
+        $this->view->render('cliente/clienteOrders', [
             // 'pedidos' => $pedidos
         ]);
     }
@@ -310,7 +310,7 @@ class ClienteController
             $this->notFound();
         }
 
-        $this->view->render('cliente/change_password', [
+        $this->view->render('cliente/changePassword', [
             'cliente' => $cliente,
             'cliente_id' => $id
         ]);
@@ -331,7 +331,7 @@ class ClienteController
 
         // Validate passwords match
         if ($newPassword !== $confirmPassword) {
-            $this->view->render('cliente/change_password', [
+            $this->view->render('cliente/changePassword', [
                 'cliente_id' => $id,
                 'error' => 'As senhas não coincidem'
             ]);
@@ -356,7 +356,7 @@ class ClienteController
             exit;
         }
 
-        $this->view->render('cliente/change_password', [
+        $this->view->render('cliente/changePassword', [
             'cliente_id' => $id,
             'error' => 'Erro ao atualizar senha'
         ]);

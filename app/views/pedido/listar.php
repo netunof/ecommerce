@@ -28,7 +28,30 @@
                                     <td><?= date('d/m/Y', strtotime($pedido->created_at)) ?></td>
                                     <td>R$ <?= number_format($pedido->total, 2, ',', '.') ?></td>
                                     <td>
-                                        <span class="badge bg-secondary">Processando</span>
+                                        <?php
+                                        switch ($pedido->estado_nome) {
+                                            case 'Rascunho':
+                                                echo '<span class="badge bg-primary">Rascunho</span>';
+                                                break;
+                                            case 'Realizado':
+                                                echo '<span class="badge bg-light">Realizado</span>';
+                                                break;
+                                            case 'Processando':
+                                                echo '<span class="badge bg-info">Processando</span>';
+                                                break;
+                                            case 'Enviado':
+                                                echo '<span class="badge bg-warning">Enviado</span>';
+                                                break;
+                                            case 'Finalizado':
+                                                echo '<span class="badge bg-success">Finalizado</span>';
+                                                break;
+                                            case 'Cancelado':
+                                                echo '<span class="badge bg-danger">Cancelado</span>';
+                                                break;
+                                            default:
+                                                echo '<span class="badge bg-dark">Erro</span>';
+                                                break;
+                                        }?>
                                     </td>
                                     <td>
                                         <a href="/pedido/detalhes/<?= $pedido->pedido_id ?>" 

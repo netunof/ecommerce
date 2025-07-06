@@ -215,7 +215,7 @@ class ProdutoModel {
     }
 
     
-    public function find($produtoId) {
+    public function find($produtoId): array {
         $query = $this->db->prepare("SELECT p.*, f.file_path FROM produto p 
         LEFT JOIN (
                 SELECT pf.* FROM produto_foto pf 

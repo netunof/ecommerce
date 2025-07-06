@@ -124,6 +124,7 @@ CREATE TABLE pedido_item(
 	produto_fk INTEGER REFERENCES produto,
 	pedido_fk INTEGER REFERENCES pedido ON DELETE CASCADE,
     pedido_item_quantidade INTEGER,
+	estado_fk INTEGER REFERENCES estado,
     PRIMARY KEY (produto_fk, pedido_fk),
   	created_by VARCHAR (100),
 	created_at TIMESTAMP,

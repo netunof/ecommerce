@@ -24,11 +24,13 @@ class PedidoItemModel
                     produto_fk,
                     pedido_fk,
                     pedido_item_quantidade,
+                    estado_fk,
                     created_at
                 ) VALUES (
                     :produto_fk,
                     :pedido_fk,
                     :pedido_item_quantidade,
+                    :estado_fk,
                     NOW()
                 )
             ");
@@ -36,7 +38,8 @@ class PedidoItemModel
             return $query->execute([
                 ':produto_fk' => $data['produto_fk'],
                 ':pedido_fk' => $data['pedido_fk'],
-                ':pedido_item_quantidade' => $data['pedido_item_quantidade']
+                ':pedido_item_quantidade' => $data['pedido_item_quantidade'],
+                ':estado_fk' => 2 // Realizado
             ]);
         } catch (PDOException $e) {
             error_log("Database error in PedidoItemModel::create: " . $e->getMessage());

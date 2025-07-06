@@ -17,7 +17,7 @@ class MarcaController
     public function index(): void
     {
         $marcas = $this->marcaModel->getAll();
-        $this->view->render('marca/index', ['marcas' => $marcas]);
+        $this->view->render('marca/marcas', ['marcas' => $marcas]);
     }
 
     public function show(int $id): void
@@ -28,12 +28,12 @@ class MarcaController
             $this->notFound();
         }
 
-        $this->view->render('marca/show', ['marca' => $marca]);
+        $this->view->render('marca/marca', ['marca' => $marca]);
     }
 
     public function create(): void
     {
-        $this->view->render('marca/create');
+        $this->view->render('marca/marcaCreate');
     }
 
     public function store(): void
@@ -78,7 +78,7 @@ class MarcaController
             $this->notFound();
         }
 
-        $this->view->render('marca/edit', ['marca' => $marca]);
+        $this->view->render('marca/marcaEdit', ['marca' => $marca]);
     }
 
     public function update(): void

@@ -1,4 +1,8 @@
-<?php include_once __DIR__ . '/../layout/cabecalho.php'; ?>
+<?php include_once __DIR__ . '/../layout/cabecalho.php'; 
+echo '<pre>';
+print_r($_SESSION);
+echo '</pre>';
+?>
 
 <main class="container py-5">
     <div class="row">

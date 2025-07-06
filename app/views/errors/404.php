@@ -1,0 +1,1 @@
+<?php echo("ERRO 404")?>

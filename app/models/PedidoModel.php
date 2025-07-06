@@ -46,11 +46,20 @@ class PedidoModel
     public function find(int $pedidoId): ?object
     {
         $query = $this->db->prepare("
-            SELECT p.*, c.cliente_nome, c.cliente_email
-            FROM pedido p
-            JOIN cliente c ON p.cliente_fk = c.cliente_id
-            WHERE p.pedido_id = :pedido_id AND p.active = TRUE
-        ");
+        SELECT 
+            p.pedido_id,
+            p.cliente_fk as cliente_fk,
+            p.total,
+            p.created_at,
+            p.active,
+            c.cliente_nome,
+            c.cliente_email,
+            e.estado_nome
+        FROM pedido p
+        INNER JOIN cliente c ON p.cliente_fk = c.cliente_id
+        INNER JOIN estado e ON p.estado_fk = e.estado_id
+        WHERE p.pedido_id = :pedido_id AND p.active = TRUE
+    ");
         
         $query->execute([':pedido_id' => $pedidoId]);
         
@@ -60,8 +69,9 @@ class PedidoModel
     public function findByCliente(int $clienteId): array
     {
         $query = $this->db->prepare("
-            SELECT p.* 
+            SELECT p.*, e.estado_nome
             FROM pedido p
+            INNER JOIN estado e ON p.estado_fk = e.estado_id
             WHERE p.cliente_fk = :cliente_id AND p.active = TRUE
             ORDER BY p.created_at DESC
         ");

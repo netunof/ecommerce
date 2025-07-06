@@ -29,22 +29,23 @@ class ProdutoController
         ];
         
         $produtos = $this->produtoModel->getProdutosComFoto($filtros);
-        $this->view->render('produto/index', [
+        $this->view->render('produto/produtos', [
             'produtos' => $produtos,
             'filtros' => $filtros
         ]);
     }
 
-    public function show(int $produtoId): void
+    public function show(int $produtoId)
     {
-        $produto = $this->produtoModel->find($produtoId);
+        $produto = $this->produtoModel->find($produtoId) ?? [];
         
         if (!$produto) {
             $this->notFound();
         }
 
-        $produtoFotos = $this->produtoFotoModel->getByProduto($produtoId);
-        $this->view->render('produto/show', [
+        $produtoFotos = $this->produtoFotoModel->getByProduto($produtoId) ?? [];
+        
+        $this->view->render('produto/produto', [
             'produto' => $produto,
             'produtoFotos' => $produtoFotos,
             'primaryPhoto' => $this->getPrimaryPhoto($produtoFotos)
@@ -53,7 +54,7 @@ class ProdutoController
 
     public function create(): void
     {
-        $this->view->render('produto/create', [
+        $this->view->render('produto/produtoCreate', [
             'marcas' => $this->marcaModel->getAll(),
             'categorias' => $this->categoriaModel->getAll()
         ]);
@@ -82,7 +83,7 @@ class ProdutoController
             return;
         }
 
-        $this->view->render('produto/edit', [
+        $this->view->render('produto/produtoEdit', [
             'marcas' => $this->marcaModel->getAll(),
             'categorias' => $this->categoriaModel->getAll(),
             'produto' => $produto,
